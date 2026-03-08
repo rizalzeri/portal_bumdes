@@ -22,9 +22,25 @@ class DashboardController extends Controller
             'langganan_aktif' => Langganan::where('status', 'active')->count()
         ];
         
+        // Part 2: Real registration data for chart (Last 6 months)
+        $chartData = collect(range(5, 0))->map(function ($i) {
+            $date = now()->subMonths($i);
+            $month = $date->format('M');
+            $count = Bumdes::whereYear('created_at', $date->year)
+                ->whereMonth('created_at', $date->month)
+                ->count();
+            return [
+                'label' => $month,
+                'count' => $count
+            ];
+        });
+
+        $chartLabels = $chartData->pluck('label');
+        $chartValues = $chartData->pluck('count');
+
         // Latest registrations
         $latestBumdes = Bumdes::with('kabupaten.province')->orderBy('created_at', 'desc')->take(5)->get();
-        
-        return view('superadmin.dashboard', compact('stats', 'latestBumdes'));
+
+        return view('superadmin.dashboard', compact('stats', 'latestBumdes', 'chartLabels', 'chartValues'));
     }
 }

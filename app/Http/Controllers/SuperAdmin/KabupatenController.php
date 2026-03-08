@@ -60,4 +60,17 @@ class KabupatenController extends Controller
         $kabupaten->delete();
         return redirect()->route('superadmin.kabupaten.index')->with('success', 'Data kabupaten berhasil dihapus.');
     }
+
+    public function infografisIndex()
+    {
+        $kabupatens = Kabupaten::with('province')->orderBy('name')->get();
+        return view('superadmin.infografis.index', compact('kabupatens'));
+    }
+
+    public function toggleFeatured($id)
+    {
+        $kabupaten = Kabupaten::findOrFail($id);
+        $kabupaten->update(['is_featured' => !$kabupaten->is_featured]);
+        return redirect()->back()->with('success', 'Status unggulan infografis berhasil diperbarui.');
+    }
 }

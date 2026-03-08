@@ -118,15 +118,15 @@
                         </div>
                     </div>
                 </a>
-                @if ($previewBumdes->count() > 0)
+                @if ($previewKabupaten->count() > 0)
                     <div class="px-7 pb-5">
-                        <p class="text-xs text-gray-400 mb-2 font-medium">Kinerja & Capaian BUMDesa:</p>
+                        <p class="text-xs text-gray-400 mb-2 font-medium">Infografis Per-Kabupaten:</p>
                         <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-                            @foreach ($previewBumdes as $item)
-                                <a href="{{ url('bumdes/' . ($item->slug ?? '') . '#kinerja-capaian') }}"
+                            @foreach ($previewKabupaten as $item)
+                                <a href="{{ route('public.infografis.kabupaten', $item->id) }}"
                                     class="group/item flex items-center gap-2 p-3 rounded-xl border border-gray-100 hover:border-blue-400 hover:bg-blue-50 transition-all">
                                     <div class="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center shrink-0">
-                                        <i class="fa-solid fa-chart-line text-blue-600 text-sm"></i>
+                                        <i class="fa-solid fa-map-location-dot text-blue-600 text-sm"></i>
                                     </div>
                                     <span
                                         class="text-xs font-semibold text-gray-700 group-hover/item:text-blue-700 transition-colors line-clamp-2 leading-tight">{{ $item->name }}</span>
@@ -429,25 +429,77 @@
             </div>
 
             <!-- Menu 8: Pengumuman Portal -->
-            <div class="w-full bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden">
+            <div class="w-full bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden mb-6">
+                <a href="{{ route('public.pengumuman') }}"
+                    class="group flex flex-row items-center gap-0 hover:bg-gray-50 transition-colors">
+                    <div class="w-1.5 self-stretch bg-blue-500 shrink-0 rounded-l-2xl"></div>
+                    <div class="flex flex-row items-center gap-5 p-5 flex-grow">
+                        <div
+                            class="w-14 h-14 bg-blue-50 rounded-full flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform duration-300">
+                            <i class="fa-solid fa-bullhorn text-2xl text-blue-500"></i>
+                        </div>
+                        <div class="flex-grow">
+                            <h3 class="text-lg font-bold text-gray-900 group-hover:text-blue-600 transition-colors">
+                                Pengumuman Portal Pusat</h3>
+                            <p class="text-gray-500 text-sm mt-0.5">Informasi penting, agenda kegiatan, dan berita resmi
+                                dari Pusat.</p>
+                        </div>
+                        <div class="shrink-0 flex items-center gap-2">
+                            <span
+                                class="text-xs font-semibold text-gray-400 group-hover:text-blue-500 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-2 group-hover:translate-x-0 hidden sm:block">Lihat
+                                semua</span>
+                            <div
+                                class="w-9 h-9 rounded-full bg-gray-100 group-hover:bg-blue-500 flex items-center justify-center transition-colors shadow-sm group-hover:shadow">
+                                <i
+                                    class="fa-solid fa-arrow-right text-sm text-gray-500 group-hover:text-white transition-colors"></i>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+                @if ($previewPengumumanPortal->count() > 0)
+                    <div class="px-7 pb-5">
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                            @foreach ($previewPengumumanPortal as $item)
+                                <a href="javascript:void(0)"
+                                    class="group/item flex flex-col gap-1.5 p-3 rounded-xl border border-gray-100 hover:border-blue-400 hover:bg-blue-50 transition-all">
+                                    <div class="flex items-center gap-2 mb-1">
+                                        <div
+                                            class="w-7 h-7 bg-blue-100 rounded-full flex items-center justify-center shrink-0">
+                                            <i class="fa-solid fa-bell text-blue-600 text-[10px]"></i>
+                                        </div>
+                                        <span
+                                            class="text-[10px] text-gray-400">{{ $item->created_at->format('d M Y') }}</span>
+                                    </div>
+                                    <span
+                                        class="text-xs font-semibold text-gray-700 group-hover/item:text-blue-700 transition-colors line-clamp-2 leading-tight">{{ $item->title }}</span>
+                                    <span class="text-[10px] text-gray-400 mt-auto">Portal Pusat</span>
+                                </a>
+                            @endforeach
+                        </div>
+                    </div>
+                @endif
+            </div>
+
+            <!-- Menu 8b: Pengumuman Kabupaten -->
+            <div class="w-full bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden mb-6">
                 <a href="{{ route('public.pengumuman') }}"
                     class="group flex flex-row items-center gap-0 hover:bg-gray-50 transition-colors">
                     <div class="w-1.5 self-stretch bg-amber-500 shrink-0 rounded-l-2xl"></div>
                     <div class="flex flex-row items-center gap-5 p-5 flex-grow">
                         <div
                             class="w-14 h-14 bg-amber-50 rounded-full flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform duration-300">
-                            <i class="fa-solid fa-bullhorn text-2xl text-amber-500"></i>
+                            <i class="fa-solid fa-building-flag text-2xl text-amber-500"></i>
                         </div>
                         <div class="flex-grow">
                             <h3 class="text-lg font-bold text-gray-900 group-hover:text-amber-600 transition-colors">
-                                Pengumuman Portal</h3>
-                            <p class="text-gray-500 text-sm mt-0.5">Informasi penting, agenda kegiatan, dan berita resmi
-                                terkini.</p>
+                                Pengumuman Kabupaten</h3>
+                            <p class="text-gray-500 text-sm mt-0.5">Informasi dan edaran dari Pemerintah Kabupaten untuk
+                                BUMDesa.</p>
                         </div>
                         <div class="shrink-0 flex items-center gap-2">
                             <span
                                 class="text-xs font-semibold text-gray-400 group-hover:text-amber-500 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-2 group-hover:translate-x-0 hidden sm:block">Lihat
-                                lebih lanjut</span>
+                                semua</span>
                             <div
                                 class="w-9 h-9 rounded-full bg-gray-100 group-hover:bg-amber-500 flex items-center justify-center transition-colors shadow-sm group-hover:shadow">
                                 <i
@@ -456,12 +508,11 @@
                         </div>
                     </div>
                 </a>
-                @if ($previewPengumuman->count() > 0)
+                @if ($previewPengumumanKabupaten->count() > 0)
                     <div class="px-7 pb-5">
-                        <p class="text-xs text-gray-400 mb-2 font-medium">Pengumuman terbaru:</p>
                         <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-                            @foreach ($previewPengumuman as $item)
-                                <a href="{{ url('bumdes/' . ($item->bumdes->slug ?? '') . '#pengumuman') }}"
+                            @foreach ($previewPengumumanKabupaten as $item)
+                                <a href="javascript:void(0)"
                                     class="group/item flex flex-col gap-1.5 p-3 rounded-xl border border-gray-100 hover:border-amber-400 hover:bg-amber-50 transition-all">
                                     <div class="flex items-center gap-2 mb-1">
                                         <div
@@ -473,8 +524,63 @@
                                     </div>
                                     <span
                                         class="text-xs font-semibold text-gray-700 group-hover/item:text-amber-700 transition-colors line-clamp-2 leading-tight">{{ $item->title }}</span>
+                                    <span class="text-[10px] text-gray-400 mt-auto">
+                                        Portal {{ $item->kabupaten->name ?? 'Kabupaten' }}
+                                    </span>
+                                </a>
+                            @endforeach
+                        </div>
+                    </div>
+                @endif
+            </div>
+
+            <!-- Menu 8c: Pengumuman BUMDesa -->
+            <div class="w-full bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden">
+                <a href="{{ route('public.pengumuman') }}"
+                    class="group flex flex-row items-center gap-0 hover:bg-gray-50 transition-colors">
+                    <div class="w-1.5 self-stretch bg-emerald-500 shrink-0 rounded-l-2xl"></div>
+                    <div class="flex flex-row items-center gap-5 p-5 flex-grow">
+                        <div
+                            class="w-14 h-14 bg-emerald-50 rounded-full flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform duration-300">
+                            <i class="fa-solid fa-house-chimney-window text-2xl text-emerald-500"></i>
+                        </div>
+                        <div class="flex-grow">
+                            <h3 class="text-lg font-bold text-gray-900 group-hover:text-emerald-600 transition-colors">
+                                Pengumuman BUMDesa</h3>
+                            <p class="text-gray-500 text-sm mt-0.5">Informasi layanan dan pengumuman operasional dari unit
+                                BUMDesa.</p>
+                        </div>
+                        <div class="shrink-0 flex items-center gap-2">
+                            <span
+                                class="text-xs font-semibold text-gray-400 group-hover:text-emerald-500 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-2 group-hover:translate-x-0 hidden sm:block">Lihat
+                                semua</span>
+                            <div
+                                class="w-9 h-9 rounded-full bg-gray-100 group-hover:bg-emerald-500 flex items-center justify-center transition-colors shadow-sm group-hover:shadow">
+                                <i
+                                    class="fa-solid fa-arrow-right text-sm text-gray-500 group-hover:text-white transition-colors"></i>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+                @if ($previewPengumumanBumdes->count() > 0)
+                    <div class="px-7 pb-5">
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                            @foreach ($previewPengumumanBumdes as $item)
+                                <a href="{{ url('bumdes/' . ($item->bumdes->slug ?? '') . '#pengumuman') }}"
+                                    class="group/item flex flex-col gap-1.5 p-3 rounded-xl border border-gray-100 hover:border-emerald-400 hover:bg-emerald-50 transition-all">
+                                    <div class="flex items-center gap-2 mb-1">
+                                        <div
+                                            class="w-7 h-7 bg-emerald-100 rounded-full flex items-center justify-center shrink-0">
+                                            <i class="fa-solid fa-bell text-emerald-600 text-[10px]"></i>
+                                        </div>
+                                        <span
+                                            class="text-[10px] text-gray-400">{{ $item->created_at->format('d M Y') }}</span>
+                                    </div>
                                     <span
-                                        class="text-[10px] text-gray-400 mt-auto">{{ $item->bumdes->name ?? 'Portal Pusat' }}</span>
+                                        class="text-xs font-semibold text-gray-700 group-hover/item:text-emerald-700 transition-colors line-clamp-2 leading-tight">{{ $item->title }}</span>
+                                    <span class="text-[10px] text-gray-400 mt-auto">
+                                        {{ $item->bumdes->name ?? 'BUMDesa' }}
+                                    </span>
                                 </a>
                             @endforeach
                         </div>

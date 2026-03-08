@@ -10,7 +10,8 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        $bumdes = Bumdesa::where('user_id', auth()->id())
+        $bumdes = \App\Models\Bumdesa::where('user_id', auth()->id())
+            ->orWhere('id', auth()->user()->bumdes_id)
             ->withCount(['unitUsaha', 'katalogProduk', 'artikel', 'laporanKeuangan'])
             ->firstOrFail();
 

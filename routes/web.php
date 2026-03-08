@@ -28,6 +28,7 @@ use App\Http\Controllers\User\GaleriController as UGaleri;
 use App\Http\Controllers\User\KinerjaController as UKinerja;
 use App\Http\Controllers\User\LanggananController as ULangganan;
 use App\Http\Controllers\User\MitraController as UMitra;
+use App\Http\Controllers\User\PengumumanController as UPengumuman;
 use App\Http\Controllers\User\PersonaliaController as UPersonalia;
 use App\Http\Controllers\User\ProdukController as UProduk;
 use App\Http\Controllers\User\ProdukKetapangController as UKetapang;
@@ -41,6 +42,7 @@ Route::get('/', [PublicController::class, 'index'])->name('home');
 Route::get('/kunjungi-bumdes', [PublicController::class, 'kunjungiBumdes'])->name('public.bumdes.list');
 Route::get('/bumdes/{slug}', [PublicController::class, 'bumdesProfile'])->name('public.bumdes.profile');
 Route::get('/infografis', [PublicController::class, 'infografis'])->name('public.infografis');
+Route::get('/infografis/kabupaten/{id}', [PublicController::class, 'infografisKabupaten'])->name('public.infografis.kabupaten');
 Route::get('/materi', [PublicController::class, 'materi'])->name('public.materi');
 Route::get('/papan-informasi', [PublicController::class, 'papanInformasi'])->name('public.informasi');
 Route::get('/katalog-produk', [PublicController::class, 'katalog'])->name('public.katalog');
@@ -64,6 +66,8 @@ Route::prefix('superadmin')->name('superadmin.')->group(function () {
     Route::middleware(['auth', 'superadmin'])->group(function () {
         Route::get('/dashboard', [SADashboard::class, 'index'])->name('dashboard');
         Route::resource('kabupaten', SAKabupaten::class);
+        Route::get('/infografis-featured', [SAKabupaten::class, 'infografisIndex'])->name('infografis.index');
+        Route::post('/infografis-featured/toggle/{id}', [SAKabupaten::class, 'toggleFeatured'])->name('infografis.toggle_featured');
         Route::resource('adminkab', \App\Http\Controllers\SuperAdmin\AdminKabupatenController::class)->except(['show', 'edit', 'update']);
         Route::resource('user', SAUser::class);
         Route::resource('langganan', SALangganan::class);
@@ -119,6 +123,7 @@ Route::prefix('{slug}')->middleware(['auth', 'user'])->name('user.')->group(func
     Route::resource('mitra', UMitra::class);
     Route::resource('kinerja', UKinerja::class);
     Route::resource('artikel', UArtikel::class);
+    Route::resource('pengumuman', UPengumuman::class);
     Route::resource('langganan', ULangganan::class);
 
     // Handling Midtrans callback/checkout specific routes

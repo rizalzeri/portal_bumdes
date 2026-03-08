@@ -11,8 +11,11 @@ class Kabupaten extends Model
 {
     use HasFactory;
 
-    protected $table = 'kabupatens';
-    protected $guarded = ['id'];
+    protected $fillable = ['province_id', 'name', 'slug', 'is_featured'];
+
+    protected $casts = [
+        'is_featured' => 'boolean',
+    ];
 
     public function province(): BelongsTo
     {

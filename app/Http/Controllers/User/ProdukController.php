@@ -10,9 +10,9 @@ use Illuminate\Support\Facades\Storage;
 
 class ProdukController extends Controller
 {
-    public function index()
+    public function index($slug)
     {
-        $bumdes = Bumdesa::where('user_id', auth()->id())->firstOrFail();
+        $bumdes = Bumdesa::where('user_id', auth()->id())->orWhere('id', auth()->user()->bumdes_id)->firstOrFail();
         $produks = KatalogProduk::where('bumdes_id', $bumdes->id)->orderBy('created_at', 'desc')->get();
         // Option categories
         $kategoriOptions = \App\Models\ProdukOption::all();
@@ -20,9 +20,9 @@ class ProdukController extends Controller
         return view('user.produk.index', compact('produks', 'bumdes', 'kategoriOptions'));
     }
 
-    public function store(Request $request)
+    public function store(Request $request, $slug)
     {
-        $bumdes = Bumdesa::where('user_id', auth()->id())->firstOrFail();
+        $bumdes = Bumdesa::where('user_id', auth()->id())->orWhere('id', auth()->user()->bumdes_id)->firstOrFail();
 
         $request->validate([
             'name' => 'required|string|max:255',
@@ -51,9 +51,9 @@ class ProdukController extends Controller
         return redirect()->route('user.produk.index')->with('success', 'Produk/Layanan berhasil ditambahkan ke katalog BUMDesa.');
     }
 
-    public function update(Request $request, KatalogProduk $produk)
+    public function update(Request $request, $slug, KatalogProduk $produk)
     {
-        $bumdes = Bumdesa::where('user_id', auth()->id())->firstOrFail();
+        $bumdes = Bumdesa::where('user_id', auth()->id())->orWhere('id', auth()->user()->bumdes_id)->firstOrFail();
 
         if ($produk->bumdes_id !== $bumdes->id) {
             abort(403);
@@ -83,9 +83,9 @@ class ProdukController extends Controller
         return redirect()->route('user.produk.index')->with('success', 'Data produk berhasil diperbarui.');
     }
 
-    public function destroy(KatalogProduk $produk)
+    public function destroy($slug, KatalogProduk $produk)
     {
-        $bumdes = Bumdesa::where('user_id', auth()->id())->firstOrFail();
+        $bumdes = Bumdesa::where('user_id', auth()->id())->orWhere('id', auth()->user()->bumdes_id)->firstOrFail();
 
         if ($produk->bumdes_id !== $bumdes->id) {
             abort(403);

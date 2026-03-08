@@ -10,9 +10,9 @@ use Illuminate\Support\Facades\Storage;
 
 class FinansialController extends Controller
 {
-    public function index()
+    public function index($slug)
     {
-        $bumdes = Bumdesa::where('user_id', auth()->id())->firstOrFail();
+        $bumdes = Bumdesa::where('user_id', auth()->id())->orWhere('id', auth()->user()->bumdes_id)->firstOrFail();
         // Get all reports sorted by year and month
         $laporans = LaporanKeuangan::where('bumdes_id', $bumdes->id)
             ->orderBy('tahun', 'desc')
@@ -22,9 +22,9 @@ class FinansialController extends Controller
         return view('user.finansial.index', compact('laporans', 'bumdes'));
     }
 
-    public function store(Request $request)
+    public function store(Request $request, $slug)
     {
-        $bumdes = Bumdesa::where('user_id', auth()->id())->firstOrFail();
+        $bumdes = Bumdesa::where('user_id', auth()->id())->orWhere('id', auth()->user()->bumdes_id)->firstOrFail();
 
         $request->validate([
             'bulan' => 'required|integer|between:1,12',
@@ -65,9 +65,9 @@ class FinansialController extends Controller
         return redirect()->route('user.finansial.index')->with('success', 'Laporan keuangan berhasil disimpan.');
     }
 
-    public function update(Request $request, LaporanKeuangan $finansial)
+    public function update(Request $request, $slug, LaporanKeuangan $finansial)
     {
-        $bumdes = Bumdesa::where('user_id', auth()->id())->firstOrFail();
+        $bumdes = Bumdesa::where('user_id', auth()->id())->orWhere('id', auth()->user()->bumdes_id)->firstOrFail();
 
         if ($finansial->bumdes_id !== $bumdes->id) {
             abort(403);
@@ -99,9 +99,9 @@ class FinansialController extends Controller
         return redirect()->route('user.finansial.index')->with('success', 'Laporan keuangan berhasil diperbarui.');
     }
 
-    public function destroy(LaporanKeuangan $finansial)
+    public function destroy($slug, LaporanKeuangan $finansial)
     {
-        $bumdes = Bumdesa::where('user_id', auth()->id())->firstOrFail();
+        $bumdes = Bumdesa::where('user_id', auth()->id())->orWhere('id', auth()->user()->bumdes_id)->firstOrFail();
 
         if ($finansial->bumdes_id !== $bumdes->id) {
             abort(403);

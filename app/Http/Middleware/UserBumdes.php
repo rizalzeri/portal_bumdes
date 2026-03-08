@@ -17,6 +17,16 @@ class UserBumdes
     public function handle(Request $request, Closure $next): Response
     {
         if (Auth::check() && Auth::user()->role === 'user') {
+            $slug = $request->route('slug');
+            
+            // Security: Ensure user can only access their own dashboard/slug
+            if ($slug && Auth::user()->username !== $slug) {
+                return redirect()->route('user.dashboard', ['slug' => Auth::user()->username]);
+            }
+
+            // Set default parameters for URL generator so we don't need to pass 'slug' in every route() call
+            \Illuminate\Support\Facades\URL::defaults(['slug' => Auth::user()->username]);
+
             return $next($request);
         }
         

@@ -10,9 +10,9 @@ use Illuminate\Support\Facades\Storage;
 
 class GaleriController extends Controller
 {
-    public function index()
+    public function index($slug)
     {
-        $bumdes = Bumdesa::where('user_id', auth()->id())->firstOrFail();
+        $bumdes = Bumdesa::where('user_id', auth()->id())->orWhere('id', auth()->user()->bumdes_id)->firstOrFail();
         $galeris = Galeri::where('bumdes_id', $bumdes->id)
             ->orderBy('created_at', 'desc')
             ->get();
@@ -20,9 +20,9 @@ class GaleriController extends Controller
         return view('user.galeri.index', compact('galeris', 'bumdes'));
     }
 
-    public function store(Request $request)
+    public function store(Request $request, $slug)
     {
-        $bumdes = Bumdesa::where('user_id', auth()->id())->firstOrFail();
+        $bumdes = Bumdesa::where('user_id', auth()->id())->orWhere('id', auth()->user()->bumdes_id)->firstOrFail();
 
         $request->validate([
             'title'       => 'required|string|max:255',
@@ -46,9 +46,9 @@ class GaleriController extends Controller
             ->with('success', 'Foto galeri berhasil diunggah.');
     }
 
-    public function destroy(Galeri $galeri)
+    public function destroy($slug, Galeri $galeri)
     {
-        $bumdes = Bumdesa::where('user_id', auth()->id())->firstOrFail();
+        $bumdes = Bumdesa::where('user_id', auth()->id())->orWhere('id', auth()->user()->bumdes_id)->firstOrFail();
         if ($galeri->bumdes_id !== $bumdes->id) abort(403);
 
         if ($galeri->image && Storage::disk('public')->exists($galeri->image)) {

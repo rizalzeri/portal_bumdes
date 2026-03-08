@@ -10,9 +10,9 @@ use Illuminate\Support\Facades\Storage;
 
 class MitraController extends Controller
 {
-    public function index()
+    public function index($slug)
     {
-        $bumdes = Bumdesa::where('user_id', auth()->id())->firstOrFail();
+        $bumdes = Bumdesa::where('user_id', auth()->id())->orWhere('id', auth()->user()->bumdes_id)->firstOrFail();
         $mitras = MitraKerjasama::where('bumdes_id', $bumdes->id)
             ->orderBy('name')
             ->get();
@@ -20,9 +20,9 @@ class MitraController extends Controller
         return view('user.mitra.index', compact('bumdes', 'mitras'));
     }
 
-    public function store(Request $request)
+    public function store(Request $request, $slug)
     {
-        $bumdes = Bumdesa::where('user_id', auth()->id())->firstOrFail();
+        $bumdes = Bumdesa::where('user_id', auth()->id())->orWhere('id', auth()->user()->bumdes_id)->firstOrFail();
 
         $request->validate([
             'name'        => 'required|string|max:255',
@@ -47,9 +47,9 @@ class MitraController extends Controller
             ->with('success', 'Mitra kerjasama berhasil ditambahkan.');
     }
 
-    public function update(Request $request, MitraKerjasama $mitra)
+    public function update(Request $request, $slug, MitraKerjasama $mitra)
     {
-        $bumdes = Bumdesa::where('user_id', auth()->id())->firstOrFail();
+        $bumdes = Bumdesa::where('user_id', auth()->id())->orWhere('id', auth()->user()->bumdes_id)->firstOrFail();
         if ($mitra->bumdes_id !== $bumdes->id) abort(403);
 
         $request->validate([
@@ -73,9 +73,9 @@ class MitraController extends Controller
             ->with('success', 'Data mitra berhasil diperbarui.');
     }
 
-    public function destroy(MitraKerjasama $mitra)
+    public function destroy($slug, MitraKerjasama $mitra)
     {
-        $bumdes = Bumdesa::where('user_id', auth()->id())->firstOrFail();
+        $bumdes = Bumdesa::where('user_id', auth()->id())->orWhere('id', auth()->user()->bumdes_id)->firstOrFail();
         if ($mitra->bumdes_id !== $bumdes->id) abort(403);
 
         if ($mitra->logo && Storage::disk('public')->exists($mitra->logo)) {

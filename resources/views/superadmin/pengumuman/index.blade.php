@@ -34,6 +34,9 @@
                                 @if ($p->bumdes_id)
                                     <div class="font-bold text-gray-900 leading-tight">{{ $p->bumdes->name }}</div>
                                     <div class="text-[10px] text-gray-500">BUMDesa</div>
+                                @elseif($p->type === 'kabupaten' && $p->kabupaten)
+                                    <div class="font-bold text-amber-600">Portal {{ $p->kabupaten->name }}</div>
+                                    <div class="text-[10px] text-gray-500">Kabupaten</div>
                                 @else
                                     <div class="font-bold text-blue-600">Portal Pusat</div>
                                     <div class="text-[10px] text-gray-500">Global</div>

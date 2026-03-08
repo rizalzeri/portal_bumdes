@@ -9,9 +9,9 @@ use App\Models\Bumdesa;
 
 class LanggananController extends Controller
 {
-    public function index()
+    public function index($slug)
     {
-        $bumdes = Bumdesa::where('user_id', auth()->id())->firstOrFail();
+        $bumdes = Bumdesa::where('user_id', auth()->id())->orWhere('id', auth()->user()->bumdes_id)->firstOrFail();
         
         // Cek tagihan yang pending
         $bill = Langganan::where('bumdes_id', $bumdes->id)
@@ -76,13 +76,13 @@ class LanggananController extends Controller
         return view('user.langganan.index', compact('bumdes', 'bill', 'riwayat', 'snapToken'));
     }
 
-    public function successCallback(Request $request)
+    public function successCallback(Request $request, $slug)
     {
         // For simple redirect logic after Midtrans modal is closed (success payment)
         // Usually, the validation is happening via Midtrans Webhook (S2S notification).
         // For demonstration, we will just update status to active manually for User Demo:
         
-        $bumdes = Bumdesa::where('user_id', auth()->id())->firstOrFail();
+        $bumdes = Bumdesa::where('user_id', auth()->id())->orWhere('id', auth()->user()->bumdes_id)->firstOrFail();
         
         $bill = Langganan::where('bumdes_id', $bumdes->id)
             ->where('status', 'pending')

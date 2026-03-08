@@ -12,7 +12,7 @@ class PengumumanController extends Controller
     public function index()
     {
         // Superadmin sees all: Global + BUMDes Announcements
-        $pengumumans = Pengumuman::with('bumdes')->orderBy('created_at', 'desc')->get();
+        $pengumumans = Pengumuman::with(['bumdes', 'kabupaten'])->orderBy('created_at', 'desc')->get();
         return view('superadmin.pengumuman.index', compact('pengumumans'));
     }
 

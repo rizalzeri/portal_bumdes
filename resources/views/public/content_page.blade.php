@@ -35,27 +35,46 @@
                         <a href="{{ $item->bumdes ? url('bumdes/' . $item->bumdes->slug . $anchor) : 'javascript:void(0)' }}"
                             class="block bg-white border border-gray-200 rounded-xl p-5 hover:shadow-lg hover:border-accent transition-all group h-full flex flex-col">
 
-                            <!-- Header with BUMDes Context -->
+                            <!-- Header with BUMDes/Portal Context -->
                             <div class="mb-4 pb-3 border-b flex items-center gap-2">
                                 <div
-                                    class="w-7 h-7 bg-gray-100 rounded-full flex items-center justify-center overflow-hidden border shadow-sm shrink-0">
+                                    class="w-7 h-7 {{ $item->bumdes ? 'bg-gray-100' : ($item->type === 'kabupaten' ? 'bg-amber-500' : 'bg-blue-600') }} rounded-full flex items-center justify-center overflow-hidden border shadow-sm shrink-0">
                                     @if ($item->bumdes && $item->bumdes->logo)
                                         <img src="{{ asset('storage/' . $item->bumdes->logo) }}"
                                             class="w-full h-full object-cover">
                                     @else
-                                        <div
-                                            class="w-full h-full flex items-center justify-center {{ $item->bumdes ? 'bg-gray-50' : 'bg-blue-600' }}">
-                                            <i
-                                                class="fa-solid {{ $item->bumdes ? 'fa-store text-gray-400' : 'fa-leaf text-white' }} text-[10px]"></i>
+                                        <div class="w-full h-full flex items-center justify-center">
+                                            @if ($item->bumdes)
+                                                <i class="fa-solid fa-store text-gray-400 text-[10px]"></i>
+                                            @elseif($item->type === 'kabupaten')
+                                                <i class="fa-solid fa-map-location-dot text-white text-[10px]"></i>
+                                            @else
+                                                <i class="fa-solid fa-leaf text-white text-[10px]"></i>
+                                            @endif
                                         </div>
                                     @endif
                                 </div>
                                 <div class="min-w-0">
                                     <p
                                         class="text-[10px] font-bold text-gray-900 group-hover:text-primary transition-colors truncate">
-                                        {{ $item->bumdes ? $item->bumdes->name : 'Portal Pusat' }}</p>
+                                        @if ($item->bumdes)
+                                            {{ $item->bumdes->name }}
+                                        @elseif($item->type === 'kabupaten' && $item->kabupaten)
+                                            Portal {{ $item->kabupaten->name }}
+                                        @elseif($item->type === 'kabupaten')
+                                            Portal Kabupaten
+                                        @else
+                                            Portal Pusat
+                                        @endif
+                                    </p>
                                     <p class="text-[9px] text-gray-500 truncate">
-                                        {{ $item->bumdes && $item->bumdes->kabupaten ? $item->bumdes->kabupaten->name : 'Informasi Global' }}
+                                        @if ($item->bumdes && $item->bumdes->kabupaten)
+                                            {{ $item->bumdes->kabupaten->name }}
+                                        @elseif($item->kabupaten)
+                                            {{ $item->kabupaten->name }}
+                                        @else
+                                            Informasi Global
+                                        @endif
                                     </p>
                                 </div>
                             </div>

@@ -13,7 +13,7 @@ class ProdukKetapangController extends Controller
 {
     public function index()
     {
-        $bumdes = Bumdesa::where('user_id', auth()->id())->firstOrFail();
+        $bumdes = Bumdesa::where('user_id', auth()->id())->orWhere('id', auth()->user()->bumdes_id)->firstOrFail();
         $produks = ProdukKetahananPangan::where('bumdes_id', $bumdes->id)
             ->orderBy('created_at', 'desc')
             ->get();
@@ -24,7 +24,7 @@ class ProdukKetapangController extends Controller
 
     public function store(Request $request)
     {
-        $bumdes = Bumdesa::where('user_id', auth()->id())->firstOrFail();
+        $bumdes = Bumdesa::where('user_id', auth()->id())->orWhere('id', auth()->user()->bumdes_id)->firstOrFail();
 
         $request->validate([
             'name'                    => 'required|string|max:255',
@@ -54,7 +54,7 @@ class ProdukKetapangController extends Controller
 
     public function update(Request $request, ProdukKetahananPangan $ketapang)
     {
-        $bumdes = Bumdesa::where('user_id', auth()->id())->firstOrFail();
+        $bumdes = Bumdesa::where('user_id', auth()->id())->orWhere('id', auth()->user()->bumdes_id)->firstOrFail();
         if ($ketapang->bumdes_id !== $bumdes->id) abort(403);
 
         $request->validate([
@@ -82,7 +82,7 @@ class ProdukKetapangController extends Controller
 
     public function destroy(ProdukKetahananPangan $ketapang)
     {
-        $bumdes = Bumdesa::where('user_id', auth()->id())->firstOrFail();
+        $bumdes = Bumdesa::where('user_id', auth()->id())->orWhere('id', auth()->user()->bumdes_id)->firstOrFail();
         if ($ketapang->bumdes_id !== $bumdes->id) abort(403);
 
         if ($ketapang->image && Storage::disk('public')->exists($ketapang->image)) {

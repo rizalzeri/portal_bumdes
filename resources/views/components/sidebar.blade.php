@@ -34,11 +34,6 @@
                     <i class="fa-solid fa-map-location-dot w-5 h-5"></i>
                     <span class="mx-2 text-sm font-medium">Kabupaten</span>
                 </a>
-                <a href="{{ route('superadmin.adminkab.index') }}"
-                    class="flex items-center px-3 py-2 text-gray-200 transition-colors rounded-lg hover:bg-primary-800 hover:text-white">
-                    <i class="fa-solid fa-user-shield w-5 h-5"></i>
-                    <span class="mx-2 text-sm font-medium">Admin Kabupaten</span>
-                </a>
                 <a href="{{ route('superadmin.user.index') }}"
                     class="flex items-center px-3 py-2 text-gray-200 transition-colors rounded-lg hover:bg-primary-800 hover:text-white">
                     <i class="fa-solid fa-users w-5 h-5"></i>
@@ -66,6 +61,11 @@
                     class="flex items-center px-3 py-2 text-gray-200 transition-colors rounded-lg hover:bg-primary-800 hover:text-white">
                     <i class="fa-solid fa-bullhorn w-5 h-5"></i>
                     <span class="mx-2 text-sm font-medium">Pengumuman</span>
+                </a>
+                <a href="{{ route('superadmin.infografis.index') }}"
+                    class="flex items-center px-3 py-2 text-gray-200 transition-colors rounded-lg hover:bg-primary-800 hover:text-white">
+                    <i class="fa-solid fa-chart-pie w-5 h-5"></i>
+                    <span class="mx-2 text-sm font-medium">Infografis</span>
                 </a>
                 <a href="{{ route('superadmin.katalog.index') }}"
                     class="flex items-center px-3 py-2 text-gray-200 transition-colors rounded-lg hover:bg-primary-800 hover:text-white">
@@ -112,27 +112,27 @@
             @if (Auth::user()->role === 'user')
                 <div class="text-xs font-semibold text-gray-400 uppercase tracking-wider mt-4 mb-2 px-3">Data Profil &
                     Usaha</div>
-                <a href="{{ route('user.profil.index') }}"
+                <a href="{{ route('user.profil.index', ['slug' => Auth::user()->username]) }}"
                     class="flex items-center px-3 py-2 text-gray-200 transition-colors rounded-lg hover:bg-primary-800 hover:text-white">
                     <i class="fa-solid fa-id-card w-5 h-5"></i>
                     <span class="mx-2 text-sm font-medium">Profil BUMDes</span>
                 </a>
-                <a href="{{ route('user.personalia.index') }}"
+                <a href="{{ route('user.personalia.index', ['slug' => Auth::user()->username]) }}"
                     class="flex items-center px-3 py-2 text-gray-200 transition-colors rounded-lg hover:bg-primary-800 hover:text-white">
                     <i class="fa-solid fa-user-tie w-5 h-5"></i>
                     <span class="mx-2 text-sm font-medium">Personil / Struktur</span>
                 </a>
-                <a href="{{ route('user.unit_usaha.index') }}"
+                <a href="{{ route('user.unit_usaha.index', ['slug' => Auth::user()->username]) }}"
                     class="flex items-center px-3 py-2 text-gray-200 transition-colors rounded-lg hover:bg-primary-800 hover:text-white">
                     <i class="fa-solid fa-shop w-5 h-5"></i>
                     <span class="mx-2 text-sm font-medium">Unit Usaha</span>
                 </a>
-                <a href="{{ route('user.produk.index') }}"
+                <a href="{{ route('user.produk.index', ['slug' => Auth::user()->username]) }}"
                     class="flex items-center px-3 py-2 text-gray-200 transition-colors rounded-lg hover:bg-primary-800 hover:text-white">
                     <i class="fa-solid fa-box w-5 h-5"></i>
                     <span class="mx-2 text-sm font-medium">Produk BUMDes</span>
                 </a>
-                <a href="{{ route('user.ketapang.index') }}"
+                <a href="{{ route('user.ketapang.index', ['slug' => Auth::user()->username]) }}"
                     class="flex items-center px-3 py-2 text-gray-200 transition-colors rounded-lg hover:bg-primary-800 hover:text-white">
                     <i class="fa-solid fa-wheat-awn w-5 h-5"></i>
                     <span class="mx-2 text-sm font-medium">Ketahanan Pangan</span>
@@ -140,39 +140,44 @@
 
                 <div class="text-xs font-semibold text-gray-400 uppercase tracking-wider mt-4 mb-2 px-3">Laporan &
                     Publikasi</div>
-                <a href="{{ route('user.finansial.index') }}"
+                <a href="{{ route('user.finansial.index', ['slug' => Auth::user()->username]) }}"
                     class="flex items-center px-3 py-2 text-gray-200 transition-colors rounded-lg hover:bg-primary-800 hover:text-white">
                     <i class="fa-solid fa-file-invoice-dollar w-5 h-5"></i>
                     <span class="mx-2 text-sm font-medium">Laporan Keuangan</span>
                 </a>
-                <a href="{{ route('user.transparansi.index') }}"
+                <a href="{{ route('user.transparansi.index', ['slug' => Auth::user()->username]) }}"
                     class="flex items-center px-3 py-2 text-gray-200 transition-colors rounded-lg hover:bg-primary-800 hover:text-white">
                     <i class="fa-solid fa-magnifying-glass-chart w-5 h-5"></i>
                     <span class="mx-2 text-sm font-medium">Transparansi</span>
                 </a>
-                <a href="{{ route('user.kinerja.index') }}"
+                <a href="{{ route('user.kinerja.index', ['slug' => Auth::user()->username]) }}"
                     class="flex items-center px-3 py-2 text-gray-200 transition-colors rounded-lg hover:bg-primary-800 hover:text-white">
                     <i class="fa-solid fa-arrow-trend-up w-5 h-5"></i>
                     <span class="mx-2 text-sm font-medium">Kinerja & Capaian</span>
                 </a>
-                <a href="{{ route('user.mitra.index') }}"
+                <a href="{{ route('user.mitra.index', ['slug' => Auth::user()->username]) }}"
                     class="flex items-center px-3 py-2 text-gray-200 transition-colors rounded-lg hover:bg-primary-800 hover:text-white">
                     <i class="fa-solid fa-handshake w-5 h-5"></i>
                     <span class="mx-2 text-sm font-medium">Mitra Kerjasama</span>
                 </a>
-                <a href="{{ route('user.artikel.index') }}"
+                <a href="{{ route('user.artikel.index', ['slug' => Auth::user()->username]) }}"
                     class="flex items-center px-3 py-2 text-gray-200 transition-colors rounded-lg hover:bg-primary-800 hover:text-white">
                     <i class="fa-solid fa-newspaper w-5 h-5"></i>
                     <span class="mx-2 text-sm font-medium">Artikel & Opini</span>
                 </a>
-                <a href="{{ route('user.galeri.index') }}"
+                <a href="{{ route('user.galeri.index', ['slug' => Auth::user()->username]) }}"
                     class="flex items-center px-3 py-2 text-gray-200 transition-colors rounded-lg hover:bg-primary-800 hover:text-white">
                     <i class="fa-solid fa-images w-5 h-5"></i>
                     <span class="mx-2 text-sm font-medium">Galeri Kegiatan</span>
                 </a>
+                <a href="{{ route('user.pengumuman.index', ['slug' => Auth::user()->username]) }}"
+                    class="flex items-center px-3 py-2 text-gray-200 transition-colors rounded-lg hover:bg-primary-800 hover:text-white">
+                    <i class="fa-solid fa-bullhorn w-5 h-5"></i>
+                    <span class="mx-2 text-sm font-medium">Pengumuman</span>
+                </a>
 
                 <div class="mt-4 px-3">
-                    <a href="{{ route('user.langganan.index') }}"
+                    <a href="{{ route('user.langganan.index', ['slug' => Auth::user()->username]) }}"
                         class="mt-4 flex items-center justify-center px-4 py-2 text-primary font-bold bg-accent rounded-lg hover:bg-yellow-400 w-full transition shadow-sm">
                         <i class="fa-solid fa-crown mr-2"></i> Langganan
                     </a>

@@ -69,6 +69,9 @@ class PublicRegistrationController extends Controller
                 'subscription_package' => $request->package,
             ]);
 
+            // Set user_id back to bumdes record
+            $bumdes->update(['user_id' => $user->id]);
+
             DB::commit();
 
             if ($request->package === 'premium') {

@@ -11,17 +11,17 @@ use Illuminate\Support\Str;
 
 class ArtikelController extends Controller
 {
-    public function index()
+    public function index($slug)
     {
-        $bumdes = Bumdesa::where('user_id', auth()->id())->firstOrFail();
+        $bumdes = Bumdesa::where('user_id', auth()->id())->orWhere('id', auth()->user()->bumdes_id)->firstOrFail();
         $artikels = Artikel::where('bumdes_id', $bumdes->id)->orderBy('created_at', 'desc')->get();
 
         return view('user.artikel.index', compact('artikels', 'bumdes'));
     }
 
-    public function store(Request $request)
+    public function store(Request $request, $slug)
     {
-        $bumdes = Bumdesa::where('user_id', auth()->id())->firstOrFail();
+        $bumdes = Bumdesa::where('user_id', auth()->id())->orWhere('id', auth()->user()->bumdes_id)->firstOrFail();
 
         $request->validate([
             'title' => 'required|string|max:255',
@@ -49,9 +49,9 @@ class ArtikelController extends Controller
         return redirect()->route('user.artikel.index')->with('success', 'Artikel berhasil diterbitkan.');
     }
 
-    public function destroy(Artikel $artikel)
+    public function destroy($slug, Artikel $artikel)
     {
-        $bumdes = Bumdesa::where('user_id', auth()->id())->firstOrFail();
+        $bumdes = Bumdesa::where('user_id', auth()->id())->orWhere('id', auth()->user()->bumdes_id)->firstOrFail();
 
         if ($artikel->bumdes_id !== $bumdes->id) {
             abort(403);

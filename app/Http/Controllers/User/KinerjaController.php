@@ -8,9 +8,10 @@ use App\Models\Bumdesa;
 
 class KinerjaController extends Controller
 {
-    public function index()
+    public function index($slug)
     {
         $bumdes = Bumdesa::where('user_id', auth()->id())
+            ->orWhere('id', auth()->user()->bumdes_id)
             ->with(['laporanKeuangan' => function($q) {
                 // Get all reports sorted by year and month ascending for chart
                 $q->orderBy('tahun', 'asc')->orderBy('bulan', 'asc');

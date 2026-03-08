@@ -322,7 +322,16 @@
                                 @forelse($bumdes->pengumuman->sortByDesc('created_at')->take(3) as $umum)
                                     <div class="border rounded-lg p-4 bg-gray-50 hover:shadow transition">
                                         <h4 class="font-bold text-gray-900">{{ $umum->title }}</h4>
-                                        <p class="text-xs text-gray-500 mt-1 mb-2">
+                                        <p class="text-[10px] font-bold text-accent uppercase tracking-wider mt-1">
+                                            @if ($umum->bumdes)
+                                                {{ $umum->bumdes->name }}
+                                            @elseif($umum->type === 'kabupaten' && $umum->kabupaten)
+                                                Portal {{ $umum->kabupaten->name }}
+                                            @else
+                                                Portal Pusat
+                                            @endif
+                                        </p>
+                                        <p class="text-xs text-gray-400 mb-2">
                                             {{ $umum->created_at->translatedFormat('d F Y') }}</p>
                                         <p class="text-sm text-gray-700 line-clamp-2">
                                             {{ Str::limit(strip_tags($umum->content), 100) }}</p>

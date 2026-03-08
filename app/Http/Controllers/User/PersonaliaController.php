@@ -10,17 +10,17 @@ use Illuminate\Support\Facades\Storage;
 
 class PersonaliaController extends Controller
 {
-    public function index()
+    public function index($slug)
     {
-        $bumdes = Bumdesa::where('user_id', auth()->id())->firstOrFail();
+        $bumdes = Bumdesa::where('user_id', auth()->id())->orWhere('id', auth()->user()->bumdes_id)->firstOrFail();
         $pengurus = Pengurus::where('bumdes_id', $bumdes->id)->orderBy('role')->get();
 
         return view('user.personalia.index', compact('pengurus', 'bumdes'));
     }
 
-    public function store(Request $request)
+    public function store(Request $request, $slug)
     {
-        $bumdes = Bumdesa::where('user_id', auth()->id())->firstOrFail();
+        $bumdes = Bumdesa::where('user_id', auth()->id())->orWhere('id', auth()->user()->bumdes_id)->firstOrFail();
 
         $request->validate([
             'name' => 'required|string|max:255',
@@ -46,9 +46,9 @@ class PersonaliaController extends Controller
         return redirect()->route('user.personalia.index')->with('success', 'Data pengurus berhasil ditambahkan.');
     }
 
-    public function update(Request $request, Pengurus $personalia)
+    public function update(Request $request, $slug, Pengurus $personalia)
     {
-        $bumdes = Bumdesa::where('user_id', auth()->id())->firstOrFail();
+        $bumdes = Bumdesa::where('user_id', auth()->id())->orWhere('id', auth()->user()->bumdes_id)->firstOrFail();
 
         if ($personalia->bumdes_id !== $bumdes->id) {
             abort(403);
@@ -76,9 +76,9 @@ class PersonaliaController extends Controller
         return redirect()->route('user.personalia.index')->with('success', 'Data pengurus berhasil diperbarui.');
     }
 
-    public function destroy(Pengurus $personalia)
+    public function destroy($slug, Pengurus $personalia)
     {
-        $bumdes = Bumdesa::where('user_id', auth()->id())->firstOrFail();
+        $bumdes = Bumdesa::where('user_id', auth()->id())->orWhere('id', auth()->user()->bumdes_id)->firstOrFail();
         if ($personalia->bumdes_id !== $bumdes->id) {
             abort(403);
         }
