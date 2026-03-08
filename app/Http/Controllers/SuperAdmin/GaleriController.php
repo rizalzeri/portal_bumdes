@@ -11,9 +11,16 @@ class GaleriController extends Controller
 {
     public function index()
     {
-        // Global library
-        $galeris = Gallery::whereNull('bumdes_id')->orderBy('created_at', 'desc')->get();
+        // Combined view: Global + BUMDes Gallery
+        $galeris = \App\Models\Galeri::with('bumdes')->orderBy('created_at', 'desc')->get();
         return view('superadmin.galeri.index', compact('galeris'));
+    }
+
+    public function toggleFeatured(Request $request, $id)
+    {
+        $galeri = \App\Models\Galeri::findOrFail($id);
+        $galeri->update(['is_featured' => !$galeri->is_featured]);
+        return redirect()->back()->with('success', 'Status unggulan berhasil diperbarui.');
     }
 
     public function store(Request $request)

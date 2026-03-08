@@ -4,6 +4,7 @@ namespace App\Http\Controllers\SuperAdmin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use App\Models\Kabupaten;
 use App\Models\Province;
 
@@ -12,7 +13,8 @@ class KabupatenController extends Controller
     public function index()
     {
         $kabupatens = Kabupaten::with('province')->get();
-        $provinces = Province::orderBy('name')->get();
+        // Use unique() to prevent duplicate province names in dropdown
+        $provinces = Province::orderBy('name')->get()->unique('name');
         return view('superadmin.kabupaten.index', compact('kabupatens', 'provinces'));
     }
 
@@ -25,7 +27,10 @@ class KabupatenController extends Controller
             'longitude' => 'nullable|numeric',
         ]);
 
-        Kabupaten::create($request->all());
+        $data = $request->only(['province_id', 'name', 'latitude', 'longitude']);
+        $data['slug'] = Str::slug($request->name) . '-' . uniqid();
+
+        Kabupaten::create($data);
 
         return redirect()->route('superadmin.kabupaten.index')->with('success', 'Data kabupaten berhasil ditambahkan.');
     }
@@ -39,7 +44,13 @@ class KabupatenController extends Controller
             'longitude' => 'nullable|numeric',
         ]);
 
-        $kabupaten->update($request->all());
+        $data = $request->only(['province_id', 'name', 'latitude', 'longitude']);
+        // Only regenerate slug if the name changed
+        if ($kabupaten->name !== $request->name) {
+            $data['slug'] = Str::slug($request->name) . '-' . uniqid();
+        }
+
+        $kabupaten->update($data);
 
         return redirect()->route('superadmin.kabupaten.index')->with('success', 'Data kabupaten berhasil diperbarui.');
     }

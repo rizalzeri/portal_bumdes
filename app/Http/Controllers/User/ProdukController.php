@@ -40,7 +40,7 @@ class ProdukController extends Controller
 
         KatalogProduk::create([
             'bumdes_id' => $bumdes->id,
-            'name' => $request->name,
+            'title' => $request->name,
             'category' => $request->category,
             'description' => $request->description,
             'price' => $request->price,
@@ -68,7 +68,8 @@ class ProdukController extends Controller
             'link_pembelian' => 'nullable|url',
         ]);
 
-        $data = $request->only('name', 'category', 'description', 'price', 'link_pembelian');
+        $data = $request->only('category', 'description', 'price', 'link_pembelian');
+        $data['title'] = $request->name;
 
         if ($request->hasFile('image')) {
             if ($produk->image && Storage::disk('public')->exists($produk->image)) {

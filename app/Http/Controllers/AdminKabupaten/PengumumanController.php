@@ -29,6 +29,7 @@ class PengumumanController extends Controller
             'title' => $request->title,
             'slug' => Str::slug($request->title) . '-' . uniqid(),
             'content' => $request->content,
+            'type' => 'kabupaten',
             'is_global' => false,
         ]);
 

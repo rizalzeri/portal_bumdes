@@ -23,10 +23,11 @@ class KinerjaController extends Controller
         $labaData = [];
 
         foreach($bumdes->laporanKeuangan as $lap) {
-            $monthName = config('app.months')[$lap->bulan] ?? mb_substr(date('F', mktime(0, 0, 0, $lap->bulan, 1)), 0, 3);
-            $labels[] = $monthName . ' ' . substr($lap->tahun, 2);
+            $monthName = config('app.months')[$lap->bulan] ?? mb_substr(date('F', mktime(0, 0, 0, max(1, $lap->bulan), 1)), 0, 3);
+            $year = $lap->tahun ?? $lap->year ?? date('Y');
+            $labels[] = $monthName . ' ' . substr($year, -2);
             $pendapatanData[] = $lap->pendapatan;
-            $labaData[] = $lap->laba_bersih;
+            $labaData[] = $lap->laba_rugi ?? $lap->laba_bersih ?? 0;
         }
 
         return view('user.kinerja.index', compact('bumdes', 'labels', 'pendapatanData', 'labaData'));

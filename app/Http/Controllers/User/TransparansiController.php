@@ -29,8 +29,8 @@ class TransparansiController extends Controller
         ]);
 
         $exists = StandarTransparansi::where('bumdes_id', $bumdes->id)
-            ->where('tipe_dokumen', $request->tipe_dokumen)
-            ->where('tahun', $request->tahun)
+            ->where('type', $request->tipe_dokumen)
+            ->where('year', $request->tahun)
             ->exists();
 
         if ($exists) {
@@ -43,10 +43,13 @@ class TransparansiController extends Controller
         }
 
         StandarTransparansi::create([
-            'bumdes_id' => $bumdes->id,
-            'tipe_dokumen' => $request->tipe_dokumen,
-            'tahun' => $request->tahun,
-            'file_dokumen' => $filePath,
+            'bumdes_id'   => $bumdes->id,
+            'title'       => $request->tipe_dokumen,      // kolom NOT NULL awal, pakai tipe sbg judul
+            'type'        => $request->tipe_dokumen,       // kolom NOT NULL awal
+            'year'        => (string) $request->tahun,     // kolom NOT NULL awal
+            'tahun'       => $request->tahun,              // kolom nullable tambahan
+            'tipe'        => $request->tipe_dokumen,       // kolom nullable tambahan
+            'file_url'    => $filePath,                    // kolom NOT NULL awal
         ]);
 
         return redirect()->route('user.transparansi.index')->with('success', 'Dokumen transparansi berhasil diunggah.');

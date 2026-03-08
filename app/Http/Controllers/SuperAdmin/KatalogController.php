@@ -11,9 +11,16 @@ class KatalogController extends Controller
 {
     public function index()
     {
-        // Global catalog maintained by Superadmin
-        $katalogs = KatalogProduk::whereNull('bumdes_id')->orderBy('created_at', 'desc')->get();
+        // Collective view for Superadmin
+        $katalogs = KatalogProduk::with('bumdes')->orderBy('created_at', 'desc')->get();
         return view('superadmin.katalog.index', compact('katalogs'));
+    }
+
+    public function toggleFeatured(Request $request, $id)
+    {
+        $katalog = KatalogProduk::findOrFail($id);
+        $katalog->update(['is_featured' => !$katalog->is_featured]);
+        return redirect()->back()->with('success', 'Status unggulan berhasil diperbarui.');
     }
 
     public function store(Request $request)

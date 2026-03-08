@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -34,11 +35,15 @@
 
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-        body { font-family: 'Inter', sans-serif; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+        }
     </style>
 
     @stack('styles')
 </head>
+
 <body class="bg-gray-50 text-gray-800 antialiased flex flex-col min-h-screen">
 
     <!-- Public Navbar -->
@@ -54,20 +59,25 @@
                 <!-- Desktop Menu -->
                 <div class="hidden md:block">
                     <div class="ml-10 flex items-baseline space-x-4">
-                        <a href="{{ route('home') }}" class="hover:text-accent px-3 py-2 rounded-md font-medium transition-colors">Beranda</a>
-                        <a href="{{ route('public.bumdes.list') }}" class="hover:text-accent px-3 py-2 rounded-md font-medium transition-colors">BUMDesa</a>
-                        <a href="{{ route('public.infografis') }}" class="hover:text-accent px-3 py-2 rounded-md font-medium transition-colors">Infografis</a>
-                        
+                        <a href="{{ route('home') }}"
+                            class="hover:text-accent px-3 py-2 rounded-md font-medium transition-colors">Beranda</a>
+                        <a href="{{ route('public.bumdes.list') }}"
+                            class="hover:text-accent px-3 py-2 rounded-md font-medium transition-colors">BUMDesa</a>
+
                         @auth
-                            @if(Auth::user()->role === 'superadmin')
-                                <a href="{{ route('superadmin.dashboard') }}" class="bg-accent text-primary px-4 py-2 rounded-md font-bold hover:bg-yellow-400 object-transition">Dashboard</a>
+                            @if (Auth::user()->role === 'superadmin')
+                                <a href="{{ route('superadmin.dashboard') }}"
+                                    class="bg-accent text-primary px-4 py-2 rounded-md font-bold hover:bg-yellow-400 object-transition">Dashboard</a>
                             @elseif(Auth::user()->role === 'admin_kabupaten')
-                                <a href="{{ route('adminkab.dashboard') }}" class="bg-accent text-primary px-4 py-2 rounded-md font-bold hover:bg-yellow-400 object-transition">Dashboard</a>
+                                <a href="{{ route('adminkab.dashboard') }}"
+                                    class="bg-accent text-primary px-4 py-2 rounded-md font-bold hover:bg-yellow-400 object-transition">Dashboard</a>
                             @else
-                                <a href="{{ route('user.dashboard') }}" class="bg-accent text-primary px-4 py-2 rounded-md font-bold hover:bg-yellow-400 object-transition">Dashboard</a>
+                                <a href="{{ route('user.dashboard', ['slug' => Auth::user()->username]) }}"
+                                    class="bg-accent text-primary px-4 py-2 rounded-md font-bold hover:bg-yellow-400 object-transition">Dashboard</a>
                             @endif
                         @else
-                            <a href="{{ route('login') }}" class="bg-accent text-primary px-4 py-2 rounded-md font-bold hover:bg-yellow-400 transition-colors shadow-sm">Login</a>
+                            <a href="{{ route('login') }}"
+                                class="bg-accent text-primary px-4 py-2 rounded-md font-bold hover:bg-yellow-400 transition-colors shadow-sm">Login</a>
                         @endauth
                     </div>
                 </div>
@@ -82,9 +92,11 @@
 
     <!-- Footer -->
     <footer class="bg-primary text-white text-center py-6 mt-12">
-        <p class="text-sm text-gray-300">&copy; {{ date('Y') }} Portal BUMDesa - Pusat Inspirasi dan Informasi BUMDesa. All rights reserved.</p>
+        <p class="text-sm text-gray-300">&copy; {{ date('Y') }} Portal BUMDesa - Pusat Inspirasi dan Informasi
+            BUMDesa. All rights reserved.</p>
     </footer>
 
     @stack('scripts')
 </body>
+
 </html>

@@ -11,9 +11,16 @@ class MitraController extends Controller
 {
     public function index()
     {
-        // Global Mitra
-        $mitras = MitraKerjasama::whereNull('bumdes_id')->orderBy('name')->get();
+        // Collective view
+        $mitras = MitraKerjasama::with('bumdes')->orderBy('name')->get();
         return view('superadmin.mitra.index', compact('mitras'));
+    }
+
+    public function toggleFeatured(Request $request, $id)
+    {
+        $mitra = MitraKerjasama::findOrFail($id);
+        $mitra->update(['is_featured' => !$mitra->is_featured]);
+        return redirect()->back()->with('success', 'Status unggulan berhasil diperbarui.');
     }
 
     public function store(Request $request)

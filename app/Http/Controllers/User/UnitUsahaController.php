@@ -32,8 +32,11 @@ class UnitUsahaController extends Controller
             'status' => 'required|in:active,inactive',
         ]);
 
+        $option = \App\Models\UnitUsahaOption::firstOrCreate(['name' => $request->sektor]);
+
         UnitUsaha::create([
             'bumdes_id' => $bumdes->id,
+            'unit_usaha_option_id' => $option->id,
             'name' => $request->name,
             'sektor' => $request->sektor,
             'deskripsi' => $request->deskripsi,
@@ -60,7 +63,16 @@ class UnitUsahaController extends Controller
             'status' => 'required|in:active,inactive',
         ]);
 
-        $unitUsaha->update($request->only('name', 'sektor', 'deskripsi', 'tahun_berdiri', 'status'));
+        $option = \App\Models\UnitUsahaOption::firstOrCreate(['name' => $request->sektor]);
+
+        $unitUsaha->update([
+            'unit_usaha_option_id' => $option->id,
+            'name' => $request->name,
+            'sektor' => $request->sektor,
+            'deskripsi' => $request->deskripsi,
+            'tahun_berdiri' => $request->tahun_berdiri,
+            'status' => $request->status,
+        ]);
 
         return redirect()->route('user.unit_usaha.index')->with('success', 'Data unit usaha berhasil diperbarui.');
     }

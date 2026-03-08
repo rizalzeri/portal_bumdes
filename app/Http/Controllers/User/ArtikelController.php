@@ -40,7 +40,7 @@ class ArtikelController extends Controller
             'title' => $request->title,
             'slug' => Str::slug($request->title) . '-' . uniqid(),
             'content' => $request->content,
-            'category' => $request->category ?? 'Berita Desa',
+            'category' => in_array($request->category, ['artikel', 'opini']) ? $request->category : 'artikel',
             'image' => $imagePath,
             'is_global' => false,
             'views' => 0,

@@ -35,18 +35,20 @@ class AuthController extends Controller
 
     public function adminKabupatenLogin(Request $request)
     {
-        $credentials = $request->validate([
-            'email' => ['required', 'email'],
+        $request->validate([
+            'email' => ['required'], // using 'email' field name but storing username
             'password' => ['required'],
         ]);
 
-        if (Auth::attempt($credentials) && Auth::user()->role === 'admin_kabupaten') {
+        $loginType = filter_var($request->email, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
+
+        if (Auth::attempt([$loginType => $request->email, 'password' => $request->password]) && Auth::user()->role === 'admin_kabupaten') {
             $request->session()->regenerate();
             return redirect()->intended('admin-kabupaten/dashboard');
         }
 
         Auth::logout();
-        return back()->withErrors(['email' => 'The provided credentials do not match our admin kabupaten records.']);
+        return back()->withErrors(['email' => 'Username/Email atau password salah.']);
     }
 
     public function showUserLogin()
@@ -56,18 +58,29 @@ class AuthController extends Controller
 
     public function userLogin(Request $request)
     {
-        $credentials = $request->validate([
-            'email' => ['required', 'email'],
+        $request->validate([
+            'email' => ['required'], // user enters 'domain' (username) here
             'password' => ['required'],
         ]);
 
-        if (Auth::attempt($credentials) && Auth::user()->role === 'user') {
+        $loginType = filter_var($request->email, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
+
+        if (Auth::attempt([$loginType => $request->email, 'password' => $request->password]) && Auth::user()->role === 'user') {
+            
+            // Check if gratis account is inactive
+            if (Auth::user()->subscription_status === 'inactive') {
+                Auth::logout();
+                return back()->withErrors(['email' => 'Akun Anda sedang menunggu konfirmasi/aktivasi dari Admin Kabupaten.']);
+            }
+
             $request->session()->regenerate();
-            return redirect()->intended('user/dashboard');
+            
+            // Redirect to dynamic slug dashboard
+            return redirect()->intended(Auth::user()->username . '/dashboard');
         }
 
         Auth::logout();
-        return back()->withErrors(['email' => 'The provided credentials do not match our BUMDes user records.']);
+        return back()->withErrors(['email' => 'Username/Domain atau password salah.']);
     }
 
     public function logout(Request $request)

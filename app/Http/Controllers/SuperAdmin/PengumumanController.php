@@ -11,9 +11,16 @@ class PengumumanController extends Controller
 {
     public function index()
     {
-        // Superadmin sees all global announcements
-        $pengumumans = Pengumuman::where('is_global', true)->orderBy('created_at', 'desc')->get();
+        // Superadmin sees all: Global + BUMDes Announcements
+        $pengumumans = Pengumuman::with('bumdes')->orderBy('created_at', 'desc')->get();
         return view('superadmin.pengumuman.index', compact('pengumumans'));
+    }
+
+    public function toggleFeatured(Request $request, $id)
+    {
+        $pengumuman = Pengumuman::findOrFail($id);
+        $pengumuman->update(['is_featured' => !$pengumuman->is_featured]);
+        return redirect()->back()->with('success', 'Status unggulan berhasil diperbarui.');
     }
 
     public function store(Request $request)
@@ -27,6 +34,7 @@ class PengumumanController extends Controller
             'title' => $request->title,
             'slug' => Str::slug($request->title) . '-' . uniqid(),
             'content' => $request->content,
+            'type' => 'portal',
             'is_global' => true,
         ]);
 

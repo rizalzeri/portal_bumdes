@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\LaporanKeuangan;
 use App\Models\Bumdesa;
+use App\Models\LaporanKeuangan;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class FinansialController extends Controller
@@ -28,7 +28,7 @@ class FinansialController extends Controller
 
         $request->validate([
             'bulan' => 'required|integer|between:1,12',
-            'tahun' => 'required|integer|min:2000|max:' . (date('Y') + 1),
+            'tahun' => 'required|integer|min:2000|max:'.(date('Y') + 1),
             'pendapatan' => 'required|numeric',
             'pengeluaran' => 'required|numeric',
             'aset' => 'required|numeric',
@@ -52,13 +52,14 @@ class FinansialController extends Controller
 
         LaporanKeuangan::create([
             'bumdes_id' => $bumdes->id,
+            'year' => (string) $request->tahun,  // kolom NOT NULL dari migrasi awal
+            'tahun' => $request->tahun,           // kolom nullable dari migrasi tambahan
             'bulan' => $request->bulan,
-            'tahun' => $request->tahun,
             'pendapatan' => $request->pendapatan,
             'pengeluaran' => $request->pengeluaran,
-            'laba_bersih' => $request->pendapatan - $request->pengeluaran,
-            'aset' => $request->aset,
-            'file_laporan' => $filePath,
+            'laba_rugi' => $request->pendapatan - $request->pengeluaran,
+            'total_aset' => $request->aset,
+            'file_url' => $filePath,
         ]);
 
         return redirect()->route('user.finansial.index')->with('success', 'Laporan keuangan berhasil disimpan.');

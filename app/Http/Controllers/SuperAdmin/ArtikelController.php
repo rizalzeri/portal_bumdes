@@ -12,9 +12,16 @@ class ArtikelController extends Controller
 {
     public function index()
     {
-        // Global articles (no bumdes)
-        $artikels = Artikel::whereNull('bumdes_id')->orderBy('created_at', 'desc')->get();
+        // Collective: Global + BUMDes Articles
+        $artikels = Artikel::with('bumdes')->orderBy('created_at', 'desc')->get();
         return view('superadmin.artikel.index', compact('artikels'));
+    }
+
+    public function toggleFeatured(Request $request, $id)
+    {
+        $artikel = Artikel::findOrFail($id);
+        $artikel->update(['is_featured' => !$artikel->is_featured]);
+        return redirect()->back()->with('success', 'Status unggulan berhasil diperbarui.');
     }
 
     public function store(Request $request)

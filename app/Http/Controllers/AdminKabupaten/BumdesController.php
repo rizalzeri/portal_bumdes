@@ -99,4 +99,31 @@ class BumdesController extends Controller
 
         return redirect()->route('adminkab.bumdes.index')->with('success', 'BUMDesa berhasil dihapus.');
     }
+
+    public function toggleStatus($id)
+    {
+        $bumde = Bumdesa::findOrFail($id);
+        
+        if ($bumde->kabupaten_id !== auth()->user()->kabupaten_id) {
+            abort(403);
+        }
+
+        $bumde->is_active = !$bumde->is_active;
+        $bumde->status = $bumde->is_active ? 'active' : 'inactive';
+        $bumde->save();
+
+        // Also update the associated user subscription status if needed
+        $user = User::where('bumdes_id', $bumde->id)->orWhere('id', $bumde->user_id)->first();
+        if ($user) {
+            if ($bumde->is_active && $user->subscription_status === 'inactive') {
+                $user->subscription_status = 'active_gratis';
+                $user->save();
+            } else if (!$bumde->is_active) {
+                $user->subscription_status = 'inactive';
+                $user->save();
+            }
+        }
+
+        return redirect()->back()->with('success', 'Status BUMDesa berhasil diubah.');
+    }
 }

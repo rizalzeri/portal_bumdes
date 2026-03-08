@@ -24,4 +24,9 @@ class Pengumuman extends Model
     {
         return $this->belongsTo(Bumdes::class);
     }
+
+    public function kabupaten(): BelongsTo
+    {
+        return $this->belongsTo(Kabupaten::class);
+    }
 }
