@@ -221,6 +221,24 @@
                 if (provinceSelect.value) {
                     loadKabupaten(provinceSelect.value, oldKabupatenId);
                 }
+
+                // Loading state saat submit
+                const registerForm = document.querySelector('form');
+                registerForm.addEventListener('submit', function() {
+                    const btn = registerForm.querySelector('button[type="submit"]');
+                    btn.disabled = true;
+                    btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin mr-2"></i> Memproses...';
+
+                    Swal.fire({
+                        title: 'Mohon Tunggu',
+                        text: 'Sedang mendaftarkan BUMDesa Anda...',
+                        allowOutsideClick: false,
+                        showConfirmButton: false,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
+                });
             });
         </script>
     @endpush

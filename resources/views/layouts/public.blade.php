@@ -87,6 +87,45 @@
 
     <!-- Main Content -->
     <main class="flex-grow">
+        @if (session('success'))
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Berhasil!',
+                        text: "{{ session('success') }}",
+                        confirmButtonColor: '#1e3a5f',
+                    });
+                });
+            </script>
+        @endif
+
+        @if (session('error'))
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Terjadi Kesalahan',
+                        text: "{{ session('error') }}",
+                        confirmButtonColor: '#1e3a5f',
+                    });
+                });
+            </script>
+        @endif
+
+        @if (session('info'))
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    Swal.fire({
+                        icon: 'info',
+                        title: 'Informasi',
+                        text: "{{ session('info') }}",
+                        confirmButtonColor: '#1e3a5f',
+                    });
+                });
+            </script>
+        @endif
+
         @yield('content')
     </main>
 

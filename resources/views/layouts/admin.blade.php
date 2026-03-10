@@ -85,15 +85,44 @@
             <!-- Main section -->
             <main class="p-4 md:p-6 lg:p-8 w-full max-w-9xl mx-auto">
                 
-                @if(session('success'))
+                @if (session('success'))
                     <script>
-                        Swal.fire({ icon: 'success', title: 'Berhasil!', text: '{{ session('success') }}', timer: 3000, showConfirmButton: false });
+                        document.addEventListener('DOMContentLoaded', function() {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Berhasil!',
+                                text: "{{ session('success') }}",
+                                timer: 3000,
+                                showConfirmButton: false
+                            });
+                        });
                     </script>
                 @endif
-                
-                @if(session('error'))
+
+                @if (session('error'))
                     <script>
-                        Swal.fire({ icon: 'error', title: 'Oops...', text: '{{ session('error') }}', timer: 3000, showConfirmButton: false });
+                        document.addEventListener('DOMContentLoaded', function() {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: "{{ session('error') }}",
+                                timer: 3000,
+                                showConfirmButton: false
+                            });
+                        });
+                    </script>
+                @endif
+
+                @if (session('info'))
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            Swal.fire({
+                                icon: 'info',
+                                title: 'Informasi',
+                                text: "{{ session('info') }}",
+                                confirmButtonColor: '#1e3a5f',
+                            });
+                        });
                     </script>
                 @endif
 
