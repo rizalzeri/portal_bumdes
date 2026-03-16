@@ -111,8 +111,11 @@
                                 </div>
                             </div>
                             <div class="p-6 pt-10 flex-grow flex flex-col">
-                                <h3 class="font-bold text-lg text-gray-900 tracking-tight">{{ $bd->name }}</h3>
-                                <p class="text-xs text-green-600 font-semibold mb-3"><i class="fa-solid fa-certificate"></i> {{ $bd->legal_status ?? 'Status Hukum Belum Diperbarui' }}</p>
+                                <h3 class="font-bold text-lg text-gray-900 tracking-tight">BUMDesa "{{ $bd->name }}" Desa</h3>
+                                <p class="text-[10px] font-bold uppercase tracking-wider mb-3 {{ $bd->status === 'active' ? 'text-emerald-600' : 'text-red-600' }}">
+                                    <i class="fa-solid {{ $bd->status === 'active' ? 'fa-circle-check' : 'fa-circle-xmark' }}"></i> 
+                                    Status BUMDesa: {{ $bd->status === 'active' ? 'Aktif' : 'Tidak Aktif' }}
+                                </p>
                                 
                                 <p class="text-sm text-gray-500 mb-4 line-clamp-2 flex-grow">{{ $bd->about ?? 'Deskripsi profil BUMDesa belum dilengkapi.' }}</p>
                                 

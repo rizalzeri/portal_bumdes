@@ -1,5 +1,5 @@
 @extends('layouts.public')
-@section('title', $bumdes->name)
+@section('title', 'BUMDesa "' . $bumdes->name . '" Desa')
 
 @section('content')
     <!-- Header Section -->
@@ -18,15 +18,20 @@
                 </div>
                 <div class="flex-grow text-center md:text-left">
                     <span
-                        class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800 mb-4">
-                        <i class="fa-solid fa-circle-check mr-2"></i>
-                        {{ $bumdes->legal_status ?? 'Status Hukum Terdaftar' }}
+                        class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium {{ $bumdes->status === 'active' ? 'bg-emerald-100 text-emerald-800' : 'bg-red-100 text-red-800' }} mb-4">
+                        <i
+                            class="fa-solid {{ $bumdes->status === 'active' ? 'fa-circle-check' : 'fa-circle-xmark' }} mr-2"></i>
+                        Status BUMDesa: {{ $bumdes->status === 'active' ? 'Aktif' : 'Tidak Aktif' }}
                     </span>
-                    <h1 class="text-3xl md:text-5xl font-extrabold mb-4">{{ $bumdes->name }}</h1>
+                    <h1 class="text-3xl md:text-5xl font-extrabold mb-4">BUMDesa "{{ $bumdes->name }}" Desa</h1>
                     <div
                         class="flex flex-col sm:flex-row flex-wrap gap-4 justify-center md:justify-start text-blue-100 text-sm md:text-base">
                         <div class="flex items-center"><i class="fa-solid fa-map-location-dot w-5 text-accent"></i>
                             {{ $bumdes->address ?? 'Alamat belum diatur' }}, {{ $bumdes->kabupaten->name }}</div>
+                        @if ($bumdes->nomor_sertifikat)
+                            <div class="flex items-center"><i class="fa-solid fa-certificate w-5 text-accent"></i>
+                                No. Badan Hukum: {{ $bumdes->nomor_sertifikat }}</div>
+                        @endif
                         @if ($bumdes->phone)
                             <div class="flex items-center"><i class="fa-solid fa-phone w-5 text-accent"></i>
                                 {{ $bumdes->phone }}</div>
@@ -34,11 +39,6 @@
                         @if ($bumdes->email)
                             <div class="flex items-center"><i class="fa-solid fa-envelope w-5 text-accent"></i>
                                 {{ $bumdes->email }}</div>
-                        @endif
-                        @if ($bumdes->website_url)
-                            <div class="flex items-center"><i class="fa-solid fa-globe w-5 text-accent"></i> <a
-                                    href="{{ $bumdes->website_url }}" target="_blank"
-                                    class="hover:text-white underline">{{ $bumdes->website_url }}</a></div>
                         @endif
                     </div>
                 </div>
@@ -67,12 +67,25 @@
         <!-- Main Content Layout (Full Width Vertical) -->
         <div class="flex flex-col gap-8 w-full">
 
-            <!-- 1. Tentang Desa -->
+            <!-- 1. Tentang Kami -->
             <div class="bg-white rounded-xl shadow-sm border p-6">
                 <h3 class="text-xl font-bold text-primary border-b pb-2 mb-4"><i
-                        class="fa-solid fa-circle-info mr-2 text-accent"></i> Tentang BUMDesa</h3>
-                <p class="text-gray-600 leading-relaxed">
-                    {{ $bumdes->about ?? 'Profil singkat BUMDesa ini belum dilengkapi oleh pengelola.' }}</p>
+                        class="fa-solid fa-circle-info mr-2 text-accent"></i> Tentang Kami</h3>
+                <div class="space-y-6">
+                    <div>
+                        <h4 class="font-bold text-gray-800 mb-2">Profil BUMDesa</h4>
+                        <p class="text-gray-600 leading-relaxed">
+                            {{ $bumdes->about ?? 'Profil singkat BUMDesa ini belum dilengkapi oleh pengelola.' }}</p>
+                    </div>
+                    @if ($bumdes->visi_misi)
+                        <div>
+                            <h4 class="font-bold text-gray-800 mb-2">Visi & Misi</h4>
+                            <div class="text-gray-600 leading-relaxed whitespace-pre-line">
+                                {{ $bumdes->visi_misi }}
+                            </div>
+                        </div>
+                    @endif
+                </div>
             </div>
 
             <!-- 2. Unit Usaha Aktif -->
@@ -82,17 +95,12 @@
                 @if ($bumdes->unitUsahaAktifs->isEmpty())
                     <p class="text-sm text-gray-500 italic">Belum ada unit usaha didaftarkan.</p>
                 @else
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div class="flex flex-wrap gap-3">
                         @foreach ($bumdes->unitUsahaAktifs as $unit)
-                            <div class="flex items-start p-4 border rounded-lg hover:shadow transition bg-gray-50">
-                                <i class="fa-solid fa-check-circle text-green-500 mt-1 mr-3 text-xl"></i>
-                                <div>
-                                    <h4 class="font-bold text-gray-800">{{ $unit->unitUsahaOption->name }}</h4>
-                                    @if ($unit->description)
-                                        <p class="text-sm text-gray-500 mt-1">{{ $unit->description }}</p>
-                                    @endif
-                                </div>
-                            </div>
+                            <span
+                                class="bg-blue-100 text-blue-800 text-xs font-bold px-4 py-2 rounded-full border border-blue-200">
+                                {{ $unit->unitUsahaOption->name ?? $unit->sektor }}
+                            </span>
                         @endforeach
                     </div>
                 @endif
@@ -114,21 +122,30 @@
                         <p class="text-sm text-gray-600 mb-6">{{ $bumdes->struktur_organisasi_desc }}</p>
                     @endif
 
-                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-4">
-                        @foreach ($bumdes->personils as $person)
-                            <div class="bg-white border text-center rounded-xl p-6 hover:shadow-lg transition">
+                    <div class="flex flex-wrap justify-center gap-6 mt-4">
+                        @php
+                            $allowedRoles = ['Penasehat', 'Pengawas', 'Direktur', 'Sekertaris', 'Bendahara'];
+                            $filteredPersonils = $bumdes->personils
+                                ->filter(function ($p) use ($allowedRoles) {
+                                    return in_array($p->role ?? $p->position, $allowedRoles);
+                                })
+                                ->take(5);
+                        @endphp
+                        @foreach ($filteredPersonils as $person)
+                            <div class="bg-white border text-center rounded-xl p-4 hover:shadow-lg transition w-40">
                                 <div
-                                    class="w-24 h-24 mx-auto mb-4 bg-gray-200 rounded-full flex items-center justify-center overflow-hidden border-2 border-primary shadow-sm">
+                                    class="w-16 h-16 mx-auto mb-3 bg-gray-200 rounded-full flex items-center justify-center overflow-hidden border-2 border-primary shadow-sm">
                                     @if ($person->photo)
                                         <img src="{{ asset('storage/' . $person->photo) }}"
                                             class="w-full h-full object-cover">
                                     @else
-                                        <i class="fa-solid fa-user text-gray-400 text-3xl"></i>
+                                        <i class="fa-solid fa-user text-gray-400 text-xl"></i>
                                     @endif
                                 </div>
-                                <h4 class="font-bold text-gray-900 leading-tight line-clamp-1" title="{{ $person->name }}">
+                                <h4 class="font-bold text-gray-900 leading-tight line-clamp-1 text-sm"
+                                    title="{{ $person->name }}">
                                     {{ $person->name }}</h4>
-                                <p class="text-sm text-primary font-semibold uppercase mt-1">
+                                <p class="text-[10px] text-primary font-semibold uppercase mt-1">
                                     {{ $person->role ?? $person->position }}</p>
                             </div>
                         @endforeach
@@ -183,31 +200,26 @@
                 @if ($bumdes->produkKetahananPangans->isEmpty())
                     <div class="text-center py-8 text-gray-400 border border-dashed rounded-lg">
                         <i class="fa-solid fa-seedling text-3xl mb-2"></i>
-                        <p>Belum ada produk ketahanan pangan.</p>
+                        <p>Belum ada data ketahanan pangan.</p>
                     </div>
                 @else
-                    <div class="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-4">
+                    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
                         @foreach ($bumdes->produkKetahananPangans as $pangan)
                             <div
-                                class="bg-white border rounded-lg overflow-hidden flex flex-col hover:shadow-md transition">
-                                <div class="h-40 bg-gray-100 flex items-center justify-center overflow-hidden relative">
-                                    @if ($pangan->image)
-                                        <img src="{{ asset('storage/' . $pangan->image) }}"
-                                            class="object-cover w-full h-full">
-                                    @else
-                                        <i class="fa-solid fa-leaf text-green-200 text-5xl"></i>
-                                    @endif
-                                    <div
-                                        class="absolute top-2 right-2 bg-green-500 text-white text-[10px] uppercase font-bold px-2 py-1 rounded shadow">
-                                        {{ $pangan->produkKetapangOption->name ?? 'Pangan' }}
-                                    </div>
+                                class="bg-white border rounded-xl p-4 flex flex-col items-center text-center hover:shadow-md transition">
+                                <div
+                                    class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mb-3 text-green-600">
+                                    <i class="fa-solid fa-wheat-awn"></i>
                                 </div>
-                                <div class="p-4">
-                                    <h4 class="font-bold text-gray-900 line-clamp-2">{{ $pangan->name }}</h4>
-                                    @if ($pangan->price)
-                                        <p class="font-bold text-green-600 mt-2">Rp
-                                            {{ number_format($pangan->price, 0, ',', '.') }}</p>
-                                    @endif
+                                <span
+                                    class="text-xs font-bold text-gray-500 uppercase tracking-tighter mb-1">Kategori</span>
+                                <h4 class="font-black text-primary uppercase text-sm mb-2">
+                                    {{ $pangan->produkKetapangOption->name ?? 'Pangan' }}</h4>
+
+                                <div class="mt-auto pt-2 border-t w-full">
+                                    <span class="text-[10px] text-gray-400 uppercase font-bold block">Produksi Per
+                                        Tahun</span>
+                                    <span class="font-bold text-gray-700">{{ $pangan->produksi_pertahun ?? '-' }}</span>
                                 </div>
                             </div>
                         @endforeach

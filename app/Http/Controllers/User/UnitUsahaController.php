@@ -25,7 +25,7 @@ class UnitUsahaController extends Controller
         $bumdes = Bumdesa::where('user_id', auth()->id())->orWhere('id', auth()->user()->bumdes_id)->firstOrFail();
 
         $request->validate([
-            'name' => 'required|string|max:255',
+            'name' => 'nullable|string|max:255',
             'sektor' => 'required|string|max:100', // From options
             'deskripsi' => 'nullable|string',
             'tahun_berdiri' => 'nullable|integer',
@@ -56,7 +56,7 @@ class UnitUsahaController extends Controller
         }
 
         $request->validate([
-            'name' => 'required|string|max:255',
+            'name' => 'nullable|string|max:255',
             'sektor' => 'required|string|max:100',
             'deskripsi' => 'nullable|string',
             'tahun_berdiri' => 'nullable|integer',

@@ -17,36 +17,22 @@
         <table class="w-full text-sm text-left datatable" id="tableKetapang">
             <thead class="bg-gray-50 text-gray-700 uppercase text-xs">
                 <tr>
-                    <th class="px-4 py-3">Nama Produk</th>
-                    <th class="px-4 py-3">Kategori</th>
-                    <th class="px-4 py-3 text-right">Harga Estimasi</th>
-                    <th class="px-4 py-3 text-center">Foto</th>
+                    <th class="px-4 py-3">Kategori Sektor</th>
+                    <th class="px-4 py-3">Produksi Per Tahun</th>
                     <th class="px-4 py-3 text-right">Aksi</th>
                 </tr>
             </thead>
             <tbody class="divide-y divide-gray-100">
                 @foreach ($produks as $p)
                     <tr class="hover:bg-gray-50 transition">
-                        <td class="px-4 py-3 font-semibold text-gray-800">{{ $p->name }}</td>
                         <td class="px-4 py-3 text-gray-600">
                             <span
-                                class="bg-blue-50 text-blue-700 px-2 py-0.5 rounded text-[10px] font-bold border border-blue-100 uppercase">
+                                class="bg-blue-50 text-blue-700 px-3 py-1 rounded-full text-[10px] font-bold border border-blue-100 uppercase">
                                 {{ $p->produkKetapangOption->name ?? '-' }}
                             </span>
                         </td>
-                        <td class="px-4 py-3 text-gray-800 text-right font-bold">
-                            {{ $p->price ? 'Rp ' . number_format($p->price, 0, ',', '.') : '-' }}
-                        </td>
-                        <td class="px-4 py-3 text-center">
-                            @if ($p->image)
-                                <img src="{{ asset('storage/' . $p->image) }}"
-                                    class="w-12 h-12 object-cover rounded border shadow-sm mx-auto" alt="foto">
-                            @else
-                                <div
-                                    class="w-10 h-10 bg-gray-50 rounded border flex items-center justify-center mx-auto text-gray-300">
-                                    <i class="fa-solid fa-image text-xs"></i>
-                                </div>
-                            @endif
+                        <td class="px-4 py-3 text-gray-800 font-bold">
+                            {{ $p->produksi_pertahun ?? '-' }}
                         </td>
                         <td class="px-4 py-3 text-right">
                             <form action="{{ route('user.ketapang.destroy', $p) }}" method="POST"
@@ -76,14 +62,9 @@
             <form action="{{ route('user.ketapang.store') }}" method="POST" enctype="multipart/form-data"
                 class="p-6 space-y-4">
                 @csrf
+                <input type="hidden" name="name" value="Produk Ketapang">
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Nama Produk <span
-                            class="text-red-500">*</span></label>
-                    <input type="text" name="name" required
-                        class="w-full border rounded-lg px-3 py-2 text-sm focus:ring-primary focus:border-primary">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Kategori <span
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Pilih Kategori <span
                             class="text-red-500">*</span></label>
                     <select name="produk_ketapang_option_id" required
                         class="w-full border rounded-lg px-3 py-2 text-sm focus:ring-primary focus:border-primary">
@@ -94,16 +75,8 @@
                     </select>
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Harga Estimasi</label>
-                    <input type="number" name="price" min="0" class="w-full border rounded-lg px-3 py-2 text-sm">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Deskripsi</label>
-                    <textarea name="description" rows="2" class="w-full border rounded-lg px-3 py-2 text-sm"></textarea>
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Foto Produk</label>
-                    <input type="file" name="image" accept="image/*" class="w-full text-sm border rounded-lg p-2">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Produksi Per Tahun</label>
+                    <input type="text" name="produksi_pertahun" placeholder="Cth: 10 Ton / Tahun" class="w-full border rounded-lg px-3 py-2 text-sm focus:ring-primary focus:border-primary">
                 </div>
                 <div class="flex justify-end gap-3 pt-2">
                     <button type="button" onclick="document.getElementById('modalTambah').classList.add('hidden')"

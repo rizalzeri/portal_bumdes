@@ -6237,6 +6237,7 @@ namespace App\Models {
      *
      * @property \Illuminate\Support\Carbon|null $updated_at
      * @property \Illuminate\Support\Carbon|null $created_at
+     * @property string|null $produksi_pertahun
      * @property string|null $description
      * @property float|null $price
      * @property string|null $image
@@ -6253,6 +6254,7 @@ namespace App\Models {
      * @method static \Illuminate\Database\Eloquent\Builder<ProdukKetahananPangan>|ProdukKetahananPangan whereImage($value)
      * @method static \Illuminate\Database\Eloquent\Builder<ProdukKetahananPangan>|ProdukKetahananPangan wherePrice($value)
      * @method static \Illuminate\Database\Eloquent\Builder<ProdukKetahananPangan>|ProdukKetahananPangan whereDescription($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<ProdukKetahananPangan>|ProdukKetahananPangan whereProduksiPertahun($value)
      * @method static \Illuminate\Database\Eloquent\Builder<ProdukKetahananPangan>|ProdukKetahananPangan whereCreatedAt($value)
      * @method static \Illuminate\Database\Eloquent\Builder<ProdukKetahananPangan>|ProdukKetahananPangan whereUpdatedAt($value)
      * @method static \Illuminate\Database\Eloquent\Builder<ProdukKetahananPangan>|ProdukKetahananPangan newModelQuery()

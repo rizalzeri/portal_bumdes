@@ -29,10 +29,17 @@ class ProfilController extends Controller
             'email' => 'nullable|email|max:255',
             'website' => 'nullable|url|max:255',
             'facebook' => 'nullable|url|max:255',
-            'instagram' => 'nullable|string|max:255', // Just username is fine or URL
+            'instagram' => 'nullable|string|max:255', 
+            'address' => 'nullable|string',
             'latitude' => 'nullable|numeric',
             'longitude' => 'nullable|numeric',
-            'logo' => 'nullable|image|max:2048', // 2MB
+            'logo' => 'nullable|image|max:2048',
+            'musdes_terakhir' => 'nullable|date',
+            'laporan_dinas_status' => 'nullable|in:sudah,belum',
+            'laporan_dinas_link' => 'nullable|url',
+            'audit_internal_terakhir' => 'nullable|date',
+            'pemeringkatan' => 'nullable|string',
+            'status' => 'nullable|string',
         ]);
 
         $data = $request->except(['_token', '_method', 'logo']);

@@ -80,7 +80,7 @@
                                         @endif
                                     </div>
                                     <span
-                                        class="text-xs font-semibold text-gray-700 group-hover/item:text-primary transition-colors line-clamp-2 leading-tight">{{ $item->name }}</span>
+                                        class="text-xs font-semibold text-gray-700 group-hover/item:text-primary transition-colors line-clamp-2 leading-tight">BUMDesa "{{ $item->name }}" Desa</span>
                                     <span class="text-xs text-gray-400">{{ $item->kabupaten->name ?? '-' }}</span>
                                 </a>
                             @endforeach
@@ -178,7 +178,7 @@
                                     <span
                                         class="text-xs font-semibold text-gray-700 group-hover/item:text-green-700 transition-colors line-clamp-2 leading-tight">{{ $item->title }}</span>
                                     <span
-                                        class="text-[10px] text-gray-400 line-clamp-1">{{ $item->bumdes->name ?? 'Portal Pusat' }}</span>
+                                        class="text-[10px] text-gray-400 line-clamp-1">BUMDesa "{{ $item->bumdes->name ?? 'Portal Pusat' }}" Desa</span>
                                 </a>
                             @endforeach
                         </div>
@@ -232,7 +232,7 @@
                                     @endif
                                     <span
                                         class="text-xs font-semibold text-gray-700 group-hover/item:text-indigo-700 transition-colors line-clamp-2 leading-tight">{{ $item->title }}</span>
-                                    <span class="text-xs text-gray-400">{{ $item->bumdes->name ?? 'Portal Pusat' }}</span>
+                                    <span class="text-xs text-gray-400">BUMDesa "{{ $item->bumdes->name ?? 'Portal Pusat' }}" Desa</span>
                                 </a>
                             @endforeach
                         </div>
@@ -290,7 +290,7 @@
                                         <span class="text-xs text-teal-600 font-bold">Rp
                                             {{ number_format($item->price, 0, ',', '.') }}</span>
                                     @endif
-                                    <span class="text-xs text-gray-400">{{ $item->bumdes->name ?? '-' }}</span>
+                                    <span class="text-xs text-gray-400">BUMDesa "{{ $item->bumdes->name ?? '-' }}" Desa</span>
                                 </a>
                             @endforeach
                         </div>
@@ -347,7 +347,7 @@
                                             class="text-xs font-semibold text-gray-700 group-hover/item:text-red-700 transition-colors line-clamp-1">
                                             {{ $item->name }}</p>
                                         <p class="text-xs text-gray-400 line-clamp-1">
-                                            {{ $item->bumdes->name ?? 'Portal Pusat' }}</p>
+                                            BUMDesa "{{ $item->bumdes->name ?? 'Portal Pusat' }}" Desa</p>
                                     </div>
                                 </a>
                             @endforeach
@@ -419,7 +419,7 @@
                                         <span
                                             class="text-xs font-semibold text-gray-700 group-hover/item:text-purple-700 transition-colors line-clamp-1 leading-tight">{{ $item->title }}</span>
                                         <span
-                                            class="text-[10px] text-gray-400 line-clamp-1">{{ $item->bumdes->name ?? 'Portal Pusat' }}</span>
+                                            class="text-[10px] text-gray-400 line-clamp-1">BUMDesa "{{ $item->bumdes->name ?? 'Portal Pusat' }}" Desa</span>
                                     </div>
                                 </a>
                             @endforeach
@@ -579,7 +579,7 @@
                                     <span
                                         class="text-xs font-semibold text-gray-700 group-hover/item:text-emerald-700 transition-colors line-clamp-2 leading-tight">{{ $item->title }}</span>
                                     <span class="text-[10px] text-gray-400 mt-auto">
-                                        {{ $item->bumdes->name ?? 'BUMDesa' }}
+                                        BUMDesa "{{ $item->bumdes->name ?? 'BUMDesa' }}" Desa
                                     </span>
                                 </a>
                             @endforeach

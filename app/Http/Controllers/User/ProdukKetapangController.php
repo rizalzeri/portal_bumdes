@@ -27,8 +27,9 @@ class ProdukKetapangController extends Controller
         $bumdes = Bumdesa::where('user_id', auth()->id())->orWhere('id', auth()->user()->bumdes_id)->firstOrFail();
 
         $request->validate([
-            'name'                    => 'required|string|max:255',
+            'name'                    => 'nullable|string|max:255',
             'produk_ketapang_option_id' => 'required|exists:produk_ketapang_options,id',
+            'produksi_pertahun'       => 'nullable|string|max:255',
             'description'             => 'nullable|string',
             'price'                   => 'nullable|numeric|min:0',
             'image'                   => 'nullable|image|max:2048',
@@ -42,7 +43,8 @@ class ProdukKetapangController extends Controller
         ProdukKetahananPangan::create([
             'bumdes_id'                => $bumdes->id,
             'produk_ketapang_option_id' => $request->produk_ketapang_option_id,
-            'name'                     => $request->name,
+            'name'                     => $request->name ?? 'Produk Ketapang',
+            'produksi_pertahun'        => $request->produksi_pertahun,
             'description'              => $request->description,
             'price'                    => $request->price,
             'image'                    => $imagePath,
@@ -58,14 +60,15 @@ class ProdukKetapangController extends Controller
         if ($ketapang->bumdes_id !== $bumdes->id) abort(403);
 
         $request->validate([
-            'name'                    => 'required|string|max:255',
+            'name'                    => 'nullable|string|max:255',
             'produk_ketapang_option_id' => 'required|exists:produk_ketapang_options,id',
+            'produksi_pertahun'       => 'nullable|string|max:255',
             'description'             => 'nullable|string',
             'price'                   => 'nullable|numeric|min:0',
             'image'                   => 'nullable|image|max:2048',
         ]);
 
-        $data = $request->only('name', 'produk_ketapang_option_id', 'description', 'price');
+        $data = $request->only('name', 'produk_ketapang_option_id', 'produksi_pertahun', 'description', 'price');
 
         if ($request->hasFile('image')) {
             if ($ketapang->image && Storage::disk('public')->exists($ketapang->image)) {

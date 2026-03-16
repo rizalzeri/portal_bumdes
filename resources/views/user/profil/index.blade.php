@@ -59,32 +59,32 @@
                         <input type="text" name="nomor_sertifikat" value="{{ old('nomor_sertifikat', $bumdes->nomor_sertifikat) }}" placeholder="Nomor registrasi resmi" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm border p-2 uppercase font-mono text-sm">
                     </div>
                 </div>
+                <div class="mt-4">
+                    <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Alamat Lengkap</label>
+                    <textarea name="address" rows="2" placeholder="Jl. Raya Desa No. ..." class="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm border p-2">{{ old('address', $bumdes->address) }}</textarea>
+                </div>
             </div>
         </div>
 
         <!-- Deskripsi BUMDes -->
         <div>
-            <h3 class="font-bold text-gray-900 border-b pb-2 mb-4 mt-6">Informasi & Sejarah</h3>
+            <h3 class="font-bold text-gray-900 border-b pb-2 mb-4 mt-6">Informasi Tentang Kami</h3>
             <div class="space-y-4">
                 <div>
-                    <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Deskripsi Singkat (Tentang BUMDes)</label>
+                    <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Deskripsi Singkat (Tentang Kami)</label>
                     <textarea name="about" rows="3" placeholder="Ceritakan secara singkat mengenai BUMDes Anda..." class="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm border p-2">{{ old('about', $bumdes->about) }}</textarea>
                 </div>
                 <div>
                     <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Visi dan Misi</label>
                     <textarea name="visi_misi" rows="4" placeholder="Tuliskan Visi dan Misi BUMDesa..." class="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm border p-2">{{ old('visi_misi', $bumdes->visi_misi) }}</textarea>
                 </div>
-                <div>
-                    <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Sejarah Pendirian</label>
-                    <textarea name="sejarah" rows="3" placeholder="Bagaimana BUMDesa ini didirikan..." class="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm border p-2">{{ old('sejarah', $bumdes->sejarah) }}</textarea>
-                </div>
             </div>
         </div>
 
-        <!-- Kontak dan Media Sosial -->
+        <!-- Kontak -->
         <div>
-            <h3 class="font-bold text-gray-900 border-b pb-2 mb-4 mt-6">Kontak & Jaringan Sosial</h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <h3 class="font-bold text-gray-900 border-b pb-2 mb-4 mt-6">Kontak Kami</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                     <label class="block text-xs font-semibold text-gray-600 uppercase mb-1"><i class="fa-solid fa-phone text-gray-400 mr-1"></i> Telp/WhatsApp</label>
                     <input type="text" name="phone" value="{{ old('phone', $bumdes->phone) }}" placeholder="08..." class="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm border p-2">
@@ -93,38 +93,60 @@
                     <label class="block text-xs font-semibold text-gray-600 uppercase mb-1"><i class="fa-solid fa-envelope text-gray-400 mr-1"></i> Email Publik</label>
                     <input type="email" name="email" value="{{ old('email', $bumdes->email) }}" placeholder="email@bumdes.com" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm border p-2">
                 </div>
-                <div>
-                    <label class="block text-xs font-semibold text-gray-600 uppercase mb-1"><i class="fa-solid fa-globe text-gray-400 mr-1"></i> Website Resmi</label>
-                    <input type="url" name="website" value="{{ old('website', $bumdes->website) }}" placeholder="https://..." class="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm border p-2">
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold text-gray-600 uppercase mb-1"><i class="fa-brands fa-instagram text-gray-400 mr-1"></i> Akun Instagram</label>
-                    <input type="text" name="instagram" value="{{ old('instagram', $bumdes->instagram) }}" placeholder="@username" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm border p-2">
-                </div>
             </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-                 <div>
-                    <label class="block text-xs font-semibold text-gray-600 uppercase mb-1"><i class="fa-brands fa-facebook text-gray-400 mr-1"></i> Tautan Profil Facebook (URL)</label>
-                    <input type="url" name="facebook" value="{{ old('facebook', $bumdes->facebook) }}" placeholder="https://facebook.com/..." class="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm border p-2">
+        </div>
+
+
+        <!-- Citra & Status -->
+        <div>
+            <h3 class="font-bold text-gray-900 border-b pb-2 mb-4 mt-6">Citra & Status</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Status Operasional</label>
+                    <select name="status" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm border p-2">
+                        <option value="active" {{ $bumdes->status == 'active' ? 'selected' : '' }}>Aktif</option>
+                        <option value="inactive" {{ $bumdes->status == 'inactive' ? 'selected' : '' }}>Tidak Aktif</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Hasil Pemeringkatan</label>
+                    <select name="pemeringkatan" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm border p-2">
+                        <option value="">-- Pilih Hasil --</option>
+                        <option value="Maju" {{ $bumdes->pemeringkatan == 'Maju' ? 'selected' : '' }}>Maju</option>
+                        <option value="Berkembang" {{ $bumdes->pemeringkatan == 'Berkembang' ? 'selected' : '' }}>Berkembang</option>
+                        <option value="Perintis" {{ $bumdes->pemeringkatan == 'Perintis' ? 'selected' : '' }}>Perintis</option>
+                        <option value="Pemula" {{ $bumdes->pemeringkatan == 'Pemula' ? 'selected' : '' }}>Pemula</option>
+                    </select>
                 </div>
             </div>
         </div>
 
-        <!-- Lokasi Peta (Opsional) -->
+        <!-- Transparansi -->
         <div>
-            <h3 class="font-bold text-gray-900 border-b pb-2 mb-4 mt-6">Peta Digital (Opsional)</h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <h3 class="font-bold text-gray-900 border-b pb-2 mb-4 mt-6">Data Transparansi</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 <div>
-                    <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Garis Lintang (Latitude)</label>
-                    <input type="number" step="any" name="latitude" value="{{ old('latitude', $bumdes->latitude) }}" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm border p-2 font-mono">
+                    <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Musdes Terakhir</label>
+                    <input type="date" name="musdes_terakhir" value="{{ old('musdes_terakhir', $bumdes->musdes_terakhir) }}" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm border p-2">
                 </div>
                 <div>
-                    <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Garis Bujur (Longitude)</label>
-                    <input type="number" step="any" name="longitude" value="{{ old('longitude', $bumdes->longitude) }}" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm border p-2 font-mono">
+                    <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Audit Internal Terakhir</label>
+                    <input type="date" name="audit_internal_terakhir" value="{{ old('audit_internal_terakhir', $bumdes->audit_internal_terakhir) }}" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm border p-2">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Laporan Ke Dinas</label>
+                    <select name="laporan_dinas_status" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm border p-2">
+                        <option value="belum" {{ $bumdes->laporan_dinas_status == 'belum' ? 'selected' : '' }}>Belum Dikirim</option>
+                        <option value="sudah" {{ $bumdes->laporan_dinas_status == 'sudah' ? 'selected' : '' }}>Sudah Dikirim</option>
+                    </select>
+                </div>
+                <div class="md:col-span-2 lg:col-span-3">
+                    <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Link GDrive (Laporan Dinas)</label>
+                    <input type="url" name="laporan_dinas_link" value="{{ old('laporan_dinas_link', $bumdes->laporan_dinas_link) }}" placeholder="https://drive.google.com/..." class="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm border p-2">
                 </div>
             </div>
-            <p class="text-xs text-gray-500 mt-2">Dapatkan koordinat letak kantor BUMDesa dari Google Maps dengan melakukan klik kanan pada titik peta lalu pilih angkanya.</p>
         </div>
+
 
         <div class="pt-6 mt-8 border-t flex justify-end">
             <button type="submit" class="bg-primary hover:bg-primary-900 text-white px-8 py-3 rounded-lg font-bold shadow-lg transition-colors flex items-center text-sm">

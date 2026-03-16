@@ -17,9 +17,7 @@
         <table class="datatable w-full whitespace-nowrap text-sm text-left text-gray-500">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                 <tr>
-                    <th class="px-6 py-3">Nama Unit Usaha</th>
-                    <th class="px-6 py-3">Sektor/Kategori</th>
-                    <th class="px-6 py-3">Tahun Berdiri</th>
+                    <th class="px-6 py-3">Kategori Sektor</th>
                     <th class="px-6 py-3">Status</th>
                     <th class="px-6 py-3 text-right">Aksi</th>
                 </tr>
@@ -28,13 +26,8 @@
                 @foreach($units as $u)
                 <tr class="bg-white border-b hover:bg-gray-50">
                     <td class="px-6 py-4">
-                        <div class="font-bold text-gray-900 text-base">{{ $u->name }}</div>
-                        <div class="text-xs text-gray-500 line-clamp-1 truncate max-w-xs mt-1">{{ $u->deskripsi ?? 'Tidak ada deskripsi' }}</div>
+                        <span class="bg-blue-100 text-blue-800 text-[10px] font-bold px-4 py-1.5 rounded-full border border-blue-200 uppercase">{{ $u->sektor }}</span>
                     </td>
-                    <td class="px-6 py-4">
-                        <span class="bg-blue-100 text-blue-800 text-[10px] font-bold px-2 py-0.5 rounded border border-blue-200">{{ $u->sektor }}</span>
-                    </td>
-                    <td class="px-6 py-4">{{ $u->tahun_berdiri ?? '-' }}</td>
                     <td class="px-6 py-4">
                         @if($u->status === 'active')
                             <span class="text-green-600 font-bold"><i class="fa-solid fa-circle-check"></i> Aktif Beroperasi</span>
@@ -68,11 +61,7 @@
         <form action="{{ route('user.unit_usaha.store') }}" method="POST" class="space-y-4">
             @csrf
             <div>
-                <label class="block text-sm font-medium text-gray-700">Nama Unit Usaha</label>
-                <input type="text" name="name" required placeholder="Cth: Simpan Pinjam / Toko Desa" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm border p-2">
-            </div>
-            <div>
-                <label class="block text-sm font-medium text-gray-700">Kategori Sektor</label>
+                <label class="block text-sm font-medium text-gray-700">Pilih Kategori Sektor</label>
                 <select name="sektor" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm border p-2">
                     <option value="">-- Pilih Sektor --</option>
                     @foreach($kategoriOptions as $opt)
@@ -80,23 +69,14 @@
                     @endforeach
                     <option value="Lainnya">Lainnya...</option>
                 </select>
-            </div>
-            <div class="grid grid-cols-2 gap-4">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Tahun Berdiri</label>
-                    <input type="number" name="tahun_berdiri" min="1900" max="{{ date('Y') }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm border p-2">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Status Operasional</label>
-                    <select name="status" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm border p-2">
-                        <option value="active">Aktif</option>
-                        <option value="inactive">Tidak Aktif</option>
-                    </select>
-                </div>
+                <input type="hidden" name="name" value="Unit Usaha">
             </div>
             <div>
-                <label class="block text-sm font-medium text-gray-700">Deskripsi Singkat</label>
-                <textarea name="deskripsi" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm border p-2"></textarea>
+                <label class="block text-sm font-medium text-gray-700">Status Operasional</label>
+                <select name="status" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm border p-2">
+                    <option value="active">Aktif</option>
+                    <option value="inactive">Tidak Aktif</option>
+                </select>
             </div>
             
             <div class="pt-4 border-t flex justify-end gap-2">
@@ -117,10 +97,7 @@
         <form id="form-edit" method="POST" class="space-y-4">
             @csrf
             @method('PUT')
-            <div>
-                <label class="block text-sm font-medium text-gray-700">Nama Unit Usaha</label>
-                <input type="text" name="name" id="edit-name" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm border p-2">
-            </div>
+            <input type="hidden" name="name" id="edit-name">
             <div>
                 <label class="block text-sm font-medium text-gray-700">Kategori Sektor</label>
                 <select name="sektor" id="edit-sektor" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm border p-2">
@@ -131,22 +108,12 @@
                     <option value="Lainnya">Lainnya...</option>
                 </select>
             </div>
-            <div class="grid grid-cols-2 gap-4">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Tahun Berdiri</label>
-                    <input type="number" name="tahun_berdiri" id="edit-tahun" min="1900" max="{{ date('Y') }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm border p-2">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Status Operasional</label>
-                    <select name="status" id="edit-status" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm border p-2">
-                        <option value="active">Aktif</option>
-                        <option value="inactive">Tidak Aktif</option>
-                    </select>
-                </div>
-            </div>
             <div>
-                <label class="block text-sm font-medium text-gray-700">Deskripsi Singkat</label>
-                <textarea name="deskripsi" id="edit-desc" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm border p-2"></textarea>
+                <label class="block text-sm font-medium text-gray-700">Status Operasional</label>
+                <select name="status" id="edit-status" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm border p-2">
+                    <option value="active">Aktif</option>
+                    <option value="inactive">Tidak Aktif</option>
+                </select>
             </div>
             
             <div class="pt-4 border-t flex justify-end gap-2">
