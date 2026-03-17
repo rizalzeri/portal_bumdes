@@ -7,10 +7,12 @@
             <h2 class="text-2xl font-bold text-gray-800">Galeri Kegiatan</h2>
             <p class="text-gray-500 text-sm mt-1">Dokumentasi foto kegiatan BUMDesa Anda.</p>
         </div>
+        @premium('galeri', 'create')
         <button onclick="document.getElementById('modalTambah').classList.remove('hidden')"
             class="bg-primary text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-primary-700 transition flex items-center gap-2">
             <i class="fa-solid fa-plus"></i> Upload Foto
         </button>
+        @endpremium
     </div>
 
     @if (session('success'))
@@ -32,6 +34,7 @@
                                 class="fa-solid fa-calendar mr-1"></i>{{ \Carbon\Carbon::parse($g->event_date)->format('d M Y') }}
                         </p>
                     @endif
+                    @premium('galeri', 'delete')
                     <form action="{{ route('user.galeri.destroy', $g) }}" method="POST"
                         onsubmit="return confirm('Hapus foto ini?')" class="mt-2">
                         @csrf @method('DELETE')
@@ -39,6 +42,7 @@
                             <i class="fa-solid fa-trash mr-1"></i>Hapus
                         </button>
                     </form>
+                    @endpremium
                 </div>
             </div>
         @empty

@@ -13,20 +13,18 @@ return new class extends Migration
     {
         Schema::create('premium_features', function (Blueprint $table) {
             $table->id();
-            $table->string('key')->unique();
-            $table->string('name');
-            $table->string('category')->default('Umum'); // Profil, Mitra, Keuangan, dsb
-            $table->text('description')->nullable();
             
-            // Konfigurasi Premium
-            $table->boolean('is_premium')->default(false); // Apakah fitur ini di-lock untuk premium?
+            $table->string('module'); // profil, personalia, unit_usaha, produk, dll.
+            $table->string('action'); // create, read, update, delete
             
-            // Limit gratis jika ada (misal: hanya boleh tambah 3 mitra)
+            $table->boolean('is_premium')->default(false);
             $table->integer('free_limit')->nullable();
 
-            $table->string('fallback_action')->default('hide'); // hide, readonly
+            $table->string('fallback_action')->default('hide'); 
             
             $table->timestamps();
+            
+            $table->unique(['module', 'action']);
         });
     }
 

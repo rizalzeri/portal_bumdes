@@ -83,4 +83,9 @@ class Bumdes extends Model
     {
         return $this->hasMany(User::class);
     }
+
+    public function langganan(): HasMany
+    {
+        return $this->hasMany(Langganan::class, 'bumdes_id');
+    }
 }

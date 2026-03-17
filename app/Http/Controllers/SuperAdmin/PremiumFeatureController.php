@@ -10,34 +10,41 @@ class PremiumFeatureController extends Controller
 {
     public function index()
     {
-        $features = PremiumFeature::orderBy('category', 'asc')->orderBy('name', 'asc')->get();
-        return view('superadmin.premium_features.index', compact('features'));
+        $features = PremiumFeature::orderBy('module', 'asc')->orderBy('action', 'asc')->get();
+        $modules = PremiumFeature::getModules();
+        $actions = PremiumFeature::getActions();
+        return view('superadmin.premium_features.index', compact('features', 'modules', 'actions'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'key' => 'required|string|unique:premium_features,key',
-            'name' => 'required|string',
-            'category' => 'required|string',
-            'description' => 'nullable|string',
+            'module' => 'required|string',
+            'action' => 'required|string',
             'is_premium' => 'required|boolean',
             'free_limit' => 'nullable|integer',
             'fallback_action' => 'required|string',
         ]);
+        
+        // Cek unique
+        $exists = PremiumFeature::where('module', '=', $request->module)
+            ->where('action', '=', $request->action)
+            ->exists();
+            
+        if($exists) {
+            return redirect()->back()->with('error', 'Konfigurasi Fitur ini sudah ada!');
+        }
 
         PremiumFeature::create($request->all());
 
-        return redirect()->back()->with('success', 'Fitur Premium berhasil ditambahkan.');
+        return redirect()->back()->with('success', 'Konfigurasi Premium berhasil ditambahkan.');
     }
 
     public function update(Request $request, PremiumFeature $premiumFeature)
     {
         $request->validate([
-            'key' => 'required|string|unique:premium_features,key,' . $premiumFeature->id,
-            'name' => 'required|string',
-            'category' => 'required|string',
-            'description' => 'nullable|string',
+            'module' => 'required|string',
+            'action' => 'required|string',
             'is_premium' => 'required|boolean',
             'free_limit' => 'nullable|integer',
             'fallback_action' => 'required|string',
@@ -45,13 +52,13 @@ class PremiumFeatureController extends Controller
 
         $premiumFeature->update($request->all());
 
-        return redirect()->back()->with('success', 'Fitur Premium berhasil diperbarui.');
+        return redirect()->back()->with('success', 'Konfigurasi Premium berhasil diperbarui.');
     }
 
     public function destroy(PremiumFeature $premiumFeature)
     {
         $premiumFeature->delete();
-        return redirect()->back()->with('success', 'Fitur Premium dihapus.');
+        return redirect()->back()->with('success', 'Konfigurasi Premium dihapus.');
     }
 
     public function inlineUpdate(Request $request, $id)

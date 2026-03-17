@@ -111,7 +111,7 @@ Route::prefix('admin-kabupaten')->name('adminkab.')->group(function () {
 });
 
 // ------------- USER BUMDES ROUTES (Dynamic Slug Based) -------------
-Route::prefix('{slug}')->middleware(['auth', 'user'])->name('user.')->group(function () {
+Route::prefix('{slug}')->middleware(['auth', 'user', 'premium_check'])->name('user.')->group(function () {
     Route::get('/dashboard', [UDashboard::class, 'index'])->name('dashboard');
     Route::get('/profil', [UProfil::class, 'index'])->name('profil.index');
     Route::put('/profil', [UProfil::class, 'update'])->name('profil.update');

@@ -7,9 +7,11 @@
         <h2 class="text-2xl font-bold text-gray-800">Manajemen Unit Usaha</h2>
         <p class="text-gray-500 text-sm mt-1">Daftarkan dan kelola seluruh unit usaha yang dijalankan oleh BUMDesa Anda.</p>
     </div>
+    @premium('unit_usaha', 'create')
     <button onclick="document.getElementById('modal-add').classList.remove('hidden')" class="bg-primary hover:bg-primary-900 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-colors shadow-sm">
         <i class="fa-solid fa-store mr-2"></i> Tambah Unit Usaha
     </button>
+    @endpremium
 </div>
 
 <div class="bg-white rounded-xl shadow-sm border p-6">
@@ -36,13 +38,18 @@
                         @endif
                     </td>
                     <td class="px-6 py-4 text-right">
+                        @premium('unit_usaha', 'update')
                         <button onclick="editUnit({{ $u->toJson() }})" class="text-accent hover:text-yellow-600 bg-yellow-50 hover:bg-yellow-100 p-2 rounded-md transition-colors mr-1 tooltip" title="Edit Unit Usaha">
                             <i class="fa-solid fa-pen"></i>
                         </button>
+                        @endpremium
+
+                        @premium('unit_usaha', 'delete')
                         <form action="{{ route('user.unit_usaha.destroy', $u->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Hapus unit usaha ini?');">
                             @csrf @method('DELETE')
                             <button type="submit" class="text-red-500 hover:text-red-700 bg-red-50 hover:bg-red-100 p-2 rounded-md transition-colors tooltip" title="Hapus"><i class="fa-solid fa-trash"></i></button>
                         </form>
+                        @endpremium
                     </td>
                 </tr>
                 @endforeach

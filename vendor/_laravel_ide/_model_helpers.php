@@ -413,6 +413,8 @@ namespace App\Models {
      * @property-read int|null $personils_count
      * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\User> $users
      * @property-read int|null $users_count
+     * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Langganan> $langganan
+     * @property-read int|null $langganan_count
      * @method static \Illuminate\Database\Eloquent\Builder<Bumdes>|Bumdes whereId($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Bumdes>|Bumdes whereKabupatenId($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Bumdes>|Bumdes whereUserId($value)
@@ -5925,6 +5927,22 @@ namespace App\Models {
     /**
      * App\Models\PremiumFeature
      *
+     * @property \Illuminate\Support\Carbon|null $updated_at
+     * @property \Illuminate\Support\Carbon|null $created_at
+     * @property string $fallback_action
+     * @property int|null $free_limit
+     * @property bool $is_premium
+     * @property string $action
+     * @property string $module
+     * @property int $id
+     * @method static \Illuminate\Database\Eloquent\Builder<PremiumFeature>|PremiumFeature whereId($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<PremiumFeature>|PremiumFeature whereModule($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<PremiumFeature>|PremiumFeature whereAction($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<PremiumFeature>|PremiumFeature whereIsPremium($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<PremiumFeature>|PremiumFeature whereFreeLimit($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<PremiumFeature>|PremiumFeature whereFallbackAction($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<PremiumFeature>|PremiumFeature whereCreatedAt($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<PremiumFeature>|PremiumFeature whereUpdatedAt($value)
      * @method static \Illuminate\Database\Eloquent\Builder<PremiumFeature>|PremiumFeature newModelQuery()
      * @method static \Illuminate\Database\Eloquent\Builder<PremiumFeature>|PremiumFeature newQuery()
      * @method static \Illuminate\Database\Eloquent\Builder<PremiumFeature>|PremiumFeature query()

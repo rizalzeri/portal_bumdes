@@ -7,10 +7,12 @@
             <h2 class="text-2xl font-bold text-gray-800">Mitra Kerjasama</h2>
             <p class="text-gray-500 text-sm mt-1">Daftar mitra kerjasama strategis BUMDesa {{ $bumdes->name }}.</p>
         </div>
+        @premium('mitra', 'create')
         <button onclick="document.getElementById('modalTambah').classList.remove('hidden')"
             class="bg-primary text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-primary-700 transition flex items-center gap-2">
             <i class="fa-solid fa-plus"></i> Tambah Mitra
         </button>
+        @endpremium
     </div>
 
     @if (session('success'))
@@ -25,10 +27,12 @@
             </div>
             <h3 class="font-bold text-gray-800 text-lg mb-1">Belum Ada Mitra</h3>
             <p class="text-gray-500 text-sm mb-4">Tambahkan mitra kerjasama strategis BUMDesa Anda.</p>
+            @premium('mitra', 'create')
             <button onclick="document.getElementById('modalTambah').classList.remove('hidden')"
                 class="bg-primary text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-primary-700">
                 <i class="fa-solid fa-plus mr-1"></i> Tambah Mitra Pertama
             </button>
+            @endpremium
         </div>
     @else
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -61,11 +65,15 @@
                             <p class="text-xs text-gray-500 mt-1 line-clamp-2">{{ $m->description }}</p>
                         @endif
                         <div class="flex gap-2 mt-3">
+                            @premium('mitra', 'update')
                             <button
                                 onclick="openEditModal({{ $m->id }}, {{ $m->mitra_option_id ?? 'null' }}, '{{ addslashes($m->description) }}', {{ $m->is_active ? 1 : 0 }})"
                                 class="text-xs text-blue-600 font-semibold hover:underline">
                                 <i class="fa-solid fa-pen mr-1"></i>Edit
                             </button>
+                            @endpremium
+
+                            @premium('mitra', 'delete')
                             <form action="{{ route('user.mitra.destroy', ['slug' => auth()->user()->username, 'mitra' => $m->id]) }}" method="POST"
                                 onsubmit="return confirm('Hapus mitra ini?')">
                                 @csrf @method('DELETE')
@@ -73,6 +81,7 @@
                                     <i class="fa-solid fa-trash mr-1"></i>Hapus
                                 </button>
                             </form>
+                            @endpremium
                         </div>
                     </div>
                 </div>

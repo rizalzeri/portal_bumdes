@@ -15,6 +15,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'superadmin' => \App\Http\Middleware\Superadmin::class,
             'admin_kabupaten' => \App\Http\Middleware\AdminKabupaten::class,
             'user' => \App\Http\Middleware\UserBumdes::class,
+            'premium_check' => \App\Http\Middleware\CheckPremiumFeature::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

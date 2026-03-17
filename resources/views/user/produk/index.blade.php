@@ -7,9 +7,11 @@
         <h2 class="text-2xl font-bold text-gray-800">Katalog Produk & Layanan</h2>
         <p class="text-gray-500 text-sm mt-1">Daftar produk unggulan dan layanan BUMDesa Anda yang ditampilkan ke publik.</p>
     </div>
+    @premium('produk', 'create')
     <button onclick="document.getElementById('modal-add').classList.remove('hidden')" class="bg-primary hover:bg-primary-900 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-colors shadow-sm">
         <i class="fa-solid fa-plus mr-2"></i> Tambah Produk / Jasa
     </button>
+    @endpremium
 </div>
 
 <!-- Tampilan Katalog Grid -->
@@ -28,11 +30,16 @@
             
             <!-- Quick Actions Overlay -->
             <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center gap-3 opacity-0 group-hover:opacity-100 transition-opacity">
+                @premium('produk', 'update')
                 <button onclick="editProduk({{ $kt->toJson() }})" class="bg-yellow-400 hover:bg-yellow-500 text-white p-2.5 rounded-full transition shadow tooltip" title="Edit Data"><i class="fa-solid fa-pen"></i></button>
+                @endpremium
+
+                @premium('produk', 'delete')
                 <form action="{{ route('user.produk.destroy', $kt->id) }}" method="POST" onsubmit="return confirm('Hapus produk ini dari katalog?');" class="inline">
                     @csrf @method('DELETE')
                     <button class="bg-red-500 hover:bg-red-600 text-white p-2.5 rounded-full transition shadow tooltip" title="Hapus"><i class="fa-solid fa-trash"></i></button>
                 </form>
+                @endpremium
             </div>
         </div>
         <div class="p-4 flex-grow flex flex-col justify-between">
