@@ -15,6 +15,11 @@ class MitraKerjasama extends Model
 
     public function bumdes(): BelongsTo
     {
-        return $this->belongsTo(Bumdes::class);
+        return $this->belongsTo(Bumdesa::class); // usually it's Bumdesa, not Bumdes
+    }
+
+    public function mitraOption(): BelongsTo
+    {
+        return $this->belongsTo(MitraOption::class);
     }
 }

@@ -72,7 +72,14 @@
             </div>
             <div>
                 <label class="block text-sm font-medium text-gray-700">Jabatan / Peran</label>
-                <input type="text" name="role" required placeholder="Cth: Direktur Utama / Penasihat (Kades)" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm border p-2">
+                <select name="role" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm border p-2">
+                    <option value="">-- Pilih Jabatan --</option>
+                    <option value="Penasehat">Penasehat</option>
+                    <option value="Pengawas">Pengawas</option>
+                    <option value="Direktur">Direktur</option>
+                    <option value="Sekretaris">Sekretaris</option>
+                    <option value="Bendahara">Bendahara</option>
+                </select>
             </div>
             <div>
                 <label class="block text-sm font-medium text-gray-700">Foto Profil (Rekomendasi rasio 1:1 / Kotak)</label>
@@ -107,7 +114,14 @@
             </div>
             <div>
                 <label class="block text-sm font-medium text-gray-700">Jabatan / Peran</label>
-                <input type="text" name="role" id="edit-role" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm border p-2">
+                <select name="role" id="edit-role" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm border p-2">
+                    <option value="">-- Pilih Jabatan --</option>
+                    <option value="Penasehat">Penasehat</option>
+                    <option value="Pengawas">Pengawas</option>
+                    <option value="Direktur">Direktur</option>
+                    <option value="Sekretaris">Sekretaris</option>
+                    <option value="Bendahara">Bendahara</option>
+                </select>
             </div>
             <div>
                 <label class="block text-sm font-medium text-gray-700">Ganti Foto (Kosongkan bila tidak diganti)</label>

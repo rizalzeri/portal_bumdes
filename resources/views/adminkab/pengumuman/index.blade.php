@@ -1,5 +1,5 @@
 @extends('layouts.admin')
-@section('title', 'Pengumuman Kabupaten')
+@section('title', 'Pengumuman Dinas PMD Kabupaten')
 
 @section('content')
 <div class="mb-6 flex justify-between items-center">

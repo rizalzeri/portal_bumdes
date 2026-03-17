@@ -33,7 +33,15 @@
     @else
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             @foreach ($mitras as $m)
-                <div class="bg-white rounded-xl border shadow-sm p-5 flex gap-4 items-start hover:shadow-md transition">
+                <div class="bg-white rounded-xl border shadow-sm p-5 flex gap-4 items-start hover:shadow-md transition relative">
+                    <div class="absolute top-3 right-3 flex space-x-2">
+                        @if($m->is_active)
+                            <span class="bg-green-100 text-green-800 text-[10px] font-bold px-2 py-0.5 rounded-full border border-green-200">Aktif</span>
+                        @else
+                            <span class="bg-red-100 text-red-800 text-[10px] font-bold px-2 py-0.5 rounded-full border border-red-200">Tidak Aktif</span>
+                        @endif
+                    </div>
+                
                     @if ($m->logo)
                         <img src="{{ asset('storage/' . $m->logo) }}"
                             class="w-14 h-14 object-contain border rounded-lg bg-gray-50 p-1 shrink-0"
@@ -44,18 +52,21 @@
                             <i class="fa-solid fa-building text-xl"></i>
                         </div>
                     @endif
-                    <div class="flex-1 min-w-0">
-                        <h3 class="font-bold text-gray-800 truncate">{{ $m->name }}</h3>
+                    <div class="flex-1 min-w-0 pr-12">
+                        <h3 class="font-bold text-gray-800">{{ $m->name }}</h3>
+                        <p class="text-xs text-gray-400 font-semibold mb-1">
+                            Kategori: {{ $m->mitraOption->name ?? $m->name }}
+                        </p>
                         @if ($m->description)
                             <p class="text-xs text-gray-500 mt-1 line-clamp-2">{{ $m->description }}</p>
                         @endif
                         <div class="flex gap-2 mt-3">
                             <button
-                                onclick="openEditModal({{ $m->id }}, '{{ addslashes($m->name) }}', '{{ addslashes($m->description) }}')"
+                                onclick="openEditModal({{ $m->id }}, {{ $m->mitra_option_id ?? 'null' }}, '{{ addslashes($m->description) }}', {{ $m->is_active ? 1 : 0 }})"
                                 class="text-xs text-blue-600 font-semibold hover:underline">
                                 <i class="fa-solid fa-pen mr-1"></i>Edit
                             </button>
-                            <form action="{{ route('user.mitra.destroy', $m) }}" method="POST"
+                            <form action="{{ route('user.mitra.destroy', ['slug' => auth()->user()->username, 'mitra' => $m->id]) }}" method="POST"
                                 onsubmit="return confirm('Hapus mitra ini?')">
                                 @csrf @method('DELETE')
                                 <button type="submit" class="text-xs text-red-500 font-semibold hover:underline">
@@ -77,18 +88,30 @@
                 <button onclick="document.getElementById('modalTambah').classList.add('hidden')"
                     class="text-gray-400 hover:text-gray-600 text-xl">&times;</button>
             </div>
-            <form action="{{ route('user.mitra.store') }}" method="POST" enctype="multipart/form-data"
+            <form action="{{ route('user.mitra.store', ['slug' => auth()->user()->username]) }}" method="POST" enctype="multipart/form-data"
                 class="p-6 space-y-4">
                 @csrf
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Nama Mitra <span
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Kategori Mitra <span
                             class="text-red-500">*</span></label>
-                    <input type="text" name="name" required
-                        class="w-full border rounded-lg px-3 py-2 text-sm focus:ring-primary focus:border-primary">
+                    <select name="mitra_option_id" required class="w-full border rounded-lg px-3 py-2 text-sm focus:ring-primary focus:border-primary">
+                        <option value="">-- Pilih Jenis/Kategori Mitra --</option>
+                        @foreach($options as $opt)
+                            <option value="{{ $opt->id }}">{{ $opt->name }}</option>
+                        @endforeach
+                    </select>
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Deskripsi / Keterangan</label>
-                    <textarea name="description" rows="3" class="w-full border rounded-lg px-3 py-2 text-sm"></textarea>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Status Kemitraan <span
+                            class="text-red-500">*</span></label>
+                    <select name="is_active" required class="w-full border rounded-lg px-3 py-2 text-sm focus:ring-primary focus:border-primary">
+                        <option value="1">Aktif</option>
+                        <option value="0">Tidak Aktif</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Deskripsi / Keterangan Partner</label>
+                    <textarea name="description" rows="3" class="w-full border rounded-lg px-3 py-2 text-sm" placeholder="Contoh: Bekerja sama dengan PT Mandiri dalam pengelolaan produk"></textarea>
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Logo Mitra</label>
@@ -115,13 +138,25 @@
             <form id="editForm" method="POST" enctype="multipart/form-data" class="p-6 space-y-4">
                 @csrf @method('PUT')
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Nama Mitra <span
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Kategori Mitra <span
                             class="text-red-500">*</span></label>
-                    <input type="text" name="name" id="editName" required
-                        class="w-full border rounded-lg px-3 py-2 text-sm">
+                    <select name="mitra_option_id" id="editKategori" required class="w-full border rounded-lg px-3 py-2 text-sm focus:ring-primary focus:border-primary">
+                        <option value="">-- Pilih Jenis/Kategori Mitra --</option>
+                        @foreach($options as $opt)
+                            <option value="{{ $opt->id }}">{{ $opt->name }}</option>
+                        @endforeach
+                    </select>
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Deskripsi</label>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Status Kemitraan <span
+                            class="text-red-500">*</span></label>
+                    <select name="is_active" id="editStatus" required class="w-full border rounded-lg px-3 py-2 text-sm focus:ring-primary focus:border-primary">
+                        <option value="1">Aktif</option>
+                        <option value="0">Tidak Aktif</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Deskripsi / Keterangan Partner</label>
                     <textarea name="description" id="editDesc" rows="3" class="w-full border rounded-lg px-3 py-2 text-sm"></textarea>
                 </div>
                 <div>
@@ -140,10 +175,12 @@
 
     @push('scripts')
         <script>
-            function openEditModal(id, name, desc) {
-                document.getElementById('editName').value = name;
+            function openEditModal(id, option_id, desc, is_active) {
+                if(option_id) document.getElementById('editKategori').value = option_id;
+                document.getElementById('editStatus').value = is_active;
                 document.getElementById('editDesc').value = desc;
-                document.getElementById('editForm').action = '/user/mitra/' + id;
+                const slug = '{{ auth()->user()->username }}';
+                document.getElementById('editForm').action = '/' + slug + '/mitra/' + id;
                 document.getElementById('modalEdit').classList.remove('hidden');
             }
         </script>

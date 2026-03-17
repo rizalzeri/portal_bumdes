@@ -90,6 +90,8 @@ Route::prefix('superadmin')->name('superadmin.')->group(function () {
         Route::post('pengumuman/toggle-featured/{id}', [SAPengumuman::class, 'toggleFeatured'])->name('pengumuman.toggle_featured');
         Route::post('datamaster/inline-update/{id}', [SADataMaster::class, 'inlineUpdate'])->name('datamaster.inline_update');
         Route::resource('datamaster', SADataMaster::class);
+        Route::post('premium-features/inline-update/{id}', [\App\Http\Controllers\SuperAdmin\PremiumFeatureController::class, 'inlineUpdate'])->name('premium-features.inline_update');
+        Route::resource('premium-features', \App\Http\Controllers\SuperAdmin\PremiumFeatureController::class);
     });
 });
 

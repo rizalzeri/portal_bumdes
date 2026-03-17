@@ -97,55 +97,7 @@
         </div>
 
 
-        <!-- Citra & Status -->
-        <div>
-            <h3 class="font-bold text-gray-900 border-b pb-2 mb-4 mt-6">Citra & Status</h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                    <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Status Operasional</label>
-                    <select name="status" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm border p-2">
-                        <option value="active" {{ $bumdes->status == 'active' ? 'selected' : '' }}>Aktif</option>
-                        <option value="inactive" {{ $bumdes->status == 'inactive' ? 'selected' : '' }}>Tidak Aktif</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Hasil Pemeringkatan</label>
-                    <select name="pemeringkatan" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm border p-2">
-                        <option value="">-- Pilih Hasil --</option>
-                        <option value="Maju" {{ $bumdes->pemeringkatan == 'Maju' ? 'selected' : '' }}>Maju</option>
-                        <option value="Berkembang" {{ $bumdes->pemeringkatan == 'Berkembang' ? 'selected' : '' }}>Berkembang</option>
-                        <option value="Perintis" {{ $bumdes->pemeringkatan == 'Perintis' ? 'selected' : '' }}>Perintis</option>
-                        <option value="Pemula" {{ $bumdes->pemeringkatan == 'Pemula' ? 'selected' : '' }}>Pemula</option>
-                    </select>
-                </div>
-            </div>
-        </div>
 
-        <!-- Transparansi -->
-        <div>
-            <h3 class="font-bold text-gray-900 border-b pb-2 mb-4 mt-6">Data Transparansi</h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                <div>
-                    <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Musdes Terakhir</label>
-                    <input type="date" name="musdes_terakhir" value="{{ old('musdes_terakhir', $bumdes->musdes_terakhir) }}" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm border p-2">
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Audit Internal Terakhir</label>
-                    <input type="date" name="audit_internal_terakhir" value="{{ old('audit_internal_terakhir', $bumdes->audit_internal_terakhir) }}" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm border p-2">
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Laporan Ke Dinas</label>
-                    <select name="laporan_dinas_status" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm border p-2">
-                        <option value="belum" {{ $bumdes->laporan_dinas_status == 'belum' ? 'selected' : '' }}>Belum Dikirim</option>
-                        <option value="sudah" {{ $bumdes->laporan_dinas_status == 'sudah' ? 'selected' : '' }}>Sudah Dikirim</option>
-                    </select>
-                </div>
-                <div class="md:col-span-2 lg:col-span-3">
-                    <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Link GDrive (Laporan Dinas)</label>
-                    <input type="url" name="laporan_dinas_link" value="{{ old('laporan_dinas_link', $bumdes->laporan_dinas_link) }}" placeholder="https://drive.google.com/..." class="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm border p-2">
-                </div>
-            </div>
-        </div>
 
 
         <div class="pt-6 mt-8 border-t flex justify-end">

@@ -28,10 +28,6 @@
                         class="flex flex-col sm:flex-row flex-wrap gap-4 justify-center md:justify-start text-blue-100 text-sm md:text-base">
                         <div class="flex items-center"><i class="fa-solid fa-map-location-dot w-5 text-accent"></i>
                             {{ $bumdes->address ?? 'Alamat belum diatur' }}, {{ $bumdes->kabupaten->name }}</div>
-                        @if ($bumdes->nomor_sertifikat)
-                            <div class="flex items-center"><i class="fa-solid fa-certificate w-5 text-accent"></i>
-                                No. Badan Hukum: {{ $bumdes->nomor_sertifikat }}</div>
-                        @endif
                         @if ($bumdes->phone)
                             <div class="flex items-center"><i class="fa-solid fa-phone w-5 text-accent"></i>
                                 {{ $bumdes->phone }}</div>
@@ -39,6 +35,10 @@
                         @if ($bumdes->email)
                             <div class="flex items-center"><i class="fa-solid fa-envelope w-5 text-accent"></i>
                                 {{ $bumdes->email }}</div>
+                        @endif
+                        @if ($bumdes->nomor_sertifikat)
+                            <div class="flex items-center"><i class="fa-solid fa-certificate w-5 text-accent"></i>
+                                No. Badan Hukum: {{ $bumdes->nomor_sertifikat }}</div>
                         @endif
                     </div>
                 </div>
@@ -80,9 +80,7 @@
                     @if ($bumdes->visi_misi)
                         <div>
                             <h4 class="font-bold text-gray-800 mb-2">Visi & Misi</h4>
-                            <div class="text-gray-600 leading-relaxed whitespace-pre-line">
-                                {{ $bumdes->visi_misi }}
-                            </div>
+                            <div class="text-gray-600 leading-relaxed whitespace-pre-line">{{ trim($bumdes->visi_misi) }}</div>
                         </div>
                     @endif
                 </div>
@@ -153,10 +151,10 @@
                 @endif
             </div>
 
-            <!-- 4. Produk Desa BUMDesa -->
+            <!-- 4. Produk Desa -->
             <div class="bg-white rounded-xl shadow-sm border p-6" id="produk-desa">
                 <h2 class="text-2xl font-bold text-primary border-b pb-2 mb-6"><i
-                        class="fa-solid fa-box-open mr-2 text-accent"></i> Produk Desa BUMDesa</h2>
+                        class="fa-solid fa-box-open mr-2 text-accent"></i> Produk Desa</h2>
                 @if ($bumdes->katalogProduks->isEmpty())
                     <div class="text-center py-8 text-gray-400 border border-dashed rounded-lg">
                         <i class="fa-solid fa-box text-3xl mb-2"></i>
@@ -229,45 +227,70 @@
 
             <!-- 6. Kinerja & Capaian -->
             <div class="bg-white rounded-xl shadow-sm border p-6" id="kinerja-capaian">
-                <h3 class="text-2xl font-bold text-primary border-b pb-2 mb-6"><i
-                        class="fa-solid fa-chart-line mr-2 text-accent"></i> Kinerja & Capaian</h3>
-                @if (count($labels) > 0)
-                    <!-- Chart Container -->
-                    <div class="w-full" style="height: 400px;">
-                        <canvas id="kinerjaChart"></canvas>
+                <h3 class="text-2xl font-bold text-primary border-b pb-2 mb-6"><i class="fa-solid fa-chart-line mr-2 text-accent"></i> Kinerja & Capaian</h3>
+                
+                @if ($bumdes->kinerjaCapaians->isEmpty())
+                    <div class="text-center py-8 text-gray-400 border border-dashed rounded-lg">
+                        <i class="fa-solid fa-chart-line text-3xl mb-2"></i>
+                        <p>Belum ada data kinerja yang dipublikasikan.</p>
                     </div>
                 @else
-                    <p class="text-gray-500 italic text-center py-6">Data laporan keuangan belum tersedia.</p>
-                @endif
-            </div>
-
-            <!-- 7. Transparansi / Materi & Template -->
-            <div class="bg-white rounded-xl shadow-sm border p-6" id="materi-template">
-                <h3 class="text-2xl font-bold text-primary border-b pb-2 mb-6"><i
-                        class="fa-solid fa-file-contract mr-2 text-accent"></i> Transparansi</h3>
-                @if ($bumdes->transparansis->isEmpty())
-                    <p class="text-gray-500 italic text-center py-6">Dokumen transparansi belum diunggah.</p>
-                @else
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                        @foreach ($bumdes->transparansis as $doc)
-                            <div
-                                class="border rounded-lg p-5 flex items-center justify-between hover:border-primary transition-all hover:shadow-md bg-gray-50">
-                                <div class="flex items-center">
-                                    <i class="fa-solid fa-file-pdf text-4xl text-red-500 mr-4"></i>
-                                    <div>
-                                        <h4 class="font-bold text-gray-800">{{ $doc->title }}</h4>
-                                        <p class="text-xs font-semibold text-gray-500 mt-1">{{ $doc->type }} -
-                                            {{ $doc->year }}</p>
-                                    </div>
-                                </div>
-                                <a href="{{ asset('storage/' . $doc->file_url) }}" target="_blank"
-                                    class="bg-primary text-white rounded-full w-10 h-10 flex items-center justify-center hover:bg-accent hover:text-primary transition shadow">
-                                    <i class="fa-solid fa-download"></i>
-                                </a>
+                    <div class="space-y-6">
+                        @php
+                            $kinerjaGrouped = $bumdes->kinerjaCapaians->sortByDesc('year')->groupBy('year');
+                        @endphp
+                        
+                        @foreach($kinerjaGrouped as $year => $items)
+                        <div class="border rounded-lg overflow-hidden">
+                            <div class="bg-gray-50 px-4 py-3 border-b font-bold text-gray-800 flex justify-between items-center">
+                                <span>Periode Tahun {{ $year }}</span>
                             </div>
+                            <div class="p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                                @foreach($items as $item)
+                                <div class="bg-white border p-3 rounded-lg shadow-sm hover:shadow-md transition">
+                                    <span class="text-[10px] uppercase font-bold text-gray-400 block mb-1">{{ $item->description }}</span>
+                                    <h5 class="text-sm font-bold text-gray-900 mb-2">{{ $item->title }}</h5>
+                                    <p class="text-base font-mono text-primary font-bold">Rp {{ number_format($item->value, 0, ',', '.') }}</p>
+                                </div>
+                                @endforeach
+                            </div>
+                        </div>
                         @endforeach
                     </div>
                 @endif
+            </div>
+
+            <!-- 7. Transparansi -->
+            <div class="bg-white rounded-xl shadow-sm border p-6" id="materi-template">
+                <h3 class="text-2xl font-bold text-primary border-b pb-2 mb-6"><i
+                        class="fa-solid fa-file-contract mr-2 text-accent"></i> Transparansi</h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="flex flex-col items-center justify-center p-4 bg-gray-50 rounded-xl border">
+                        <i class="fa-solid fa-calendar-check text-blue-500 text-3xl mb-3"></i>
+                        <span class="text-xs font-bold text-gray-500 uppercase">Musdes Terakhir</span>
+                        <span class="font-bold text-gray-900 mt-1">
+                            {{ $bumdes->musdes_terakhir ? \Carbon\Carbon::parse($bumdes->musdes_terakhir)->translatedFormat('d F Y') : 'Belum Ada Data' }}
+                        </span>
+                    </div>
+                    <div class="flex flex-col items-center justify-center p-4 bg-gray-50 rounded-xl border">
+                        <i class="fa-solid fa-magnifying-glass-chart text-green-500 text-3xl mb-3"></i>
+                        <span class="text-xs font-bold text-gray-500 uppercase">Audit Internal Terakhir</span>
+                        <span class="font-bold text-gray-900 mt-1">
+                            {{ $bumdes->audit_internal_terakhir ? \Carbon\Carbon::parse($bumdes->audit_internal_terakhir)->translatedFormat('d F Y') : 'Belum Ada Data' }}
+                        </span>
+                    </div>
+                    <div class="flex flex-col items-center justify-center p-4 bg-gray-50 rounded-xl border">
+                        <i class="fa-solid fa-file-export text-red-500 text-3xl mb-3"></i>
+                        <span class="text-xs font-bold text-gray-500 uppercase">Status Laporan Dinas</span>
+                        <span class="font-bold {{ $bumdes->laporan_dinas_status === 'sudah' ? 'text-emerald-600' : 'text-gray-900' }} mt-1">
+                            {{ $bumdes->laporan_dinas_status === 'sudah' ? 'Sudah Dikirim' : 'Belum Dikirim' }}
+                        </span>
+                        @if($bumdes->laporan_dinas_status === 'sudah' && $bumdes->laporan_dinas_link)
+                            <a href="{{ $bumdes->laporan_dinas_link }}" target="_blank" class="mt-2 text-xs bg-blue-100 text-blue-700 px-3 py-1 rounded-full font-bold hover:bg-blue-200 transition">Lihat Laporan <i class="fa-solid fa-arrow-up-right-from-square ml-1 text-[10px]"></i></a>
+                        @endif
+                    </div>
+                </div>
             </div>
 
             <!-- 8. Mitra -->
@@ -389,76 +412,4 @@
         </div>
     </div>
 
-    @if (count($labels) > 0)
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-        <script>
-            document.addEventListener("DOMContentLoaded", function() {
-                const ctx = document.getElementById('kinerjaChart').getContext('2d');
-                const labels = @json($labels);
-                const dataPendapatan = @json($pendapatanData);
-                const dataLaba = @json($labaData);
-
-                new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        labels: labels,
-                        datasets: [{
-                                label: 'Pendapatan Kotor (Rp)',
-                                data: dataPendapatan,
-                                borderColor: '#3b82f6', // blue-500
-                                backgroundColor: 'rgba(59, 130, 246, 0.1)',
-                                borderWidth: 3,
-                                tension: 0.4,
-                                fill: true
-                            },
-                            {
-                                label: 'Laba Bersih (Rp)',
-                                data: dataLaba,
-                                borderColor: '#10b981', // green-500
-                                backgroundColor: 'rgba(16, 185, 129, 0.1)',
-                                borderWidth: 3,
-                                tension: 0.4,
-                                fill: true
-                            }
-                        ]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: {
-                                position: 'top',
-                            },
-                            tooltip: {
-                                callbacks: {
-                                    label: function(context) {
-                                        let label = context.dataset.label || '';
-                                        if (label) {
-                                            label += ': ';
-                                        }
-                                        if (context.parsed.y !== null) {
-                                            label += 'Rp ' + new Intl.NumberFormat('id-ID').format(context
-                                                .parsed.y);
-                                        }
-                                        return label;
-                                    }
-                                }
-                            }
-                        },
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                                ticks: {
-                                    callback: function(value) {
-                                        if (value >= 1000000) return 'Rp ' + (value / 1000000) + ' Jt';
-                                        return 'Rp ' + value;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                });
-            });
-        </script>
-    @endif
 @endsection

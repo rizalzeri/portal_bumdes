@@ -14,15 +14,18 @@
 
 <!-- Tabs mapping via Alpine -->
 <div x-data="{ activeTab: 'unit_usaha' }">
-    <div class="flex border-b border-gray-200 mb-6 space-x-4">
-        <button @click="activeTab = 'unit_usaha'" :class="{'border-accent text-primary font-bold border-b-2': activeTab === 'unit_usaha', 'text-gray-500 hover:text-gray-700': activeTab !== 'unit_usaha'}" class="pb-3 px-2 text-sm md:text-base font-medium transition-colors">
+    <div class="flex border-b border-gray-200 mb-6 space-x-4 overflow-x-auto pb-1">
+        <button @click="activeTab = 'unit_usaha'" :class="{'border-accent text-primary font-bold border-b-2': activeTab === 'unit_usaha', 'text-gray-500 hover:text-gray-700': activeTab !== 'unit_usaha'}" class="whitespace-nowrap pb-3 px-2 text-sm md:text-base font-medium transition-colors">
             Kategori Unit Usaha
         </button>
-        <button @click="activeTab = 'produk'" :class="{'border-accent text-primary font-bold border-b-2': activeTab === 'produk', 'text-gray-500 hover:text-gray-700': activeTab !== 'produk'}" class="pb-3 px-2 text-sm md:text-base font-medium transition-colors">
+        <button @click="activeTab = 'produk'" :class="{'border-accent text-primary font-bold border-b-2': activeTab === 'produk', 'text-gray-500 hover:text-gray-700': activeTab !== 'produk'}" class="whitespace-nowrap pb-3 px-2 text-sm md:text-base font-medium transition-colors">
             Kategori Produk BUMDes
         </button>
-        <button @click="activeTab = 'ketapang'" :class="{'border-accent text-primary font-bold border-b-2': activeTab === 'ketapang', 'text-gray-500 hover:text-gray-700': activeTab !== 'ketapang'}" class="pb-3 px-2 text-sm md:text-base font-medium transition-colors">
+        <button @click="activeTab = 'ketapang'" :class="{'border-accent text-primary font-bold border-b-2': activeTab === 'ketapang', 'text-gray-500 hover:text-gray-700': activeTab !== 'ketapang'}" class="whitespace-nowrap pb-3 px-2 text-sm md:text-base font-medium transition-colors">
             Kategori Ketahanan Pangan
+        </button>
+        <button @click="activeTab = 'mitra'" :class="{'border-accent text-primary font-bold border-b-2': activeTab === 'mitra', 'text-gray-500 hover:text-gray-700': activeTab !== 'mitra'}" class="whitespace-nowrap pb-3 px-2 text-sm md:text-base font-medium transition-colors">
+            Kategori Mitra Kerjasama
         </button>
     </div>
 
@@ -109,6 +112,34 @@
             </table>
         </div>
     </div>
+
+    <!-- Mitra Tab -->
+    <div x-show="activeTab === 'mitra'" style="display: none;" class="bg-white rounded-xl shadow-sm border p-6">
+        <div class="table-responsive w-full overflow-x-auto">
+            <table class="datatable w-full whitespace-nowrap text-sm text-left text-gray-500">
+                <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                    <tr><th class="px-6 py-3">Ikon & Nama Kategori</th><th class="px-6 py-3 text-right">Aksi</th></tr>
+                </thead>
+                <tbody>
+                    @foreach($mitraOptions as $opt)
+                    <tr class="bg-white border-b hover:bg-gray-50">
+                        <td class="px-6 py-4 font-medium text-gray-900 group">
+                            <i class="{{ $opt->icon ?? 'fa-solid fa-handshake' }} text-accent mr-2 w-5 text-center"></i>
+                            <span class="data-editable underline-offset-4 decoration-dashed decoration-gray-300 hover:underline cursor-text focus:outline-none focus:bg-yellow-50 focus:ring-1 focus:ring-primary px-1 rounded transition" data-id="{{ $opt->id }}" data-type="mitra" contenteditable="true" title="Klik ganda untuk mengedit langsung">{{ $opt->name }}</span>
+                        </td>
+                        <td class="px-6 py-4 text-right">
+                            <button onclick="editData('mitra', {{ $opt->id }}, '{{ addslashes($opt->name) }}', '{{ addslashes($opt->icon ?? '') }}')" class="text-accent hover:text-yellow-600 bg-yellow-50 hover:bg-yellow-100 p-2 rounded-md transition-colors mr-1"><i class="fa-solid fa-pen"></i></button>
+                            <form action="{{ route('superadmin.datamaster.destroy', $opt->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Yakin hapus opsi ini?');">
+                                @csrf @method('DELETE') <input type="hidden" name="type" value="mitra">
+                                <button type="submit" class="text-red-500 hover:text-red-700 bg-red-50 hover:bg-red-100 p-2 rounded-md transition-colors"><i class="fa-solid fa-trash"></i></button>
+                            </form>
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
 
 <!-- Add Modal -->
@@ -126,6 +157,7 @@
                     <option value="unit_usaha">Kategori Unit Usaha</option>
                     <option value="produk">Kategori Produk BUMDes</option>
                     <option value="ketapang">Kategori Produk Ketahanan Pangan</option>
+                    <option value="mitra">Kategori Mitra Kerjasama</option>
                 </select>
             </div>
             <div>

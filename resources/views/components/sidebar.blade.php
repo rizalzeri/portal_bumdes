@@ -70,7 +70,7 @@
                 <a href="{{ route('superadmin.katalog.index') }}"
                     class="flex items-center px-3 py-2 text-gray-200 transition-colors rounded-lg hover:bg-primary-800 hover:text-white">
                     <i class="fa-solid fa-shop w-5 h-5"></i>
-                    <span class="mx-2 text-sm font-medium">Katalog Produk</span>
+                    <span class="mx-2 text-sm font-medium">Produk Desa</span>
                 </a>
                 <a href="{{ route('superadmin.mitra.index') }}"
                     class="flex items-center px-3 py-2 text-gray-200 transition-colors rounded-lg hover:bg-primary-800 hover:text-white">
@@ -81,6 +81,13 @@
                     class="flex items-center px-3 py-2 text-gray-200 transition-colors rounded-lg hover:bg-primary-800 hover:text-white">
                     <i class="fa-solid fa-images w-5 h-5"></i>
                     <span class="mx-2 text-sm font-medium">Galeri Kegiatan</span>
+                </a>
+                
+                <div class="text-xs font-semibold text-gray-400 uppercase tracking-wider mt-4 mb-2 px-3">Sistem</div>
+                <a href="{{ route('superadmin.premium-features.index') }}"
+                    class="flex items-center px-3 py-2 text-gray-200 transition-colors rounded-lg hover:bg-primary-800 hover:text-white">
+                    <i class="fa-solid fa-star w-5 h-5 text-yellow-400"></i>
+                    <span class="mx-2 text-sm font-medium">Fitur Premium</span>
                 </a>
             @endif
 
@@ -95,7 +102,7 @@
                 <a href="{{ route('adminkab.keuangan.index') }}"
                     class="flex items-center px-3 py-2 text-gray-200 transition-colors rounded-lg hover:bg-primary-800 hover:text-white">
                     <i class="fa-solid fa-chart-line w-5 h-5"></i>
-                    <span class="mx-2 text-sm font-medium">Data Keuangan BUMDes</span>
+                    <span class="mx-2 text-sm font-medium">Perkembangan Laporan BUMDesa</span>
                 </a>
                 <a href="{{ route('adminkab.pengumuman.index') }}"
                     class="flex items-center px-3 py-2 text-gray-200 transition-colors rounded-lg hover:bg-primary-800 hover:text-white">
@@ -130,7 +137,7 @@
                 <a href="{{ route('user.produk.index', ['slug' => Auth::user()->username]) }}"
                     class="flex items-center px-3 py-2 text-gray-200 transition-colors rounded-lg hover:bg-primary-800 hover:text-white">
                     <i class="fa-solid fa-box w-5 h-5"></i>
-                    <span class="mx-2 text-sm font-medium">Produk BUMDes</span>
+                    <span class="mx-2 text-sm font-medium">Produk Desa</span>
                 </a>
                 <a href="{{ route('user.ketapang.index', ['slug' => Auth::user()->username]) }}"
                     class="flex items-center px-3 py-2 text-gray-200 transition-colors rounded-lg hover:bg-primary-800 hover:text-white">
@@ -143,7 +150,7 @@
                 <a href="{{ route('user.finansial.index', ['slug' => Auth::user()->username]) }}"
                     class="flex items-center px-3 py-2 text-gray-200 transition-colors rounded-lg hover:bg-primary-800 hover:text-white">
                     <i class="fa-solid fa-file-invoice-dollar w-5 h-5"></i>
-                    <span class="mx-2 text-sm font-medium">Laporan Keuangan</span>
+                    <span class="mx-2 text-sm font-medium">Laporan Keuangan & Perkembangan</span>
                 </a>
                 <a href="{{ route('user.transparansi.index', ['slug' => Auth::user()->username]) }}"
                     class="flex items-center px-3 py-2 text-gray-200 transition-colors rounded-lg hover:bg-primary-800 hover:text-white">

@@ -23,36 +23,17 @@ class TransparansiController extends Controller
         $bumdes = Bumdesa::where('user_id', auth()->id())->orWhere('id', auth()->user()->bumdes_id)->firstOrFail();
 
         $request->validate([
-            'tipe_dokumen' => 'required|string|max:100',
-            'tahun' => 'required|integer|min:2000|max:'.(date('Y') + 1),
-            'file_dokumen' => 'required|file|mimes:pdf|max:10240', // enforce PDF
+            'musdes_terakhir' => 'nullable|date',
+            'audit_internal_terakhir' => 'nullable|date',
+            'laporan_dinas_status' => 'nullable|in:sudah,belum',
+            'laporan_dinas_link' => 'nullable|url',
         ]);
 
-        $exists = StandarTransparansi::where('bumdes_id', $bumdes->id)
-            ->where('type', $request->tipe_dokumen)
-            ->where('year', $request->tahun)
-            ->exists();
+        $bumdes->update($request->only([
+            'musdes_terakhir', 'audit_internal_terakhir', 'laporan_dinas_status', 'laporan_dinas_link'
+        ]));
 
-        if ($exists) {
-            return back()->withInput()->with('error', 'Dokumen tipe ini untuk tahun tersebut sudah ada.');
-        }
-
-        $filePath = null;
-        if ($request->hasFile('file_dokumen')) {
-            $filePath = $request->file('file_dokumen')->store('transparansi', 'public');
-        }
-
-        StandarTransparansi::create([
-            'bumdes_id' => $bumdes->id,
-            'title' => $request->tipe_dokumen,      // kolom NOT NULL awal, pakai tipe sbg judul
-            'type' => $request->tipe_dokumen,       // kolom NOT NULL awal
-            'year' => (string) $request->tahun,     // kolom NOT NULL awal
-            'tahun' => $request->tahun,              // kolom nullable tambahan
-            'tipe' => $request->tipe_dokumen,       // kolom nullable tambahan
-            'file_url' => $filePath,                    // kolom NOT NULL awal
-        ]);
-
-        return redirect()->route('user.transparansi.index')->with('success', 'Dokumen transparansi berhasil diunggah.');
+        return redirect()->route('user.transparansi.index')->with('success', 'Data Transparansi berhasil diperbarui.');
     }
 
     public function destroy($slug, StandarTransparansi $transparansi)

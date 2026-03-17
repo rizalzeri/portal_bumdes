@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\UnitUsahaOption;
 use App\Models\ProdukOption;
 use App\Models\ProdukKetapangOption;
+use App\Models\MitraOption;
 
 class DataMasterController extends Controller
 {
@@ -15,14 +16,15 @@ class DataMasterController extends Controller
         $unitUsahaOptions = UnitUsahaOption::all();
         $produkOptions = ProdukOption::all();
         $ketapangOptions = ProdukKetapangOption::all();
+        $mitraOptions = MitraOption::all();
 
-        return view('superadmin.datamaster.index', compact('unitUsahaOptions', 'produkOptions', 'ketapangOptions'));
+        return view('superadmin.datamaster.index', compact('unitUsahaOptions', 'produkOptions', 'ketapangOptions', 'mitraOptions'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'type' => 'required|in:unit_usaha,produk,ketapang',
+            'type' => 'required|in:unit_usaha,produk,ketapang,mitra',
             'name' => 'required|string|max:255',
             'icon' => 'nullable|string|max:100', // For fontawesome icons
         ]);
@@ -31,6 +33,8 @@ class DataMasterController extends Controller
             UnitUsahaOption::create($request->only('name', 'icon'));
         } elseif ($request->type === 'produk') {
             ProdukOption::create($request->only('name', 'icon'));
+        } elseif ($request->type === 'mitra') {
+            MitraOption::create($request->only('name', 'icon'));
         } else {
             ProdukKetapangOption::create($request->only('name', 'icon'));
         }
@@ -41,7 +45,7 @@ class DataMasterController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'type' => 'required|in:unit_usaha,produk,ketapang',
+            'type' => 'required|in:unit_usaha,produk,ketapang,mitra',
             'name' => 'required|string|max:255',
             'icon' => 'nullable|string|max:100',
         ]);
@@ -50,6 +54,8 @@ class DataMasterController extends Controller
             UnitUsahaOption::findOrFail($id)->update($request->only('name', 'icon'));
         } elseif ($request->type === 'produk') {
             ProdukOption::findOrFail($id)->update($request->only('name', 'icon'));
+        } elseif ($request->type === 'mitra') {
+            MitraOption::findOrFail($id)->update($request->only('name', 'icon'));
         } else {
             ProdukKetapangOption::findOrFail($id)->update($request->only('name', 'icon'));
         }
@@ -59,12 +65,14 @@ class DataMasterController extends Controller
 
     public function destroy(Request $request, $id)
     {
-        $request->validate(['type' => 'required|in:unit_usaha,produk,ketapang']);
+        $request->validate(['type' => 'required|in:unit_usaha,produk,ketapang,mitra']);
 
         if ($request->type === 'unit_usaha') {
             UnitUsahaOption::findOrFail($id)->delete();
         } elseif ($request->type === 'produk') {
             ProdukOption::findOrFail($id)->delete();
+        } elseif ($request->type === 'mitra') {
+            MitraOption::findOrFail($id)->delete();
         } else {
             ProdukKetapangOption::findOrFail($id)->delete();
         }
@@ -75,7 +83,7 @@ class DataMasterController extends Controller
     public function inlineUpdate(Request $request, $id)
     {
         $request->validate([
-            'type' => 'required|in:unit_usaha,produk,ketapang',
+            'type' => 'required|in:unit_usaha,produk,ketapang,mitra',
             'name' => 'required|string|max:255',
         ]);
 
@@ -84,6 +92,8 @@ class DataMasterController extends Controller
                 UnitUsahaOption::findOrFail($id)->update(['name' => $request->name]);
             } elseif ($request->type === 'produk') {
                 ProdukOption::findOrFail($id)->update(['name' => $request->name]);
+            } elseif ($request->type === 'mitra') {
+                MitraOption::findOrFail($id)->update(['name' => $request->name]);
             } else {
                 ProdukKetapangOption::findOrFail($id)->update(['name' => $request->name]);
             }

@@ -264,7 +264,7 @@
                 <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
                     <i class="fa-solid fa-bullhorn text-blue-600"></i>
                 </div>
-                <h2 class="text-2xl font-bold text-gray-900">4. Pengumuman Kabupaten</h2>
+                <h2 class="text-2xl font-bold text-gray-900">4. Pengumuman Dinas PMD Kabupaten</h2>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

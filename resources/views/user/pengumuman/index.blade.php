@@ -1,10 +1,10 @@
 @extends('layouts.admin')
-@section('title', 'Pengumuman BUMDesa')
+@section('title', 'Pengumuman dari BUMDesa')
 
 @section('content')
     <div class="mb-6 flex justify-between items-center">
         <div>
-            <h2 class="text-2xl font-bold text-gray-800">Pengumuman BUMDesa</h2>
+            <h2 class="text-2xl font-bold text-gray-800">Pengumuman dari BUMDesa</h2>
             <p class="text-gray-500 text-sm mt-1">Sampaikan informasi penting terkait layanan atau kegiatan operasional
                 BUMDesa Anda.
             </p>

@@ -19,7 +19,7 @@
                 <tr>
                     <th class="px-4 py-3">Kategori Sektor</th>
                     <th class="px-4 py-3">Produksi Per Tahun</th>
-                    <th class="px-4 py-3 text-right">Aksi</th>
+                    <th class="px-4 py-3 text-left">Aksi</th>
                 </tr>
             </thead>
             <tbody class="divide-y divide-gray-100">
@@ -34,7 +34,7 @@
                         <td class="px-4 py-3 text-gray-800 font-bold">
                             {{ $p->produksi_pertahun ?? '-' }}
                         </td>
-                        <td class="px-4 py-3 text-right">
+                        <td class="px-4 py-3 text-left">
                             <form action="{{ route('user.ketapang.destroy', $p) }}" method="POST"
                                 onsubmit="return confirm('Hapus produk ini?')" class="inline-block">
                                 @csrf @method('DELETE')
