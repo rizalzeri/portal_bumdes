@@ -351,6 +351,11 @@ namespace App\Models {
     /**
      * App\Models\Bumdes
      *
+     * @property string|null $pemeringkatan
+     * @property string|null $audit_internal_terakhir
+     * @property string|null $laporan_dinas_link
+     * @property mixed $laporan_dinas_status
+     * @property string|null $musdes_terakhir
      * @property float|null $longitude
      * @property float|null $latitude
      * @property string|null $instagram
@@ -438,6 +443,11 @@ namespace App\Models {
      * @method static \Illuminate\Database\Eloquent\Builder<Bumdes>|Bumdes whereInstagram($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Bumdes>|Bumdes whereLatitude($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Bumdes>|Bumdes whereLongitude($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<Bumdes>|Bumdes whereMusdesTerakhir($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<Bumdes>|Bumdes whereLaporanDinasStatus($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<Bumdes>|Bumdes whereLaporanDinasLink($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<Bumdes>|Bumdes whereAuditInternalTerakhir($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<Bumdes>|Bumdes wherePemeringkatan($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Bumdes>|Bumdes newModelQuery()
      * @method static \Illuminate\Database\Eloquent\Builder<Bumdes>|Bumdes newQuery()
      * @method static \Illuminate\Database\Eloquent\Builder<Bumdes>|Bumdes query()
@@ -755,6 +765,11 @@ namespace App\Models {
     /**
      * App\Models\Bumdesa
      *
+     * @property string|null $pemeringkatan
+     * @property string|null $audit_internal_terakhir
+     * @property string|null $laporan_dinas_link
+     * @property mixed $laporan_dinas_status
+     * @property string|null $musdes_terakhir
      * @property float|null $longitude
      * @property float|null $latitude
      * @property string|null $instagram
@@ -861,6 +876,11 @@ namespace App\Models {
      * @method static \Illuminate\Database\Eloquent\Builder<Bumdesa>|Bumdesa whereInstagram($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Bumdesa>|Bumdesa whereLatitude($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Bumdesa>|Bumdesa whereLongitude($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<Bumdesa>|Bumdesa whereMusdesTerakhir($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<Bumdesa>|Bumdesa whereLaporanDinasStatus($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<Bumdesa>|Bumdesa whereLaporanDinasLink($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<Bumdesa>|Bumdesa whereAuditInternalTerakhir($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<Bumdesa>|Bumdesa wherePemeringkatan($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Bumdesa>|Bumdesa newModelQuery()
      * @method static \Illuminate\Database\Eloquent\Builder<Bumdesa>|Bumdesa newQuery()
      * @method static \Illuminate\Database\Eloquent\Builder<Bumdesa>|Bumdesa query()

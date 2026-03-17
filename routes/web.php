@@ -40,7 +40,7 @@ use Illuminate\Support\Facades\Route;
 // ------------- PUBLIC ROUTES -------------
 Route::get('/', [PublicController::class, 'index'])->name('home');
 Route::get('/kunjungi-bumdes', [PublicController::class, 'kunjungiBumdes'])->name('public.bumdes.list');
-Route::get('/bumdes/{slug}', [PublicController::class, 'bumdesProfile'])->name('public.bumdes.profile');
+// Route /bumdes/{slug} dihapus - sekarang langsung /{slug}
 Route::get('/infografis', [PublicController::class, 'infografis'])->name('public.infografis');
 Route::get('/infografis/kabupaten/{id}', [PublicController::class, 'infografisKabupaten'])->name('public.infografis.kabupaten');
 Route::get('/materi', [PublicController::class, 'materi'])->name('public.materi');
@@ -135,4 +135,4 @@ Route::get('/user/login', [AuthController::class, 'showUserLogin'])->name('login
 Route::post('/user/login', [AuthController::class, 'userLogin'])->name('user.login.post');
 
 // Catch-all route for dynamic BUMDes domains (must be at the very end)
-Route::get('/{slug}', [PublicController::class, 'bumdesProfile'])->name('public.bumdes.profile.direct');
+Route::get('/{slug}', [PublicController::class, 'bumdesProfile'])->name('public.bumdes.profile');

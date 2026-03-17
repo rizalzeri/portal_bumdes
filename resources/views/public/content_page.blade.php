@@ -32,7 +32,7 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 w-full mb-8">
                     @foreach ($items as $item)
                         <!-- Dynamic rendering based on type -->
-                        <a href="{{ $item->bumdes ? url('bumdes/' . $item->bumdes->slug . $anchor) : 'javascript:void(0)' }}"
+                        <a href="{{ $item->bumdes ? route('public.bumdes.profile', $item->bumdes->slug) . $anchor : 'javascript:void(0)' }}"
                             class="block bg-white border border-gray-200 rounded-xl p-5 hover:shadow-lg hover:border-accent transition-all group h-full flex flex-col">
 
                             <!-- Header with BUMDes/Portal Context -->

@@ -68,7 +68,7 @@
                     <div class="px-7 pb-5">
                         <div class="grid grid-cols-4 gap-3">
                             @foreach ($previewBumdes->take(4) as $item)
-                                <a href="{{ url('bumdes/' . ($item->slug ?? '')) }}"
+                                <a href="{{ route('public.bumdes.profile', $item->slug ?? '') }}"
                                     class="group/item flex flex-col items-center gap-2 p-3 rounded-xl border border-gray-100 hover:border-primary hover:bg-blue-50 transition-all text-center">
                                     <div
                                         class="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center overflow-hidden shrink-0">
@@ -170,7 +170,7 @@
                         <p class="text-xs text-gray-400 mb-2 font-medium">Materi dari BUMDesa:</p>
                         <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
                             @foreach ($previewMateri as $item)
-                                <a href="{{ url('bumdes/' . ($item->bumdes->slug ?? '') . '#materi-template') }}"
+                                <a href="{{ route('public.bumdes.profile', $item->bumdes->slug ?? '') . '#materi-template' }}"
                                     class="group/item flex flex-col items-center gap-2 p-3 rounded-xl border border-gray-100 hover:border-green-400 hover:bg-green-50 transition-all text-center">
                                     <div class="w-8 h-8 rounded-lg bg-green-100 flex items-center justify-center shrink-0">
                                         <i class="fa-solid fa-file-pdf text-green-600 text-sm"></i>
@@ -219,7 +219,7 @@
                         <p class="text-xs text-gray-400 mb-2 font-medium">Artikel terbaru:</p>
                         <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
                             @foreach ($previewArtikel as $item)
-                                <a href="{{ url('bumdes/' . ($item->bumdes->slug ?? '') . '#kabar-opini') }}"
+                                <a href="{{ route('public.bumdes.profile', $item->bumdes->slug ?? '') . '#kabar-opini' }}"
                                     class="group/item flex flex-col gap-1.5 p-3 rounded-xl border border-gray-100 hover:border-indigo-400 hover:bg-indigo-50 transition-all">
                                     @if ($item->image)
                                         <img src="{{ asset('storage/' . $item->image) }}"
@@ -273,7 +273,7 @@
                         <p class="text-xs text-gray-400 mb-2 font-medium">Produk terbaru:</p>
                         <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
                             @foreach ($previewKatalog as $item)
-                                <a href="{{ url('bumdes/' . ($item->bumdes->slug ?? '') . '#produk-desa') }}"
+                                <a href="{{ route('public.bumdes.profile', $item->bumdes->slug ?? '') . '#produk-desa' }}"
                                     class="group/item flex flex-col gap-1.5 p-3 rounded-xl border border-gray-100 hover:border-teal-400 hover:bg-teal-50 transition-all">
                                     @if ($item->image)
                                         <img src="{{ asset('storage/' . $item->image) }}"
@@ -331,7 +331,7 @@
                         <p class="text-xs text-gray-400 mb-2 font-medium">Mitra terbaru:</p>
                         <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
                             @foreach ($previewMitra as $item)
-                                <a href="{{ url('bumdes/' . ($item->bumdes->slug ?? '') . '#mitra') }}"
+                                <a href="{{ route('public.bumdes.profile', $item->bumdes->slug ?? '') . '#mitra' }}"
                                     class="group/item flex items-center gap-2 p-3 rounded-xl border border-gray-100 hover:border-red-400 hover:bg-red-50 transition-all">
                                     <div
                                         class="w-8 h-8 rounded-full bg-red-100 flex items-center justify-center shrink-0 overflow-hidden">
@@ -389,7 +389,7 @@
                         <p class="text-xs text-gray-400 mb-2 font-medium">Foto terbaru:</p>
                         <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
                             @foreach ($previewGaleri as $item)
-                                <a href="{{ url('bumdes/' . ($item->bumdes->slug ?? '') . '#galeri-kegiatan') }}"
+                                <a href="{{ route('public.bumdes.profile', $item->bumdes->slug ?? '') . '#galeri-kegiatan' }}"
                                     class="group/item flex flex-col gap-1.5 p-3 rounded-xl border border-gray-100 hover:border-purple-400 hover:bg-purple-50 transition-all">
                                     <div class="w-full h-24 rounded-lg overflow-hidden shrink-0 border border-gray-50">
                                         @if ($item->type === 'video' || $item->video_url)
@@ -566,7 +566,7 @@
                     <div class="px-7 pb-5">
                         <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
                             @foreach ($previewPengumumanBumdes as $item)
-                                <a href="{{ url('bumdes/' . ($item->bumdes->slug ?? '') . '#pengumuman') }}"
+                                <a href="{{ route('public.bumdes.profile', $item->bumdes->slug ?? '') . '#pengumuman' }}"
                                     class="group/item flex flex-col gap-1.5 p-3 rounded-xl border border-gray-100 hover:border-emerald-400 hover:bg-emerald-50 transition-all">
                                     <div class="flex items-center gap-2 mb-1">
                                         <div
