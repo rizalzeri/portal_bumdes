@@ -19,15 +19,21 @@
                 Pusat Inspirasi dan Informasi BUMDesa se-Indonesia. Temukan potensi, produk, dan perkembangan ribuan BUMDesa
                 untuk memajukan ekonomi desa bersama.
             </p>
-            <div class="mt-10 flex flex-col sm:flex-row justify-center items-center gap-4">
-                <a href="{{ route('public.bumdes.list') }}"
-                    class="px-8 py-4 border border-transparent text-lg font-bold rounded-full text-primary bg-accent hover:bg-yellow-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent shadow-lg transform transition hover:-translate-y-1 text-center w-full sm:w-auto">
-                    Kunjungi BUMDesa
-                </a>
-                <a href="{{ route('public.register') }}"
-                    class="px-8 py-4 border-2 border-accent text-lg font-bold rounded-full text-accent bg-transparent hover:bg-accent hover:text-primary focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent shadow-lg transform transition hover:-translate-y-1 text-center w-full sm:w-auto">
-                    Buat Website BUMDES
-                </a>
+            <div class="mt-10 flex flex-col sm:flex-row justify-center items-center gap-6 sm:gap-12">
+                <div class="flex flex-col items-center gap-2 w-full sm:w-auto">
+                    <a href="{{ route('public.bumdes.list') }}"
+                        class="px-8 py-4 border border-transparent text-lg font-bold rounded-full text-primary bg-accent hover:bg-yellow-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent shadow-lg transform transition hover:-translate-y-1 text-center w-full">
+                        Kunjungi BUMDesa
+                    </a>
+                    <span class="text-xs font-semibold text-accent/90 italic tracking-wide">(Gratis dan Praktis)</span>
+                </div>
+                <div class="flex flex-col items-center gap-2 w-full sm:w-auto">
+                    <a href="{{ route('public.register') }}"
+                        class="px-8 py-4 border-2 border-accent text-lg font-bold rounded-full text-accent bg-transparent hover:bg-accent hover:text-primary focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent shadow-lg transform transition hover:-translate-y-1 text-center w-full">
+                        Buat Website BUMDES
+                    </a>
+                    <span class="text-xs font-semibold text-accent/80 italic tracking-wide">(Mudah dan Cepat)</span>
+                </div>
             </div>
         </div>
     </div>
