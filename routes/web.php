@@ -19,6 +19,7 @@ use App\Http\Controllers\SuperAdmin\LanggananController as SALangganan;
 use App\Http\Controllers\SuperAdmin\MateriController as SAMateri;
 use App\Http\Controllers\SuperAdmin\MitraController as SAMitra;
 use App\Http\Controllers\SuperAdmin\PengumumanController as SAPengumuman;
+use App\Http\Controllers\SuperAdmin\PricingConfigController as SAPricingConfig;
 use App\Http\Controllers\SuperAdmin\UserController as SAUser;
 use App\Http\Controllers\User\ArtikelController as UArtikel;
 // User BUMDes Controllers
@@ -71,6 +72,7 @@ Route::prefix('superadmin')->name('superadmin.')->group(function () {
         Route::resource('adminkab', \App\Http\Controllers\SuperAdmin\AdminKabupatenController::class)->except(['show', 'edit', 'update']);
         Route::resource('user', SAUser::class);
         Route::resource('langganan', SALangganan::class);
+        Route::resource('pricing-config', SAPricingConfig::class)->except(['show', 'create', 'edit']);
         Route::resource('materi', SAMateri::class);
         Route::post('materi/toggle-featured/{id}', [SAMateri::class, 'toggleFeatured'])->name('materi.toggle_featured');
 
@@ -111,30 +113,38 @@ Route::prefix('admin-kabupaten')->name('adminkab.')->group(function () {
 });
 
 // ------------- USER BUMDES ROUTES (Dynamic Slug Based) -------------
-Route::prefix('{slug}')->middleware(['auth', 'user', 'premium_check'])->name('user.')->group(function () {
+Route::prefix('{slug}')->middleware(['auth', 'user'])->name('user.')->group(function () {
     Route::get('/dashboard', [UDashboard::class, 'index'])->name('dashboard');
-    Route::get('/profil', [UProfil::class, 'index'])->name('profil.index');
-    Route::put('/profil', [UProfil::class, 'update'])->name('profil.update');
-    Route::resource('personalia', UPersonalia::class);
-    Route::resource('unit_usaha', UUnitUsaha::class);
-    Route::resource('produk', UProduk::class);
-    Route::resource('ketapang', UKetapang::class);
-    Route::resource('galeri', UGaleri::class);
-    Route::resource('finansial', UFinansial::class);
-    Route::resource('transparansi', UTransparansi::class);
-    Route::resource('mitra', UMitra::class);
-    Route::resource('kinerja', UKinerja::class);
-    Route::resource('artikel', UArtikel::class);
-    Route::resource('pengumuman', UPengumuman::class);
-    Route::resource('langganan', ULangganan::class);
 
-    // Handling Midtrans callback/checkout specific routes
+    // Langganan routes (di luar premium_check agar bisa diakses user gratis untuk upgrade)
+    Route::get('langganan', [ULangganan::class, 'index'])->name('langganan.index');
+    Route::post('langganan', [ULangganan::class, 'store'])->name('langganan.store');
+    Route::delete('langganan/{langganan}', [ULangganan::class, 'destroy'])->name('langganan.destroy');
     Route::get('langganan/success', [ULangganan::class, 'successCallback'])->name('langganan.success');
+
+    Route::middleware(['premium_check'])->group(function () {
+        Route::get('/profil', [UProfil::class, 'index'])->name('profil.index');
+        Route::put('/profil', [UProfil::class, 'update'])->name('profil.update');
+        Route::resource('personalia', UPersonalia::class);
+        Route::resource('unit_usaha', UUnitUsaha::class);
+        Route::resource('produk', UProduk::class);
+        Route::resource('ketapang', UKetapang::class);
+        Route::resource('galeri', UGaleri::class);
+        Route::resource('finansial', UFinansial::class);
+        Route::resource('transparansi', UTransparansi::class);
+        Route::resource('mitra', UMitra::class);
+        Route::resource('kinerja', UKinerja::class);
+        Route::resource('artikel', UArtikel::class);
+        Route::resource('pengumuman', UPengumuman::class);
+    });
 });
 
 // ------------- PUBLIC AUTH ROUTES -------------
 Route::get('/user/login', [AuthController::class, 'showUserLogin'])->name('login');
 Route::post('/user/login', [AuthController::class, 'userLogin'])->name('user.login.post');
+
+// ------------- MIDTRANS WEBHOOK (S2S Notification) -------------
+Route::post('/midtrans/notification', [ULangganan::class, 'notification'])->name('midtrans.notification');
 
 // Catch-all route for dynamic BUMDes domains (must be at the very end)
 Route::get('/{slug}', [PublicController::class, 'bumdesProfile'])->name('public.bumdes.profile');

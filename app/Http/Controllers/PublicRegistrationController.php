@@ -16,7 +16,8 @@ class PublicRegistrationController extends Controller
     {
         // Fix duplicate provinces by name
         $provinces = Province::orderBy('name')->get()->unique('name');
-        return view('public.register', compact('provinces'));
+        $pricingConfigs = \App\Models\PricingConfig::active()->get();
+        return view('public.register', compact('provinces', 'pricingConfigs'));
     }
 
     public function getKabupatens(Province $province)
@@ -35,17 +36,20 @@ class PublicRegistrationController extends Controller
             'username' => 'required|string|max:255|unique:users,username|regex:/^[a-zA-Z0-9\-]+$/',
             'password' => 'required|string|min:6|confirmed',
             'package' => 'required|in:gratis,premium',
+            'pricing_config_id' => 'required_if:package,premium|exists:pricing_configs,id',
         ], [
             'username.regex' => 'Username/Domain hanya boleh berisi huruf, angka, dan strip (-).',
             'username.unique' => 'Domain/Username ini sudah digunakan, silakan pilih yang lain.',
             'password.confirmed' => 'Konfirmasi password tidak cocok.',
+            'pricing_config_id.required_if' => 'Silakan pilih paket premium yang Anda inginkan.',
         ]);
 
         DB::beginTransaction();
 
         try {
             $statusBumdes = $request->package === 'premium' ? true : false;
-            $subscriptionStatus = $request->package === 'premium' ? 'active_premium' : 'inactive';
+            // Set as pending_premium so user can login but does not bypass premium checks (unless paid)
+            $subscriptionStatus = $request->package === 'premium' ? 'pending_premium' : 'inactive';
 
             // Create BUMDes
             $bumdes = Bumdes::create([
@@ -72,11 +76,31 @@ class PublicRegistrationController extends Controller
             // Set user_id back to bumdes record
             $bumdes->update(['user_id' => $user->id]);
 
+            if ($request->package === 'premium') {
+                $plan = \App\Models\PricingConfig::findOrFail($request->pricing_config_id);
+                $totalAmount = $plan->total_price;
+                $orderId = 'BUMDES-' . $bumdes->id . '-REG-' . time();
+                
+                // Create pending Langganan
+                \App\Models\Langganan::create([
+                    'bumdes_id'       => $bumdes->id,
+                    'package_name'    => $plan->name . ' (' . $plan->months . ' Bulan)',
+                    'order_id'        => $orderId,
+                    'amount'          => $totalAmount,
+                    'duration_months' => $plan->months,
+                    'status'          => 'pending',
+                    'start_date'      => now(),
+                    'end_date'        => now()->addMonths($plan->months),
+                ]);
+            }
+
             DB::commit();
 
             if ($request->package === 'premium') {
                 \Illuminate\Support\Facades\Auth::login($user);
-                return redirect()->to($user->username . '/dashboard')->with('success', 'Pendaftaran berhasil! Akun Anda langsung aktif. Silakan lengkapi profil Anda.');
+                return redirect()->route('user.langganan.index', $user->username)
+                    ->with('open_payment', true)
+                    ->with('success', 'Pendaftaran berhasil! Akun Anda aktif. Silakan selesaikan pembayaran untuk mengaktifkan fitur Premium.');
             } else {
                 return redirect()->route('login')->with('success', 'Pendaftaran berhasil!')->with('info', 'Akun Anda sedang menunggu konfirmasi dari Admin Kabupaten sebelum bisa digunakan untuk login.');
             }

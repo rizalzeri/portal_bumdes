@@ -23,6 +23,11 @@ class CheckPremiumFeature
             return $next($request);
         }
 
+        // Jangan cek untuk modul langganan agar user bisa akses halaman bayar
+        if (str_contains($routeName, '.langganan.')) {
+            return $next($request);
+        }
+
         // Format route biasanya: user.{module}.{action}
         // Contoh: user.unit_usaha.store
         $parts = explode('.', $routeName);

@@ -3,98 +3,270 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\Langganan;
 use App\Models\Bumdesa;
+use App\Models\Langganan;
+use App\Models\PricingConfig;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class LanggananController extends Controller
 {
+    private function configureMidtrans(): void
+    {
+        \Midtrans\Config::$serverKey     = config('services.midtrans.server_key');
+        \Midtrans\Config::$isProduction  = config('services.midtrans.is_production', false);
+        \Midtrans\Config::$isSanitized   = true;
+        \Midtrans\Config::$is3ds         = true;
+
+        if (app()->environment('local')) {
+            \Midtrans\Config::$curlOptions = [
+                CURLOPT_SSL_VERIFYHOST => 0,
+                CURLOPT_SSL_VERIFYPEER => false,
+                CURLOPT_HTTPHEADER     => []
+            ];
+        }
+    }
+
+    /**
+     * Show subscription page with plan selector and history
+     */
     public function index($slug)
     {
-        $bumdes = Bumdesa::where('user_id', auth()->id())->orWhere('id', auth()->user()->bumdes_id)->firstOrFail();
-        
-        // Cek tagihan yang pending
-        $bill = Langganan::where('bumdes_id', $bumdes->id)
-            ->where('status', 'pending')
+        $bumdes  = Bumdesa::where('user_id', '=', auth()->id())
+            ->orWhere('id', '=', auth()->user()->bumdes_id)
+            ->firstOrFail();
+
+        $plans   = PricingConfig::active()->get();
+        $active  = Langganan::where('bumdes_id', '=', $bumdes->id)
+            ->where('status', '=', 'active')
+            ->where('end_date', '>', now())
+            ->orderBy('end_date', 'desc')
             ->first();
-            
-        // History pembayaran
-        $riwayat = Langganan::where('bumdes_id', $bumdes->id)
+
+        $pending = Langganan::where('bumdes_id', '=', $bumdes->id)
+            ->where('status', '=', 'pending')
+            ->latest()
+            ->first();
+
+        $riwayat = Langganan::where('bumdes_id', '=', $bumdes->id)
             ->orderBy('created_at', 'desc')
             ->get();
 
         $snapToken = null;
 
-        // Ensure Midtrans configuration is set up properly before requesting snap token
-        if ($bill) {
-            \Midtrans\Config::$serverKey = env('MIDTRANS_SERVER_KEY');
-            \Midtrans\Config::$isProduction = env('MIDTRANS_IS_PRODUCTION', false);
-            \Midtrans\Config::$isSanitized = true;
-            \Midtrans\Config::$is3ds = true;
+        // If there's a pending bill, generate/re-use snap token
+        if ($pending) {
+            $this->configureMidtrans();
+            $orderId     = $pending->order_id ?? ('BUMDES-' . $bumdes->id . '-' . $pending->id . '-' . time());
+            $grossAmount = (int) $pending->amount;
 
-            $orderId = 'BILL-' . $bill->id . '-' . time();
-            
-            // Assume 1 million rp per year for "Paket Premium BUMDes", or 0 if "Paket Dasar"
-            // Midtrans requires minimum Rp. 10.000
-            $grossAmount = ($bill->package_name === 'Paket Dasar (Gratis)') ? 0 : 1000000 * (\Carbon\Carbon::parse($bill->end_date)->diffInYears($bill->start_date) ?: 1);
-
-            $params = array(
-                'transaction_details' => array(
-                    'order_id' => $orderId,
+            $params = [
+                'transaction_details' => [
+                    'order_id'    => $orderId,
                     'gross_amount' => $grossAmount,
-                ),
-                'customer_details' => array(
+                ],
+                'customer_details' => [
                     'first_name' => $bumdes->name,
-                    'email' => auth()->user()->email,
-                    'phone' => $bumdes->phone ?? '080000000000',
-                ),
-                'item_details' => array(
-                    array(
-                        'id' => 'ITEM1',
-                        'price' => $grossAmount,
-                        'quantity' => 1,
-                        'name' => $bill->package_name
-                    )
-                )
-            );
+                    'email'      => auth()->user()->email,
+                    'phone'      => $bumdes->phone ?? '08000000000',
+                ],
+                'item_details' => [[
+                    'id'       => 'PREMIUM-' . $pending->id,
+                    'price'    => $grossAmount,
+                    'quantity' => 1,
+                    'name'     => $pending->package_name,
+                ]],
+            ];
 
-            // only request if amount > 0 and Midtrans is configured properly
-            if ($grossAmount > 0 && env('MIDTRANS_SERVER_KEY')) {
-                try {
-                    $snapToken = \Midtrans\Snap::getSnapToken($params);
-                } catch (\Exception $e) {
-                    // Fail silent, standard template var null
-                    \Log::error("Midtrans Snap Error: " . $e->getMessage());
+            try {
+                $snapToken = \Midtrans\Snap::getSnapToken($params);
+                if (!$pending->order_id) {
+                    $pending->update(['order_id' => $orderId]);
                 }
-            } else if ($grossAmount == 0) {
-                 // Langsung auto-aktif bebas biaya
-                 $bill->update(['status' => 'active']);
-                 return redirect()->route('user.langganan.index')->with('success', 'Paket langganan gratis langsung diaktifkan!');
+            } catch (\Exception $e) {
+                Log::error('Midtrans Snap Error: ' . $e->getMessage());
             }
         }
 
-        return view('user.langganan.index', compact('bumdes', 'bill', 'riwayat', 'snapToken'));
+        return view('user.langganan.index', compact(
+            'bumdes', 'plans', 'active', 'pending', 'riwayat', 'snapToken'
+        ));
     }
 
-    public function successCallback(Request $request, $slug)
+    /**
+     * Create a new pending subscription order
+     */
+    public function store(Request $request, $slug)
     {
-        // For simple redirect logic after Midtrans modal is closed (success payment)
-        // Usually, the validation is happening via Midtrans Webhook (S2S notification).
-        // For demonstration, we will just update status to active manually for User Demo:
-        
-        $bumdes = Bumdesa::where('user_id', auth()->id())->orWhere('id', auth()->user()->bumdes_id)->firstOrFail();
-        
-        $bill = Langganan::where('bumdes_id', $bumdes->id)
-            ->where('status', 'pending')
-            ->first();
+        $request->validate([
+            'pricing_config_id' => 'required|exists:pricing_configs,id',
+        ]);
 
-        if ($bill) {
-            $bill->update([
-                'status' => 'active'
-            ]);
-            return redirect()->route('user.langganan.index')->with('success', 'Pembayaran berhasil dikonfirmasi! Paket premium Anda telah aktif.');
+        $bumdes = Bumdesa::where('user_id', '=', auth()->id())
+            ->orWhere('id', '=', auth()->user()->bumdes_id)
+            ->firstOrFail();
+
+        // Cancel any existing pending orders first
+        Langganan::where('bumdes_id', '=', $bumdes->id)
+            ->where('status', '=', 'pending')
+            ->update(['status' => 'expired']);
+
+        $plan        = PricingConfig::findOrFail($request->pricing_config_id);
+        $totalAmount = $plan->total_price;
+        $startDate   = now();
+        $endDate     = now()->addMonths($plan->months);
+        $orderId     = 'BUMDES-' . $bumdes->id . '-' . time();
+
+        $langganan = Langganan::create([
+            'bumdes_id'       => $bumdes->id,
+            'package_name'    => $plan->name . ' (' . $plan->months . ' Bulan)',
+            'order_id'        => $orderId,
+            'amount'          => $totalAmount,
+            'duration_months' => $plan->months,
+            'status'          => 'pending',
+            'start_date'      => $startDate,
+            'end_date'        => $endDate,
+        ]);
+
+        // Generate Midtrans Snap Token
+        $this->configureMidtrans();
+
+        $params = [
+            'transaction_details' => [
+                'order_id'     => $orderId,
+                'gross_amount' => (int) $totalAmount,
+            ],
+            'customer_details' => [
+                'first_name' => $bumdes->name,
+                'email'      => auth()->user()->email,
+                'phone'      => $bumdes->phone ?? '08000000000',
+            ],
+            'item_details' => [[
+                'id'       => 'PREMIUM-' . $langganan->id,
+                'price'    => (int) $totalAmount,
+                'quantity' => 1,
+                'name'     => $langganan->package_name,
+            ]],
+        ];
+
+        try {
+            $snapToken = \Midtrans\Snap::getSnapToken($params);
+            $langganan->update(['payment_token' => $snapToken]);
+        } catch (\Exception $e) {
+            Log::error('Midtrans Snap Store Error: ' . $e->getMessage());
         }
 
-        return redirect()->route('user.langganan.index');
+        return redirect()->route('user.langganan.index', $slug)
+            ->with('open_payment', true)
+            ->with('success', 'Pesanan berhasil dibuat! Selesaikan pembayaran Anda.');
+    }
+
+    /**
+     * Midtrans Server-to-Server (S2S) Payment Notification Webhook
+     * Called by Midtrans after payment is completed
+     */
+    public function notification(Request $request)
+    {
+        $this->configureMidtrans();
+
+        try {
+            $notification    = new \Midtrans\Notification();
+            $transactionStatus = $notification->transaction_status;
+            $fraudStatus       = $notification->fraud_status;
+            $orderId           = $notification->order_id;
+
+            $langganan = Langganan::where('order_id', '=', $orderId)->first();
+
+            if (!$langganan) {
+                return response()->json(['message' => 'Order not found'], 404);
+            }
+
+            if ($transactionStatus === 'capture') {
+                if ($fraudStatus === 'accept') {
+                    $langganan->update([
+                        'status' => 'active',
+                        'start_date' => now(),
+                        'end_date' => now()->addMonths($langganan->duration_months ?? 1)
+                    ]);
+                }
+            } elseif ($transactionStatus === 'settlement') {
+                $langganan->update([
+                    'status' => 'active',
+                    'start_date' => now(),
+                    'end_date' => now()->addMonths($langganan->duration_months ?? 1)
+                ]);
+            } elseif (in_array($transactionStatus, ['cancel', 'deny', 'expire'])) {
+                $langganan->update(['status' => 'expired']);
+            } elseif ($transactionStatus === 'pending') {
+                $langganan->update(['status' => 'pending']);
+            }
+
+            return response()->json(['message' => 'OK']);
+        } catch (\Exception $e) {
+            Log::error('Midtrans Notification Error: ' . $e->getMessage());
+            return response()->json(['message' => 'Error'], 500);
+        }
+    }
+
+    /**
+     * Success redirect after payment (client-side)
+     * Note: Real activation is handled by webhook above.
+     * This just shows a success message.
+     */
+    public function successCallback(Request $request, $slug)
+    {
+        $bumdes = Bumdesa::where('user_id', '=', auth()->id())
+            ->orWhere('id', '=', auth()->user()->bumdes_id)
+            ->firstOrFail();
+
+        // Check if Midtrans already activated via webhook
+        $active = Langganan::where('bumdes_id', '=', $bumdes->id)
+            ->where('status', '=', 'active')
+            ->where('end_date', '>', now())
+            ->first();
+
+        if ($active) {
+            return redirect()->route('user.langganan.index', $slug)
+                ->with('success', 'Pembayaran berhasil! Paket premium Anda sudah aktif.');
+        }
+
+        // Fallback: activate the most recent pending if webhook hasn't fired yet
+        $pending = Langganan::where('bumdes_id', '=', $bumdes->id)
+            ->where('status', '=', 'pending')
+            ->latest()
+            ->first();
+
+        if ($pending) {
+            $pending->update([
+                'status' => 'active',
+                'start_date' => now(),
+                'end_date' => now()->addMonths($pending->duration_months ?? 1)
+            ]);
+            return redirect()->route('user.langganan.index', $slug)
+                ->with('success', 'Pembayaran berhasil dikonfirmasi! Paket premium Anda telah aktif.');
+        }
+
+        return redirect()->route('user.langganan.index', $slug)
+            ->with('info', 'Pembayaran Anda sedang diverifikasi. Status akan diperbarui otomatis.');
+    }
+
+    /**
+     * Cancel a pending subscription order
+     */
+    public function destroy($slug, Langganan $langganan)
+    {
+        $bumdes = Bumdesa::where('user_id', '=', auth()->id())
+            ->orWhere('id', '=', auth()->user()->bumdes_id)
+            ->firstOrFail();
+
+        if ($langganan->bumdes_id !== $bumdes->id || $langganan->status !== 'pending') {
+            abort(403);
+        }
+
+        $langganan->update(['status' => 'expired']);
+
+        return redirect()->route('user.langganan.index', $slug)
+            ->with('success', 'Pesanan berhasil dibatalkan.');
     }
 }

@@ -44,6 +44,11 @@
                     <i class="fa-solid fa-money-check-dollar w-5 h-5"></i>
                     <span class="mx-2 text-sm font-medium">Atur Langganan</span>
                 </a>
+                <a href="{{ route('superadmin.pricing-config.index') }}"
+                    class="flex items-center px-3 py-2 text-gray-200 transition-colors rounded-lg hover:bg-primary-800 hover:text-white">
+                    <i class="fa-solid fa-tags w-5 h-5"></i>
+                    <span class="mx-2 text-sm font-medium">Paket Harga</span>
+                </a>
 
                 <div class="text-xs font-semibold text-gray-400 uppercase tracking-wider mt-4 mb-2 px-3">Konten Portal
                 </div>
@@ -208,9 +213,18 @@
     @endpremium
 
     <div class="mt-4 px-3">
+        @php
+            $activeSub = \App\Models\Langganan::where('bumdes_id', Auth::user()->bumdes_id)
+                ->where('status', 'active')
+                ->where('end_date', '>', now())
+                ->first();
+        @endphp
         <a href="{{ route('user.langganan.index', ['slug' => Auth::user()->username]) }}"
-            class="flex items-center justify-center px-4 py-2 bg-gradient-to-r from-amber-500 to-orange-600 text-white font-bold rounded-lg hover:from-amber-600 hover:to-orange-700 w-full transition shadow-md">
-            <i class="fa-solid fa-crown mr-2"></i> Langganan Premium
+            class="flex items-center justify-center px-4 py-2 {{ $activeSub ? 'bg-gradient-to-r from-emerald-500 to-teal-600' : 'bg-gradient-to-r from-amber-500 to-orange-600' }} text-white font-bold rounded-lg hover:opacity-90 w-full transition shadow-md whitespace-nowrap overflow-hidden">
+            <i class="fa-solid fa-crown mr-2 shrink-0"></i> 
+            <span class="text-xs truncate">
+                {{ $activeSub ? ($activeSub->days_remaining . ' Hari Tersisa') : 'Langganan Premium' }}
+            </span>
         </a>
     </div>
             @endif

@@ -40,8 +40,6 @@
     <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <!-- Midtrans Snap JS -->
-    <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{ env('MIDTRANS_CLIENT_KEY') }}"></script>
 
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
@@ -133,7 +131,9 @@
 
     <script>
         $(document).ready(function() {
-            $('.datatable').DataTable({
+            // Only auto-init tables with .datatable class that have no id attribute
+            // (Tables with IDs use their own init in @push('scripts'))
+            $('.datatable:not([id])').DataTable({
                 language: {
                     search: "Cari:",
                     lengthMenu: "Tampilkan _MENU_ entri",

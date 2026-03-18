@@ -51,6 +51,32 @@
                                 @error('package')
                                     <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
                                 @enderror
+
+                                <!-- Pilihan Sub-Paket Premium (ditampilkan jika premium dipilih) -->
+                                <div id="premium_options" class="hidden mt-4 bg-yellow-50 border border-yellow-100 p-4 rounded-xl">
+                                    <label class="block text-sm font-bold text-gray-800 mb-3"><i class="fa-solid fa-crown text-accent mr-2"></i>Pilih Durasi Paket Premium <span class="text-red-500">*</span></label>
+                                    @if($pricingConfigs->isEmpty())
+                                        <div class="text-sm text-red-500">Belum ada paket premium yang tersedia.</div>
+                                    @else
+                                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                            @foreach($pricingConfigs as $plan)
+                                            <label class="cursor-pointer w-full h-full">
+                                                <input type="radio" name="pricing_config_id" value="{{ $plan->id }}" class="peer sr-only" {{ old('pricing_config_id') == $plan->id ? 'checked' : '' }}>
+                                                <div class="rounded-lg border-2 border-yellow-200 h-full p-3 bg-white hover:bg-yellow-50 peer-checked:border-accent peer-checked:bg-yellow-100 transition-all flex flex-col justify-between">
+                                                    <div>
+                                                        <div class="font-bold text-gray-900">{{ $plan->name }}</div>
+                                                        <div class="text-xs text-gray-600 mt-1 mb-2">{{ $plan->description }}</div>
+                                                    </div>
+                                                    <div class="font-black text-primary text-lg">Rp {{ number_format($plan->total_price ?? ($plan->base_price_per_month * $plan->months), 0, ',', '.') }}</div>
+                                                </div>
+                                            </label>
+                                            @endforeach
+                                        </div>
+                                    @endif
+                                    @error('pricing_config_id')
+                                        <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
+                                    @enderror
+                                </div>
                             </div>
 
                             <!-- Data Wilayah -->
@@ -221,6 +247,29 @@
                 if (provinceSelect.value) {
                     loadKabupaten(provinceSelect.value, oldKabupatenId);
                 }
+
+                // Toggle premium options visibility
+                const packageRadios = document.querySelectorAll('input[name="package"]');
+                const premiumOptions = document.getElementById('premium_options');
+                
+                function togglePremiumOptions() {
+                    const selected = document.querySelector('input[name="package"]:checked');
+                    if (selected && selected.value === 'premium') {
+                        premiumOptions.classList.remove('hidden');
+                        // Optional: mark first as checked if none checked
+                        const pOpts = document.querySelectorAll('input[name="pricing_config_id"]');
+                        if (pOpts.length > 0 && !Array.from(pOpts).some(r => r.checked)) {
+                            pOpts[0].checked = true;
+                        }
+                    } else {
+                        premiumOptions.classList.add('hidden');
+                    }
+                }
+                
+                packageRadios.forEach(radio => {
+                    radio.addEventListener('change', togglePremiumOptions);
+                });
+                togglePremiumOptions(); // Initial execution
 
                 // Loading state saat submit
                 const registerForm = document.querySelector('form');
