@@ -96,9 +96,52 @@ class PremiumFeature extends Model
         
         // 8. Cek apakah ada Limit (Contoh: Max 3 data)
         if ($feature->free_limit !== null) {
+            // Untuk view, kita selalu izinkan agar daftar data tetap muncul
+            if ($action === 'view') return true;
+
+            // Untuk update dan delete, kita izinkan karena memodifikasi data yang sudah ada
+            if ($action === 'update' || $action === 'delete') return true;
+
+            // Ambil jumlah data saat ini untuk modul tersebut
+            $count = self::getCurrentCount($bumdes, $module);
+            
+            // Jika masih di bawah limit, izinkan
+            if ($count < $feature->free_limit) {
+                return true;
+            }
+
             return 'limit';
         }
 
         return false;
+    }
+
+    /**
+     * Mengambil jumlah data saat ini untuk modul tertentu
+     */
+    public static function getCurrentCount($bumdes, $module)
+    {
+        // Mapping modul ke nama relasi di model Bumdesa
+        $mapping = [
+            'personalia' => 'pengurus',
+            'unit_usaha' => 'unitUsaha',
+            'produk'     => 'katalogProduk',
+            'ketapang'   => 'produkKetahananPangans',
+            'galeri'     => 'galeri',
+            'finansial'  => 'laporanKeuangan',
+            'transparansi'=> 'transparansi',
+            'mitra'      => 'mitraKerjasama',
+            'kinerja'    => 'kinerjaCapaian',
+            'artikel'    => 'artikel',
+            'pengumuman'  => 'pengumuman',
+        ];
+
+        $relation = $mapping[$module] ?? null;
+        
+        if ($relation && method_exists($bumdes, $relation)) {
+            return $bumdes->$relation()->count();
+        }
+
+        return 0;
     }
 }

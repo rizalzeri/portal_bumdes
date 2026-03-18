@@ -73,9 +73,9 @@
                         class="fa-solid fa-circle-info mr-2 text-accent"></i> Tentang Kami</h3>
                 <div class="space-y-6">
                     <div>
-                        <h4 class="font-bold text-gray-800 mb-2">Profil BUMDesa</h4>
+                        <h4 class="font-bold text-gray-800 mb-2">Deskripsi</h4>
                         <p class="text-gray-600 leading-relaxed">
-                            {{ $bumdes->about ?? 'Profil singkat BUMDesa ini belum dilengkapi oleh pengelola.' }}</p>
+                            {{ $bumdes->about ?? 'Deskripsi singkat BUMDesa ini belum dilengkapi oleh pengelola.' }}</p>
                     </div>
                     @if ($bumdes->visi_misi)
                         <div>

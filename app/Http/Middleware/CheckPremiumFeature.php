@@ -56,10 +56,18 @@ class CheckPremiumFeature
         $allowed = PremiumFeature::isAllowed($bumdes, $module, $action);
 
         if ($allowed !== true) {
-            if ($request->ajax() || $request->wantsJson()) {
-                return response()->json(['error' => 'Fitur ini hanya tersedia untuk pengguna Premium.'], 403);
+            $message = 'Akses Ditolak. Fitur ini hanya tersedia untuk pengguna Premium BUMDesa.';
+            
+            if ($allowed === 'limit') {
+                $feature = PremiumFeature::where('module', '=', $module)->where('action', '=', $action)->first();
+                $limit = $feature->free_limit ?? 0;
+                $message = "Maaf, Anda telah mencapai batas maksimal ({$limit}) untuk fitur gratis ini. Silakan upgrade ke Premium untuk menambah lebih banyak data.";
             }
-            return abort(403, 'Akses Ditolak. Fitur ini hanya tersedia untuk pengguna Premium BUMDesa. Silakan hubungi admin atau upgrade paket Anda.');
+
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json(['error' => $message], 403);
+            }
+            return abort(403, $message . ' Silakan hubungi admin atau upgrade paket Anda.');
         }
 
         return $next($request);
