@@ -113,7 +113,7 @@ Route::prefix('admin-kabupaten')->name('adminkab.')->group(function () {
 });
 
 // ------------- USER BUMDES ROUTES (Dynamic Slug Based) -------------
-Route::prefix('{slug}')->middleware(['auth', 'user'])->name('user.')->group(function () {
+Route::prefix('{slug}')->middleware(['auth', 'user'])->name('user.')->where(['slug' => '^(?!storage|build|css|js|images|fonts)[^/]+$'])->group(function () {
     Route::get('/dashboard', [UDashboard::class, 'index'])->name('dashboard');
 
     // Langganan routes (di luar premium_check agar bisa diakses user gratis untuk upgrade)
