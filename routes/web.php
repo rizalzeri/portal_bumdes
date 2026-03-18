@@ -147,4 +147,6 @@ Route::post('/user/login', [AuthController::class, 'userLogin'])->name('user.log
 Route::post('/midtrans/notification', [ULangganan::class, 'notification'])->name('midtrans.notification');
 
 // Catch-all route for dynamic BUMDes domains (must be at the very end)
-Route::get('/{slug}', [PublicController::class, 'bumdesProfile'])->name('public.bumdes.profile');
+Route::get('/{slug}', [PublicController::class, 'bumdesProfile'])
+    ->name('public.bumdes.profile')
+    ->where('slug', '^(?!storage|build|css|js|images|fonts).*$');
