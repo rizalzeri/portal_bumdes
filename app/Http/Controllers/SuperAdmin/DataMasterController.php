@@ -26,17 +26,22 @@ class DataMasterController extends Controller
         $request->validate([
             'type' => 'required|in:unit_usaha,produk,ketapang,mitra',
             'name' => 'required|string|max:255',
-            'icon' => 'nullable|string|max:100', // For fontawesome icons
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
+        $data = $request->only('name');
+        if ($request->hasFile('image')) {
+            $data['image'] = $request->file('image')->store('master-data', 'public');
+        }
+
         if ($request->type === 'unit_usaha') {
-            UnitUsahaOption::create($request->only('name', 'icon'));
+            UnitUsahaOption::create($data);
         } elseif ($request->type === 'produk') {
-            ProdukOption::create($request->only('name', 'icon'));
+            ProdukOption::create($data);
         } elseif ($request->type === 'mitra') {
-            MitraOption::create($request->only('name', 'icon'));
+            MitraOption::create($data);
         } else {
-            ProdukKetapangOption::create($request->only('name', 'icon'));
+            ProdukKetapangOption::create($data);
         }
 
         return redirect()->route('superadmin.datamaster.index')->with('success', 'Data Master berhasil ditambahkan.');
@@ -47,17 +52,22 @@ class DataMasterController extends Controller
         $request->validate([
             'type' => 'required|in:unit_usaha,produk,ketapang,mitra',
             'name' => 'required|string|max:255',
-            'icon' => 'nullable|string|max:100',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
+        $data = $request->only('name');
+        if ($request->hasFile('image')) {
+            $data['image'] = $request->file('image')->store('master-data', 'public');
+        }
+
         if ($request->type === 'unit_usaha') {
-            UnitUsahaOption::findOrFail($id)->update($request->only('name', 'icon'));
+            UnitUsahaOption::findOrFail($id)->update($data);
         } elseif ($request->type === 'produk') {
-            ProdukOption::findOrFail($id)->update($request->only('name', 'icon'));
+            ProdukOption::findOrFail($id)->update($data);
         } elseif ($request->type === 'mitra') {
-            MitraOption::findOrFail($id)->update($request->only('name', 'icon'));
+            MitraOption::findOrFail($id)->update($data);
         } else {
-            ProdukKetapangOption::findOrFail($id)->update($request->only('name', 'icon'));
+            ProdukKetapangOption::findOrFail($id)->update($data);
         }
 
         return redirect()->route('superadmin.datamaster.index')->with('success', 'Data Master berhasil diperbarui.');

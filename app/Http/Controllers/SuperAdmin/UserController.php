@@ -25,7 +25,7 @@ class UserController extends Controller
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8',
             'role' => ['required', Rule::in(['superadmin', 'admin_kabupaten', 'user'])],
-            'kabupaten_id' => 'required_if:role,admin_kabupaten|nullable|exists:kabupatens,id',
+            'kabupaten_id' => 'required_if:role,admin_kabupaten|required_if:role,user|nullable|exists:kabupatens,id',
             'phone' => 'nullable|string|max:20',
         ]);
 
@@ -34,7 +34,7 @@ class UserController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'role' => $request->role,
-            'kabupaten_id' => $request->role === 'admin_kabupaten' ? $request->kabupaten_id : null,
+            'kabupaten_id' => in_array($request->role, ['admin_kabupaten', 'user']) ? $request->kabupaten_id : null,
             'phone' => $request->phone,
         ]);
 
@@ -47,7 +47,7 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
             'role' => ['required', Rule::in(['superadmin', 'admin_kabupaten', 'user'])],
-            'kabupaten_id' => 'required_if:role,admin_kabupaten|nullable|exists:kabupatens,id',
+            'kabupaten_id' => 'required_if:role,admin_kabupaten|required_if:role,user|nullable|exists:kabupatens,id',
             'phone' => 'nullable|string|max:20',
         ]);
 
@@ -55,7 +55,7 @@ class UserController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'role' => $request->role,
-            'kabupaten_id' => $request->role === 'admin_kabupaten' ? $request->kabupaten_id : null,
+            'kabupaten_id' => in_array($request->role, ['admin_kabupaten', 'user']) ? $request->kabupaten_id : null,
             'phone' => $request->phone,
         ];
 
@@ -75,7 +75,11 @@ class UserController extends Controller
             return back()->with('error', 'Anda tidak dapat menghapus akun Anda sendiri.');
         }
         
-        $user->delete();
-        return redirect()->route('superadmin.user.index')->with('success', 'Pengguna berhasil dihapus.');
+        try {
+            $user->delete();
+            return redirect()->route('superadmin.user.index')->with('success', 'Pengguna berhasil dihapus.');
+        } catch (\Exception $e) {
+            return redirect()->route('superadmin.user.index')->with('error', 'Pengguna tidak dapat dihapus karena memiliki data terkait (BUMDes, dll) yang masih aktif.');
+        }
     }
 }

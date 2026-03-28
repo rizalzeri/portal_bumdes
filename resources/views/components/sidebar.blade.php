@@ -4,7 +4,7 @@
     <div class="flex items-center justify-between md:justify-center">
         <a href="#" class="flex items-center gap-2">
             <i class="fa-solid fa-leaf text-accent text-3xl"></i>
-            <span class="text-2xl font-bold text-white uppercase tracking-wider">SIBUDI</span>
+            <span class="text-xl font-bold text-white tracking-wide">BUMDespro Member</span>
         </a>
         <button @click="sidebarOpen = false" class="md:hidden text-gray-300 hover:text-white focus:outline-none">
             <i class="fa-solid fa-xmark text-xl"></i>
@@ -99,15 +99,25 @@
             @if (Auth::user()->role === 'admin_kabupaten')
                 <div class="text-xs font-semibold text-gray-400 uppercase tracking-wider mt-4 mb-2 px-3">Menu Kabupaten
                 </div>
+                <a href="{{ route('adminkab.kecamatan.index') }}"
+                    class="flex items-center px-3 py-2 text-gray-200 transition-colors rounded-lg hover:bg-primary-800 hover:text-white">
+                    <i class="fa-solid fa-map-location-dot w-5 h-5"></i>
+                    <span class="mx-2 text-sm font-medium">Daftarkan Kecamatan</span>
+                </a>
                 <a href="{{ route('adminkab.bumdes.index') }}"
                     class="flex items-center px-3 py-2 text-gray-200 transition-colors rounded-lg hover:bg-primary-800 hover:text-white">
                     <i class="fa-solid fa-house-flag w-5 h-5"></i>
-                    <span class="mx-2 text-sm font-medium">Database BUMDes</span>
+                    <span class="mx-2 text-sm font-medium">Daftar Akun BUMDesa</span>
                 </a>
-                <a href="{{ route('adminkab.keuangan.index') }}"
+                <a href="{{ route('adminkab.analisa_data.index') }}"
                     class="flex items-center px-3 py-2 text-gray-200 transition-colors rounded-lg hover:bg-primary-800 hover:text-white">
                     <i class="fa-solid fa-chart-line w-5 h-5"></i>
-                    <span class="mx-2 text-sm font-medium">Perkembangan Laporan BUMDesa</span>
+                    <span class="mx-2 text-sm font-medium">Detail dan Analisa Data</span>
+                </a>
+                <a href="{{ route('adminkab.monitoring.index') }}"
+                    class="flex items-center px-3 py-2 text-gray-200 transition-colors rounded-lg hover:bg-primary-800 hover:text-white">
+                    <i class="fa-solid fa-magnifying-glass-chart w-5 h-5"></i>
+                    <span class="mx-2 text-sm font-medium">Monitoring BUMDesa</span>
                 </a>
                 <a href="{{ route('adminkab.pengumuman.index') }}"
                     class="flex items-center px-3 py-2 text-gray-200 transition-colors rounded-lg hover:bg-primary-800 hover:text-white">
@@ -162,13 +172,6 @@
 
                 <div class="text-xs font-semibold text-gray-400 uppercase tracking-wider mt-4 mb-2 px-3">Laporan &
                     Publikasi</div>
-    @premium('keuangan')
-    <a href="{{ route('user.finansial.index', ['slug' => Auth::user()->username]) }}"
-        class="flex items-center px-3 py-2 text-gray-200 transition-colors rounded-lg hover:bg-primary-800 hover:text-white">
-        <i class="fa-solid fa-file-invoice-dollar w-5 h-5"></i>
-        <span class="mx-2 text-sm font-medium">Laporan Keuangan & Perkembangan</span>
-    </a>
-    @endpremium
     @premium('transparansi')
     <a href="{{ route('user.transparansi.index', ['slug' => Auth::user()->username]) }}"
         class="flex items-center px-3 py-2 text-gray-200 transition-colors rounded-lg hover:bg-primary-800 hover:text-white">

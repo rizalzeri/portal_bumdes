@@ -50,13 +50,23 @@
                         <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Kecamatan</label>
                         <input type="text" value="{{ $bumdes->kecamatan }}" disabled class="bg-gray-100 block w-full rounded-md border-gray-300 shadow-sm sm:text-sm border p-2 text-gray-500">
                     </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Status Badan Hukum <i class="fa-solid fa-circle-check text-green-500 ml-1"></i></label>
-                        <input type="text" name="badan_hukum" value="{{ old('badan_hukum', $bumdes->badan_hukum) }}" placeholder="Contoh: Terdaftar Kemenkumham" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm border p-2">
+                    <div class="md:col-span-2">
+                        <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Status Organisasi dan Kegiatan</label>
+                        <select name="status" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm border p-2 text-gray-700">
+                            <option value="active" {{ (old('status', $bumdes->status) === 'active') ? 'selected' : '' }}>Aktif</option>
+                            <option value="inactive" {{ (old('status', $bumdes->status) === 'inactive') ? 'selected' : '' }}>Tidak Aktif</option>
+                        </select>
                     </div>
                     <div>
-                        <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Nomor Sertifikat / SK</label>
-                        <input type="text" name="nomor_sertifikat" value="{{ old('nomor_sertifikat', $bumdes->nomor_sertifikat) }}" placeholder="Nomor registrasi resmi" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm border p-2 uppercase font-mono text-sm">
+                        <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Status Badan Hukum</label>
+                        <select name="badan_hukum" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm border p-2 text-gray-700">
+                            <option value="Belum Berbadan Hukum" {{ (old('badan_hukum', $bumdes->badan_hukum) === 'Belum Berbadan Hukum' || empty($bumdes->badan_hukum)) ? 'selected' : '' }}>Belum Berbadan Hukum</option>
+                            <option value="Sudah Berbadan Hukum" {{ (old('badan_hukum', $bumdes->badan_hukum) === 'Sudah Berbadan Hukum') ? 'selected' : '' }}>Sudah Berbadan Hukum</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-600 uppercase mb-1" title="Jika sudah, isi nomor AHU">No Badan Hukum (AHU)</label>
+                        <input type="text" name="nomor_sertifikat" value="{{ old('nomor_sertifikat', $bumdes->nomor_sertifikat) }}" placeholder="Isi nomor AHU, bila belum isi strip (-)" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm border p-2 uppercase font-mono text-sm">
                     </div>
                 </div>
                 <div class="mt-4">

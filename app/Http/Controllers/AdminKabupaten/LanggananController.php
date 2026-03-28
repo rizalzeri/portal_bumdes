@@ -13,44 +13,43 @@ class LanggananController extends Controller
     {
         $kabupatenId = auth()->user()->kabupaten_id;
         
-        // Show subscriptions specifically for BUMDesa in this Kabupaten
-        // Or if the Kabupaten itself has a subscription
-        $langganans = Langganan::whereHas('bumdes', function ($q) use ($kabupatenId) {
-                $q->where('kabupaten_id', $kabupatenId);
-            })
-            ->with(['bumdes'])
+        // Kabupaten manages its OWN subscription
+        $langganans = Langganan::where('kabupaten_id', $kabupatenId)
+            ->whereNull('bumdes_id')
             ->orderBy('created_at', 'desc')
             ->get();
 
-        $bumdesList = Bumdesa::where('kabupaten_id', $kabupatenId)->orderBy('name')->get();
+        $pricingConfigs = \App\Models\PricingConfig::where('is_active', true)->where('type', 'kabupaten')->get();
 
-        return view('adminkab.langganan.index', compact('langganans', 'bumdesList'));
+        return view('adminkab.langganan.index', compact('langganans', 'pricingConfigs'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'bumdes_id' => 'required|exists:bumdes,id',
-            'package_name' => 'required|string|max:255',
-            'duration' => 'required|integer|min:1', // duration in years
+            'pricing_config_id' => 'required|exists:pricing_configs,id',
+            'payment_method' => 'required|string',
         ]);
 
-        // Verifikasi kepemilikan
-        $bumdes = Bumdesa::findOrFail($request->bumdes_id);
-        if ($bumdes->kabupaten_id !== auth()->user()->kabupaten_id) {
-            abort(403);
+        $kabupatenId = auth()->user()->kabupaten_id;
+        $config = \App\Models\PricingConfig::findOrFail($request->pricing_config_id);
+
+        if ($config->type !== 'kabupaten') {
+            abort(403, 'Paket ini bukan untuk Kabupaten.');
         }
 
         // Logic here is simple: Admin Kabupaten marks payment as 'pending' 
-        // Or directly pays via Midtrans. As requested, we will create a pending subscription
-        // and allow admin kab/bumdes to see it. (Midtrans implementation will be done on User side)
-
-        Langganan::create([
-            'bumdes_id' => $request->bumdes_id,
-            'package_name' => $request->package_name,
+        // Midtrans implementation will handle the rest.
+        \App\Models\Langganan::create([
+            'kabupaten_id' => $kabupatenId,
+            'pricing_config_id' => $config->id,
+            'package_name' => $config->name,
+            'amount' => $config->total_price,
             'status' => 'pending',
             'start_date' => now(),
-            'end_date' => now()->addYears($request->duration),
+            'end_date' => now()->addMonths($config->months),
+            'payment_method' => $request->payment_method,
+            'order_id' => 'KAB-' . uniqid() . '-' . time(),
         ]);
 
         return redirect()->route('adminkab.langganan.index')->with('success', 'Tagihan langganan berhasil dibuat.');

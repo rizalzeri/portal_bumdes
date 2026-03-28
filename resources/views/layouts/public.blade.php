@@ -130,9 +130,18 @@
     </main>
 
     <!-- Footer -->
-    <footer class="bg-primary text-white text-center py-6 mt-12">
-        <p class="text-sm text-gray-300">&copy; {{ date('Y') }} Portal BUMDesa - Pusat Inspirasi dan Informasi
-            BUMDesa. All rights reserved.</p>
+    <footer class="bg-primary text-white pt-8 pb-8 border-t border-blue-900/30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Bottom Line -->
+            <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-xs text-gray-400 text-center md:text-left">
+                    &copy; {{ date('Y') }} Portal BUMDesa - Pusat Inspirasi dan Informasi BUMDesa. All rights reserved.
+                </p>
+                <p class="text-[10px] text-gray-500 font-medium">
+                    Powered by <span class="text-accent underline">BumdesPro Official</span>
+                </p>
+            </div>
+        </div>
     </footer>
 
     @stack('scripts')

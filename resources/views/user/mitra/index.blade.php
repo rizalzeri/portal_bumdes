@@ -122,10 +122,6 @@
                     <label class="block text-sm font-medium text-gray-700 mb-1">Deskripsi / Keterangan Partner</label>
                     <textarea name="description" rows="3" class="w-full border rounded-lg px-3 py-2 text-sm" placeholder="Contoh: Bekerja sama dengan PT Mandiri dalam pengelolaan produk"></textarea>
                 </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Logo Mitra</label>
-                    <input type="file" name="logo" accept="image/*" class="w-full text-sm border rounded-lg p-2">
-                </div>
                 <div class="flex justify-end gap-3 pt-2">
                     <button type="button" onclick="document.getElementById('modalTambah').classList.add('hidden')"
                         class="px-4 py-2 rounded-lg text-sm border text-gray-600 hover:bg-gray-50">Batal</button>
@@ -167,10 +163,6 @@
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Deskripsi / Keterangan Partner</label>
                     <textarea name="description" id="editDesc" rows="3" class="w-full border rounded-lg px-3 py-2 text-sm"></textarea>
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Logo Baru (opsional)</label>
-                    <input type="file" name="logo" accept="image/*" class="w-full text-sm border rounded-lg p-2">
                 </div>
                 <div class="flex justify-end gap-3 pt-2">
                     <button type="button" onclick="document.getElementById('modalEdit').classList.add('hidden')"

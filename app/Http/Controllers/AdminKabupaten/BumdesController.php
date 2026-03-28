@@ -20,7 +20,8 @@ class BumdesController extends Controller
 
     public function create()
     {
-        return view('adminkab.bumdes.create');
+        $kecamatans = \App\Models\Kecamatan::where('kabupaten_id', auth()->user()->kabupaten_id)->orderBy('name')->get();
+        return view('adminkab.bumdes.create', compact('kecamatans'));
     }
 
     public function store(Request $request)
@@ -66,7 +67,9 @@ class BumdesController extends Controller
             abort(403);
         }
 
-        return view('adminkab.bumdes.edit', compact('bumde'));
+        $kecamatans = \App\Models\Kecamatan::where('kabupaten_id', auth()->user()->kabupaten_id)->orderBy('name')->get();
+
+        return view('adminkab.bumdes.edit', compact('bumde', 'kecamatans'));
     }
 
     public function update(Request $request, Bumdesa $bumde)
@@ -79,11 +82,10 @@ class BumdesController extends Controller
             'name' => 'required|string|max:255',
             'desa' => 'required|string|max:255',
             'kecamatan' => 'required|string|max:255',
-            'klasifikasi' => 'nullable|string|in:Dasar,Berkembang,Maju',
             'status' => 'required|in:active,inactive',
         ]);
 
-        $bumde->update($request->only('name', 'desa', 'kecamatan', 'klasifikasi', 'status'));
+        $bumde->update($request->only('name', 'desa', 'kecamatan', 'status'));
 
         return redirect()->route('adminkab.bumdes.index')->with('success', 'Data BUMDesa berhasil diperbarui.');
     }
@@ -94,10 +96,18 @@ class BumdesController extends Controller
             abort(403);
         }
 
-        // Delete user along with bumdes
-        User::find($bumde->user_id)?->delete(); // automatically cascades bumdes due to constraints or handles orphan
+        try {
+            $userId = $bumde->user_id;
+            $bumde->delete();
+            
+            if ($userId) {
+                User::find($userId)?->delete();
+            }
 
-        return redirect()->route('adminkab.bumdes.index')->with('success', 'BUMDesa berhasil dihapus.');
+            return redirect()->route('adminkab.bumdes.index')->with('success', 'BUMDesa beserta akun pengurusnya berhasil dihapus.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Gagal menghapus! BUMDesa ini masih memiliki data aktif (laporan, unit usaha, dll) di sistem.');
+        }
     }
 
     public function toggleStatus($id)

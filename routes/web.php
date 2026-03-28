@@ -104,9 +104,19 @@ Route::prefix('admin-kabupaten')->name('adminkab.')->group(function () {
 
     Route::middleware(['auth', 'admin_kabupaten'])->group(function () {
         Route::get('/dashboard', [AKDashboard::class, 'index'])->name('dashboard');
+        
+        // Daftarkan Kecamatan
+        Route::resource('kecamatan', \App\Http\Controllers\AdminKabupaten\KecamatanController::class);
+
         Route::resource('bumdes', AKBumdes::class);
         Route::post('bumdes/toggle-status/{id}', [AKBumdes::class, 'toggleStatus'])->name('bumdes.toggle_status');
-        Route::resource('keuangan', AKKeuangan::class);
+        
+        // Replaced Keuangan with Analisa Data
+        Route::get('analisa-data', [\App\Http\Controllers\AdminKabupaten\AnalisaDataController::class, 'index'])->name('analisa_data.index');
+        
+        // Added Monitoring
+        Route::get('monitoring', [\App\Http\Controllers\AdminKabupaten\MonitoringBumdesController::class, 'index'])->name('monitoring.index');
+        
         Route::resource('pengumuman', AKPengumuman::class);
         Route::resource('langganan', AKLangganan::class);
     });

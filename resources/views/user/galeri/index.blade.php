@@ -8,10 +8,14 @@
             <p class="text-gray-500 text-sm mt-1">Dokumentasi foto kegiatan BUMDesa Anda.</p>
         </div>
         @premium('galeri', 'create')
+        @if($galeris->count() < 8)
         <button onclick="document.getElementById('modalTambah').classList.remove('hidden')"
             class="bg-primary text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-primary-700 transition flex items-center gap-2">
             <i class="fa-solid fa-plus"></i> Upload Foto
         </button>
+        @else
+        <span class="text-sm font-bold text-red-500 bg-red-50 py-2 px-3 rounded-lg"><i class="fa-solid fa-lock text-red-400 mr-2"></i> Limit Maksimal (8)</span>
+        @endif
         @endpremium
     </div>
 
@@ -34,9 +38,15 @@
                                 class="fa-solid fa-calendar mr-1"></i>{{ \Carbon\Carbon::parse($g->event_date)->format('d M Y') }}
                         </p>
                     @endif
+                    @premium('galeri', 'update')
+                    <button onclick="openEditModal({{ $g->id }}, '{{ addslashes($g->title) }}', '{{ $g->event_date }}', '{{ addslashes($g->description) }}')"
+                        class="text-xs text-blue-500 hover:text-blue-700 font-semibold mt-2 inline-block mr-3">
+                        <i class="fa-solid fa-pen mr-1"></i>Ganti
+                    </button>
+                    @endpremium
                     @premium('galeri', 'delete')
                     <form action="{{ route('user.galeri.destroy', $g) }}" method="POST"
-                        onsubmit="return confirm('Hapus foto ini?')" class="mt-2">
+                        onsubmit="return confirm('Hapus foto ini?')" class="mt-2 inline-block">
                         @csrf @method('DELETE')
                         <button type="submit" class="text-xs text-red-500 hover:text-red-700 font-semibold">
                             <i class="fa-solid fa-trash mr-1"></i>Hapus
@@ -94,4 +104,56 @@
             </form>
         </div>
     </div>
+    <!-- Modal Edit -->
+    <div id="modalEdit" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg">
+            <div class="flex justify-between items-center px-6 py-4 border-b">
+                <h3 class="font-bold text-lg text-gray-800">Ganti Foto Galeri</h3>
+                <button onclick="document.getElementById('modalEdit').classList.add('hidden')"
+                    class="text-gray-400 hover:text-gray-600 text-xl">&times;</button>
+            </div>
+            <form id="formEdit" method="POST" enctype="multipart/form-data" class="p-6 space-y-4">
+                @csrf @method('PUT')
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Judul Foto <span
+                            class="text-red-500">*</span></label>
+                    <input type="text" name="title" id="editTitle" required
+                        class="w-full border rounded-lg px-3 py-2 text-sm focus:ring-primary focus:border-primary">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">File Foto (Kosongkan jika tidak diganti)</label>
+                    <input type="file" name="image" accept="image/*"
+                        class="w-full text-sm border rounded-lg p-2">
+                    <p class="text-xs text-gray-400 mt-1">Maks. 4MB. Format: JPG, PNG, WEBP.</p>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Tanggal Kegiatan</label>
+                    <input type="date" name="event_date" id="editDate" class="w-full border rounded-lg px-3 py-2 text-sm">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Keterangan</label>
+                    <textarea name="description" id="editDesc" rows="2" class="w-full border rounded-lg px-3 py-2 text-sm"></textarea>
+                </div>
+                <div class="flex justify-end gap-3 pt-2">
+                    <button type="button" onclick="document.getElementById('modalEdit').classList.add('hidden')"
+                        class="px-4 py-2 rounded-lg text-sm border text-gray-600 hover:bg-gray-50">Batal</button>
+                    <button type="submit"
+                        class="px-4 py-2 bg-primary text-white rounded-lg text-sm font-semibold hover:bg-primary-700">Simpan Perubahan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    @push('scripts')
+        <script>
+            function openEditModal(id, title, date, desc) {
+                document.getElementById('editTitle').value = title;
+                document.getElementById('editDate').value = date;
+                document.getElementById('editDesc').value = desc;
+                const slug = '{{ auth()->user()->username }}';
+                document.getElementById('formEdit').action = `/${slug}/galeri/${id}`;
+                document.getElementById('modalEdit').classList.remove('hidden');
+            }
+        </script>
+    @endpush
 @endsection

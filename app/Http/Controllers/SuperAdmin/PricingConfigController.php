@@ -17,6 +17,7 @@ class PricingConfigController extends Controller
     public function store(Request $request)
     {
         $request->validate([
+            'type'                 => 'required|in:bumdes,kabupaten',
             'name'                 => 'required|string|max:100',
             'months'               => 'required|integer|min:1|max:120',
             'base_price_per_month' => 'required|numeric|min:0',
@@ -25,6 +26,7 @@ class PricingConfigController extends Controller
         ]);
 
         PricingConfig::create([
+            'type'                 => $request->type,
             'name'                 => $request->name,
             'months'               => $request->months,
             'base_price_per_month' => $request->base_price_per_month,
@@ -39,6 +41,7 @@ class PricingConfigController extends Controller
     public function update(Request $request, PricingConfig $pricingConfig)
     {
         $request->validate([
+            'type'                 => 'required|in:bumdes,kabupaten',
             'name'                 => 'required|string|max:100',
             'months'               => 'required|integer|min:1|max:120',
             'base_price_per_month' => 'required|numeric|min:0',
@@ -47,6 +50,7 @@ class PricingConfigController extends Controller
         ]);
 
         $pricingConfig->update([
+            'type'                 => $request->type,
             'name'                 => $request->name,
             'months'               => $request->months,
             'base_price_per_month' => $request->base_price_per_month,

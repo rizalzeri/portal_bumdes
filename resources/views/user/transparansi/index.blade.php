@@ -14,26 +14,27 @@
         <form action="{{ route('user.transparansi.store', ['slug' => $bumdes->slug ?? 'default']) }}" method="POST">
             @csrf
             
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-end">
                 <div>
                     <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Musdes Terakhir</label>
-                    <input type="date" name="musdes_terakhir" value="{{ old('musdes_terakhir', $bumdes->musdes_terakhir) }}" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm border p-2">
+                    <input type="date" name="musdes_terakhir" value="{{ old('musdes_terakhir', $bumdes->musdes_terakhir) }}" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm border p-2 bg-gray-50 focus:bg-white transition-all">
                 </div>
                 <div>
                     <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Audit Internal Terakhir</label>
-                    <input type="date" name="audit_internal_terakhir" value="{{ old('audit_internal_terakhir', $bumdes->audit_internal_terakhir) }}" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm border p-2">
+                    <input type="date" name="audit_internal_terakhir" value="{{ old('audit_internal_terakhir', $bumdes->audit_internal_terakhir) }}" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm border p-2 bg-gray-50 focus:bg-white transition-all">
                 </div>
                 <div>
-                    <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Status Laporan Ke Dinas</label>
-                    <select name="laporan_dinas_status" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm border p-2">
+                    <label class="block text-xs font-semibold text-gray-600 uppercase mb-1 leading-tight">Status Laporan Ke Dinas</label>
+                    <p class="text-[9px] text-gray-400 lowercase italic mb-1">Upload ke GDrive & masukkan link di bawah</p>
+                    <select name="laporan_dinas_status" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm border p-2 text-gray-700 bg-gray-50 focus:bg-white transition-all h-9">
                         <option value="belum" {{ $bumdes->laporan_dinas_status == 'belum' ? 'selected' : '' }}>Belum Dikirim</option>
                         <option value="sudah" {{ $bumdes->laporan_dinas_status == 'sudah' ? 'selected' : '' }}>Sudah Dikirim</option>
                     </select>
                 </div>
                 <div class="md:col-span-2 lg:col-span-3 mt-4">
-                    <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Link GDrive (Lampiran Laporan Dinas)</label>
+                    <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Link GDrive Laporan <i class="fa-brands fa-google-drive text-blue-500 ml-1"></i></label>
                     <input type="url" name="laporan_dinas_link" value="{{ old('laporan_dinas_link', $bumdes->laporan_dinas_link) }}" placeholder="https://drive.google.com/..." class="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm border p-2">
-                    <p class="text-[10px] text-gray-500 mt-1">Isi dengan tautan/link folder Google Drive atau tautan eksternal lainnya jika Anda sudah mengirimkan laporan.</p>
+                    <p class="text-[10px] text-gray-500 mt-1">Upload berkas laporan ke Google Drive terlebih dahulu, kemudian tempel/paste link-nya di sini.</p>
                 </div>
             </div>
 

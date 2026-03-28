@@ -51,6 +51,10 @@ class GaleriController extends Controller
             return abort(403, $message . ' Silakan hubungi admin atau upgrade paket Anda.');
         }
 
+        if (Galeri::where('bumdes_id', $bumdes->id)->count() >= 8) {
+            return redirect()->back()->with('error', 'Maksimal 8 foto galeri kegiatan yang dapat diunggah.');
+        }
+
         $imagePath = $request->file('image')->store('galeri', 'public');
 
         Galeri::create([
@@ -64,6 +68,45 @@ class GaleriController extends Controller
 
         return redirect()->route('user.galeri.index')
             ->with('success', 'Foto galeri berhasil diunggah.');
+    }
+
+    public function update(Request $request, $slug, Galeri $galeri)
+    {
+        $bumdes = Bumdesa::where('user_id', auth()->id())->orWhere('id', auth()->user()->bumdes_id)->firstOrFail();
+        if ($galeri->bumdes_id !== $bumdes->id) abort(403);
+
+        $request->validate([
+            'title'       => 'required|string|max:255',
+            'image'       => 'nullable|image|max:4096',
+            'description' => 'nullable|string',
+            'event_date'  => 'nullable|date',
+        ]);
+
+        $module = 'galeri';
+        $action = 'update';
+        $allowed = PremiumFeature::isAllowed($bumdes, $module, $action);
+
+        if ($allowed !== true) {
+            return redirect()->back()->with('error', 'Akses Ditolak. Fitur Edit hanya tersedia untuk Premium.');
+        }
+
+        $data = [
+            'title'       => $request->title,
+            'description' => $request->description,
+            'event_date'  => $request->event_date,
+        ];
+
+        if ($request->hasFile('image')) {
+            if ($galeri->image && Storage::disk('public')->exists($galeri->image)) {
+                Storage::disk('public')->delete($galeri->image);
+            }
+            $data['image'] = $request->file('image')->store('galeri', 'public');
+        }
+
+        $galeri->update($data);
+
+        return redirect()->route('user.galeri.index')
+            ->with('success', 'Foto galeri berhasil diperbarui.');
     }
 
     public function destroy($slug, Galeri $galeri)

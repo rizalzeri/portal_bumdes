@@ -1,14 +1,14 @@
 @extends('layouts.admin')
-@section('title', 'Langganan BUMDesa')
+@section('title', 'Langganan Akun Kabupaten')
 
 @section('content')
 <div class="mb-6 flex justify-between items-center">
     <div>
-        <h2 class="text-2xl font-bold text-gray-800">Manajemen Langganan BUMDesa</h2>
-        <p class="text-gray-500 text-sm mt-1">Pantau dan buat tagihan langganan paket untuk BUMDesa di wilayah Anda.</p>
+        <h2 class="text-2xl font-bold text-gray-800">Manajemen Langganan Akun Kabupaten</h2>
+        <p class="text-gray-500 text-sm mt-1">Kelola dan tingkatkan batas monitoring atau fitur khusus Kabupaten Anda.</p>
     </div>
     <button onclick="document.getElementById('modal-add').classList.remove('hidden')" class="bg-primary hover:bg-primary-900 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-colors shadow-sm">
-        <i class="fa-solid fa-file-invoice-dollar mr-2"></i> Buat Tagihan
+        <i class="fa-solid fa-crown mr-2"></i> Langganan Paket Baru
     </button>
 </div>
 
@@ -17,24 +17,20 @@
         <table class="datatable w-full whitespace-nowrap text-sm text-left text-gray-500">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                 <tr>
-                    <th class="px-6 py-3">Nama BUMDesa</th>
                     <th class="px-6 py-3">Paket Langganan</th>
+                    <th class="px-6 py-3">Jumlah Bayar</th>
+                    <th class="px-6 py-3">Metode Pengajuan</th>
                     <th class="px-6 py-3">Masa Berlaku</th>
-                    <th class="px-6 py-3">Status Langganan</th>
-                    <th class="px-6 py-3 text-right">Aksi Pembayaran</th>
+                    <th class="px-6 py-3">Status</th>
+                    <th class="px-6 py-3 text-right">Aksi</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach($langganans as $lang)
                 <tr class="bg-white border-b hover:bg-gray-50">
-                    <td class="px-6 py-4 font-bold text-gray-900">
-                        @if($lang->bumdes)
-                            <i class="fa-solid fa-house-flag text-blue-500 mr-2"></i> {{ $lang->bumdes->name }}
-                        @else
-                            <i class="fa-solid fa-map text-green-500 mr-2"></i> Langganan Kabupaten
-                        @endif
-                    </td>
                     <td class="px-6 py-4 font-bold text-accent">{{ $lang->package_name }}</td>
+                    <td class="px-6 py-4 text-green-600 font-bold">Rp {{ number_format($lang->amount, 0, ',', '.') }}</td>
+                    <td class="px-6 py-4">{{ Str::upper($lang->payment_method ?? 'TRANSFER') }}</td>
                     <td class="px-6 py-4">
                         <div class="text-xs">{{ \Carbon\Carbon::parse($lang->start_date)->format('d/m/Y') }} - {{ \Carbon\Carbon::parse($lang->end_date)->format('d/m/Y') }}</div>
                         @if($lang->status === 'active')
@@ -45,18 +41,16 @@
                         @if($lang->status === 'active')
                             <span class="bg-green-100 text-green-800 text-xs font-semibold px-2.5 py-0.5 rounded border border-green-200">Aktif Terbayar</span>
                         @elseif($lang->status === 'pending')
-                            <span class="bg-yellow-100 text-yellow-800 text-xs font-semibold px-2.5 py-0.5 rounded border border-yellow-200">Menunggu Pembayaran</span>
+                            <span class="bg-yellow-100 text-yellow-800 text-xs font-semibold px-2.5 py-0.5 rounded border border-yellow-200">Menunggu Verifikasi</span>
                         @else
                             <span class="bg-red-100 text-red-800 text-xs font-semibold px-2.5 py-0.5 rounded border border-red-200">Tidak Aktif / Expired</span>
                         @endif
                     </td>
                     <td class="px-6 py-4 text-right">
                         @if($lang->status === 'pending')
-                        <button class="text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1.5 rounded transition font-bold tooltip" title="Pembayaran langsung dilakukan melalui panel BUMDes ybs, atau Super Admin">
+                        <button class="text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1.5 rounded transition font-bold tooltip" title="Tunggu Super Admin untuk mengkonfirmasi pembayaran.">
                             <i class="fa-solid fa-clock mr-1 text-yellow-500"></i> Menunggu...
                         </button>
-                        @else
-                        <span class="text-xs text-green-600 font-bold"><i class="fa-solid fa-check mr-1"></i> Lunas</span>
                         @endif
                     </td>
                 </tr>
@@ -67,38 +61,44 @@
 </div>
 
 <!-- Add Modal -->
-<div id="modal-add" class="fixed inset-0 z-50 hidden bg-gray-900 bg-opacity-50 overflow-y-auto h-full w-full">
-    <div class="relative top-20 mx-auto p-5 border w-full max-w-lg shadow-lg rounded-xl bg-white mb-20">
-        <div class="flex justify-between items-center mb-4 border-b pb-2">
-            <h3 class="text-xl font-bold text-gray-900">Buat Tagihan Langganan BUMDes</h3>
-            <button onclick="document.getElementById('modal-add').classList.add('hidden')" class="text-gray-400 hover:text-gray-900 text-2xl font-bold">&times;</button>
+<div id="modal-add" class="fixed inset-0 z-50 hidden bg-gray-900 bg-opacity-50 overflow-y-auto h-full w-full flex items-center justify-center p-4">
+    <div class="relative w-full max-w-lg shadow-2xl rounded-2xl bg-white border overflow-hidden">
+        <div class="flex justify-between items-center p-5 border-b bg-gray-50">
+            <h3 class="text-xl font-bold text-gray-900"><i class="fa-solid fa-crown text-accent mr-2"></i> Langganan Paket Admin Kabupaten</h3>
+            <button onclick="document.getElementById('modal-add').classList.add('hidden')" class="text-gray-400 hover:text-gray-900 text-2xl font-bold leading-none">&times;</button>
         </div>
-        <form action="{{ route('adminkab.langganan.store') }}" method="POST" class="space-y-4">
+        <form action="{{ route('adminkab.langganan.store') }}" method="POST" class="p-6 space-y-5">
             @csrf
             <div>
-                <label class="block text-sm font-medium text-gray-700">Pilih BUMDesa</label>
-                <select name="bumdes_id" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm border p-2">
-                    <option value="">-- Pilih BUMDesa --</option>
-                    @foreach($bumdesList as $b)
-                        <option value="{{ $b->id }}">{{ $b->name }} - {{ $b->desa }}</option>
+                <label class="block text-sm font-semibold text-gray-700 mb-1">Pilih Paket <span class="text-red-500">*</span></label>
+                <select name="pricing_config_id" required class="w-full border rounded-lg px-3 py-2 text-sm focus:ring-primary focus:border-primary bg-white shadow-sm">
+                    <option value="">-- Pilih Paket Kabupaten --</option>
+                    @foreach($pricingConfigs as $cfg)
+                        <option value="{{ $cfg->id }}">
+                            {{ $cfg->name }} - Rp {{ number_format($cfg->total_price, 0, ',', '.') }} ({{ $cfg->months }} Bulan)
+                        </option>
                     @endforeach
                 </select>
+                @if($pricingConfigs->isEmpty())
+                <p class="text-xs text-red-500 mt-1">Super Admin belum menambahkan paket harga untuk Kabupaten.</p>
+                @endif
             </div>
+
             <div>
-                <label class="block text-sm font-medium text-gray-700">Paket Akses</label>
-                <select name="package_name" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm border p-2">
-                    <option value="Paket Premium BUMDes">Paket Premium BUMDes (Seluruh Fitur)</option>
-                    <option value="Paket Dasar (Gratis)">Paket Dasar (Terbatas)</option>
+                <label class="block text-sm font-semibold text-gray-700 mb-1">Metode Pembayaran</label>
+                <select name="payment_method" required class="w-full border rounded-lg px-3 py-2 text-sm focus:ring-primary focus:border-primary bg-white shadow-sm">
+                    <option value="bank_transfer">Transfer Bank Manual</option>
+                    <option value="qris">QRIS (Otomatis)</option>
+                    <option value="virtual_account">Virtual Account</option>
                 </select>
-            </div>
-            <div>
-                <label class="block text-sm font-medium text-gray-700">Durasi Perpanjangan (Tahun)</label>
-                <input type="number" name="duration" value="1" min="1" max="5" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm border p-2">
+                <p class="text-xs text-gray-500 mt-2"><i class="fa-solid fa-circle-info mr-1 text-primary"></i>Setelah memilih dan menyimpan, tagihan (invoice) akan diterbitkan dan status Anda akan pending sampai konfirmasi berhasil.</p>
             </div>
             
-            <div class="pt-4 border-t flex justify-end gap-2">
-                <button type="button" onclick="document.getElementById('modal-add').classList.add('hidden')" class="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">Batal</button>
-                <button type="submit" class="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary hover:bg-primary-900">Buat Tagihan</button>
+            <div class="pt-4 border-t flex justify-end gap-3 mt-6">
+                <button type="button" onclick="document.getElementById('modal-add').classList.add('hidden')" class="px-5 py-2.5 border rounded-lg text-sm font-semibold text-gray-600 hover:bg-gray-50 transition-colors">Batal</button>
+                <button type="submit" class="px-5 py-2.5 bg-primary text-white rounded-lg text-sm font-semibold hover:bg-primary-900 shadow-sm transition-colors flex items-center gap-2" {{ $pricingConfigs->isEmpty() ? 'disabled' : '' }}>
+                    <i class="fa-solid fa-paper-plane"></i> Ajukan Langganan
+                </button>
             </div>
         </form>
     </div>

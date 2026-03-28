@@ -20,7 +20,7 @@
                     <th class="px-6 py-3">No</th>
                     <th class="px-6 py-3">Nama Kabupaten</th>
                     <th class="px-6 py-3">Provinsi</th>
-                    <th class="px-6 py-3">Koordinat (Lat, Lng)</th>
+
                     <th class="px-6 py-3 text-right">Aksi</th>
                 </tr>
             </thead>
@@ -30,9 +30,7 @@
                     <td class="px-6 py-4">{{ $idx + 1 }}</td>
                     <td class="px-6 py-4 font-bold text-gray-900"><i class="fa-solid fa-map-pin text-accent mr-2"></i> {{ $kab->name }}</td>
                     <td class="px-6 py-4">{{ $kab->province->name }}</td>
-                    <td class="px-6 py-4 font-mono text-xs">
-                        {{ $kab->latitude ?? '-' }}, {{ $kab->longitude ?? '-' }}
-                    </td>
+
                     <td class="px-6 py-4 text-right">
                         <button onclick="editKabupaten({{ $kab->toJson() }})" class="text-accent hover:text-yellow-600 bg-yellow-50 hover:bg-yellow-100 p-2 rounded-md transition-colors mr-1">
                             <i class="fa-solid fa-pen"></i>
@@ -74,16 +72,7 @@
                 <label class="block text-sm font-medium text-gray-700">Nama Kabupaten/Kota</label>
                 <input type="text" name="name" placeholder="Contoh: Kab. Bandung" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm border p-2">
             </div>
-            <div class="grid grid-cols-2 gap-4">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Latitude</label>
-                    <input type="number" step="any" name="latitude" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm border p-2">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Longitude</label>
-                    <input type="number" step="any" name="longitude" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm border p-2">
-                </div>
-            </div>
+
             
             <div class="pt-4 border-t flex justify-end gap-2">
                 <button type="button" onclick="document.getElementById('modal-add').classList.add('hidden')" class="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">Batal</button>
@@ -116,16 +105,7 @@
                 <label class="block text-sm font-medium text-gray-700">Nama Kabupaten/Kota</label>
                 <input type="text" name="name" id="edit-name" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm border p-2">
             </div>
-            <div class="grid grid-cols-2 gap-4">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Latitude</label>
-                    <input type="number" step="any" name="latitude" id="edit-lat" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm border p-2">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Longitude</label>
-                    <input type="number" step="any" name="longitude" id="edit-lng" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm border p-2">
-                </div>
-            </div>
+
             
             <div class="pt-4 border-t flex justify-end gap-2">
                 <button type="button" onclick="document.getElementById('modal-edit').classList.add('hidden')" class="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">Batal</button>
@@ -140,8 +120,7 @@
         document.getElementById('form-edit').action = `/superadmin/kabupaten/${kab.id}`;
         document.getElementById('edit-prov').value = kab.province_id;
         document.getElementById('edit-name').value = kab.name;
-        document.getElementById('edit-lat').value = kab.latitude || '';
-        document.getElementById('edit-lng').value = kab.longitude || '';
+
         document.getElementById('modal-edit').classList.remove('hidden');
     }
 </script>

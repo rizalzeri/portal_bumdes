@@ -388,15 +388,15 @@ namespace App\Models {
      * @property int $id
      * @property-read \App\Models\Kabupaten $kabupaten
      * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\UnitUsahaAktif> $unitUsahaAktifs
-     * @property-read int|null $unitUsahaAktifs_count
+     * @property-read int|null $unit_usaha_aktifs_count
      * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ProdukBumdes> $produkBumdes
-     * @property-read int|null $produkBumdes_count
+     * @property-read int|null $produk_bumdes_count
      * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ProdukKetahananPangan> $produkKetahananPangans
-     * @property-read int|null $produkKetahananPangans_count
+     * @property-read int|null $produk_ketahanan_pangans_count
      * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\MitraKerjasama> $mitraKerjasamas
-     * @property-read int|null $mitraKerjasamas_count
+     * @property-read int|null $mitra_kerjasamas_count
      * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\KinerjaCapaian> $kinerjaCapaians
-     * @property-read int|null $kinerjaCapaians_count
+     * @property-read int|null $kinerja_capaians_count
      * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Transparansi> $transparansis
      * @property-read int|null $transparansis_count
      * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Pengumuman> $pengumuman
@@ -406,9 +406,9 @@ namespace App\Models {
      * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Galeri> $galeris
      * @property-read int|null $galeris_count
      * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\KatalogProduk> $katalogProduks
-     * @property-read int|null $katalogProduks_count
+     * @property-read int|null $katalog_produks_count
      * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\LaporanKeuangan> $laporanKeuangans
-     * @property-read int|null $laporanKeuangans_count
+     * @property-read int|null $laporan_keuangans_count
      * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Personil> $personils
      * @property-read int|null $personils_count
      * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\User> $users
@@ -805,11 +805,11 @@ namespace App\Models {
      * @property-read \App\Models\User $user
      * @property-read \App\Models\Kabupaten $kabupaten
      * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\LaporanKeuangan> $laporanKeuangan
-     * @property-read int|null $laporanKeuangan_count
+     * @property-read int|null $laporan_keuangan_count
      * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\UnitUsaha> $unitUsaha
-     * @property-read int|null $unitUsaha_count
+     * @property-read int|null $unit_usaha_count
      * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\KatalogProduk> $katalogProduk
-     * @property-read int|null $katalogProduk_count
+     * @property-read int|null $katalog_produk_count
      * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Artikel> $artikel
      * @property-read int|null $artikel_count
      * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Pengurus> $pengurus
@@ -819,13 +819,13 @@ namespace App\Models {
      * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\StandarTransparansi> $transparansi
      * @property-read int|null $transparansi_count
      * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\MitraKerjasama> $mitraKerjasama
-     * @property-read int|null $mitraKerjasama_count
+     * @property-read int|null $mitra_kerjasama_count
      * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\MitraKerjasama> $mitraKerjasamas
-     * @property-read int|null $mitraKerjasamas_count
+     * @property-read int|null $mitra_kerjasamas_count
      * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\KinerjaCapaian> $kinerjaCapaian
-     * @property-read int|null $kinerjaCapaian_count
+     * @property-read int|null $kinerja_capaian_count
      * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\KinerjaCapaian> $kinerjaCapaians
-     * @property-read int|null $kinerjaCapaians_count
+     * @property-read int|null $kinerja_capaians_count
      * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Galeri> $galeri
      * @property-read int|null $galeri_count
      * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Galeri> $galeris
@@ -839,13 +839,13 @@ namespace App\Models {
      * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Langganan> $langganans
      * @property-read int|null $langganans_count
      * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\UnitUsaha> $unitUsahaAktifs
-     * @property-read int|null $unitUsahaAktifs_count
+     * @property-read int|null $unit_usaha_aktifs_count
      * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ProdukBumdes> $produkBumdes
-     * @property-read int|null $produkBumdes_count
+     * @property-read int|null $produk_bumdes_count
      * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ProdukKetahananPangan> $produkKetahananPangans
-     * @property-read int|null $produkKetahananPangans_count
+     * @property-read int|null $produk_ketahanan_pangans_count
      * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\KatalogProduk> $katalogProduks
-     * @property-read int|null $katalogProduks_count
+     * @property-read int|null $katalog_produks_count
      * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\StandarTransparansi> $transparansis
      * @property-read int|null $transparansis_count
      * @method static \Illuminate\Database\Eloquent\Builder<Bumdesa>|Bumdesa whereId($value)
@@ -2227,7 +2227,7 @@ namespace App\Models {
      * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Bumdes> $bumdes
      * @property-read int|null $bumdes_count
      * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\InfografisData> $infografisData
-     * @property-read int|null $infografisData_count
+     * @property-read int|null $infografis_data_count
      * @method static \Illuminate\Database\Eloquent\Builder<Kabupaten>|Kabupaten whereId($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Kabupaten>|Kabupaten whereProvinceId($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Kabupaten>|Kabupaten whereName($value)
@@ -2892,6 +2892,323 @@ namespace App\Models {
     }
 
     /**
+     * App\Models\Kecamatan
+     *
+     * @method static \Illuminate\Database\Eloquent\Builder<Kecamatan>|Kecamatan newModelQuery()
+     * @method static \Illuminate\Database\Eloquent\Builder<Kecamatan>|Kecamatan newQuery()
+     * @method static \Illuminate\Database\Eloquent\Builder<Kecamatan>|Kecamatan query()
+     * @method static mixed select($columns)
+     * @method static mixed selectSub($query, $as)
+     * @method static mixed selectExpression($expression, $as)
+     * @method static mixed selectRaw($expression, array $bindings)
+     * @method static mixed fromSub($query, $as)
+     * @method static mixed fromRaw($expression, $bindings)
+     * @method static mixed createSub($query)
+     * @method static mixed parseSub($query)
+     * @method static mixed prependDatabaseNameIfCrossDatabaseQuery($query)
+     * @method static mixed addSelect($column)
+     * @method static mixed selectVectorDistance($column, $vector, $as)
+     * @method static mixed distinct()
+     * @method static mixed from($table, $as)
+     * @method static mixed useIndex($index)
+     * @method static mixed forceIndex($index)
+     * @method static mixed ignoreIndex($index)
+     * @method static mixed join($table, $first, $operator, $second, $type, $where)
+     * @method static mixed joinWhere($table, $first, $operator, $second, $type)
+     * @method static mixed joinSub($query, $as, $first, $operator, $second, $type, $where)
+     * @method static mixed joinLateral($query, string $as, string $type)
+     * @method static mixed leftJoinLateral($query, string $as)
+     * @method static mixed leftJoin($table, $first, $operator, $second)
+     * @method static mixed leftJoinWhere($table, $first, $operator, $second)
+     * @method static mixed leftJoinSub($query, $as, $first, $operator, $second)
+     * @method static mixed rightJoin($table, $first, $operator, $second)
+     * @method static mixed rightJoinWhere($table, $first, $operator, $second)
+     * @method static mixed rightJoinSub($query, $as, $first, $operator, $second)
+     * @method static mixed crossJoin($table, $first, $operator, $second)
+     * @method static mixed crossJoinSub($query, $as)
+     * @method static mixed newJoinClause(self $parentQuery, $type, $table)
+     * @method static mixed newJoinLateralClause(self $parentQuery, $type, $table)
+     * @method static mixed mergeWheres($wheres, $bindings)
+     * @method static mixed where($column, $operator, $value, $boolean)
+     * @method static mixed addArrayOfWheres($column, $boolean, $method)
+     * @method static mixed prepareValueAndOperator($value, $operator, $useDefault)
+     * @method static mixed invalidOperatorAndValue($operator, $value)
+     * @method static mixed invalidOperator($operator)
+     * @method static mixed isBitwiseOperator($operator)
+     * @method static mixed orWhere($column, $operator, $value)
+     * @method static mixed whereNot($column, $operator, $value, $boolean)
+     * @method static mixed orWhereNot($column, $operator, $value)
+     * @method static mixed whereColumn($first, $operator, $second, $boolean)
+     * @method static mixed orWhereColumn($first, $operator, $second)
+     * @method static mixed whereVectorSimilarTo($column, $vector, $minSimilarity, $order)
+     * @method static mixed whereVectorDistanceLessThan($column, $vector, $maxDistance, $boolean)
+     * @method static mixed orWhereVectorDistanceLessThan($column, $vector, $maxDistance)
+     * @method static mixed whereRaw($sql, $bindings, $boolean)
+     * @method static mixed orWhereRaw($sql, $bindings)
+     * @method static mixed whereLike($column, $value, $caseSensitive, $boolean, $not)
+     * @method static mixed orWhereLike($column, $value, $caseSensitive)
+     * @method static mixed whereNotLike($column, $value, $caseSensitive, $boolean)
+     * @method static mixed orWhereNotLike($column, $value, $caseSensitive)
+     * @method static mixed whereNullSafeEquals($column, $value, $boolean)
+     * @method static mixed orWhereNullSafeEquals($column, $value)
+     * @method static mixed whereIn($column, $values, $boolean, $not)
+     * @method static mixed orWhereIn($column, $values)
+     * @method static mixed whereNotIn($column, $values, $boolean)
+     * @method static mixed orWhereNotIn($column, $values)
+     * @method static mixed whereIntegerInRaw($column, $values, $boolean, $not)
+     * @method static mixed orWhereIntegerInRaw($column, $values)
+     * @method static mixed whereIntegerNotInRaw($column, $values, $boolean)
+     * @method static mixed orWhereIntegerNotInRaw($column, $values)
+     * @method static mixed whereNull($columns, $boolean, $not)
+     * @method static mixed orWhereNull($column)
+     * @method static mixed whereNotNull($columns, $boolean)
+     * @method static mixed whereBetween($column, iterable $values, $boolean, $not)
+     * @method static mixed whereBetweenColumns($column, array $values, $boolean, $not)
+     * @method static mixed orWhereBetween($column, iterable $values)
+     * @method static mixed orWhereBetweenColumns($column, array $values)
+     * @method static mixed whereNotBetween($column, iterable $values, $boolean)
+     * @method static mixed whereNotBetweenColumns($column, array $values, $boolean)
+     * @method static mixed orWhereNotBetween($column, iterable $values)
+     * @method static mixed orWhereNotBetweenColumns($column, array $values)
+     * @method static mixed whereValueBetween($value, array $columns, $boolean, $not)
+     * @method static mixed orWhereValueBetween($value, array $columns)
+     * @method static mixed whereValueNotBetween($value, array $columns, $boolean)
+     * @method static mixed orWhereValueNotBetween($value, array $columns)
+     * @method static mixed orWhereNotNull($column)
+     * @method static mixed whereDate($column, $operator, $value, $boolean)
+     * @method static mixed orWhereDate($column, $operator, $value)
+     * @method static mixed whereTime($column, $operator, $value, $boolean)
+     * @method static mixed orWhereTime($column, $operator, $value)
+     * @method static mixed whereDay($column, $operator, $value, $boolean)
+     * @method static mixed orWhereDay($column, $operator, $value)
+     * @method static mixed whereMonth($column, $operator, $value, $boolean)
+     * @method static mixed orWhereMonth($column, $operator, $value)
+     * @method static mixed whereYear($column, $operator, $value, $boolean)
+     * @method static mixed orWhereYear($column, $operator, $value)
+     * @method static mixed addDateBasedWhere($type, $column, $operator, $value, $boolean)
+     * @method static mixed whereNested(Closure $callback, $boolean)
+     * @method static mixed forNestedWhere()
+     * @method static mixed addNestedWhereQuery($query, $boolean)
+     * @method static mixed whereSub($column, $operator, $callback, $boolean)
+     * @method static mixed whereExists($callback, $boolean, $not)
+     * @method static mixed orWhereExists($callback, $not)
+     * @method static mixed whereNotExists($callback, $boolean)
+     * @method static mixed orWhereNotExists($callback)
+     * @method static mixed addWhereExistsQuery(self $query, $boolean, $not)
+     * @method static mixed whereRowValues($columns, $operator, $values, $boolean)
+     * @method static mixed orWhereRowValues($columns, $operator, $values)
+     * @method static mixed whereJsonContains($column, $value, $boolean, $not)
+     * @method static mixed orWhereJsonContains($column, $value)
+     * @method static mixed whereJsonDoesntContain($column, $value, $boolean)
+     * @method static mixed orWhereJsonDoesntContain($column, $value)
+     * @method static mixed whereJsonOverlaps($column, $value, $boolean, $not)
+     * @method static mixed orWhereJsonOverlaps($column, $value)
+     * @method static mixed whereJsonDoesntOverlap($column, $value, $boolean)
+     * @method static mixed orWhereJsonDoesntOverlap($column, $value)
+     * @method static mixed whereJsonContainsKey($column, $boolean, $not)
+     * @method static mixed orWhereJsonContainsKey($column)
+     * @method static mixed whereJsonDoesntContainKey($column, $boolean)
+     * @method static mixed orWhereJsonDoesntContainKey($column)
+     * @method static mixed whereJsonLength($column, $operator, $value, $boolean)
+     * @method static mixed orWhereJsonLength($column, $operator, $value)
+     * @method static mixed dynamicWhere($method, $parameters)
+     * @method static mixed addDynamic($segment, $connector, $parameters, $index)
+     * @method static mixed whereFullText($columns, $value, array $options, $boolean)
+     * @method static mixed orWhereFullText($columns, $value, array $options)
+     * @method static mixed whereAll($columns, $operator, $value, $boolean)
+     * @method static mixed orWhereAll($columns, $operator, $value)
+     * @method static mixed whereAny($columns, $operator, $value, $boolean)
+     * @method static mixed orWhereAny($columns, $operator, $value)
+     * @method static mixed whereNone($columns, $operator, $value, $boolean)
+     * @method static mixed orWhereNone($columns, $operator, $value)
+     * @method static mixed groupBy($groups)
+     * @method static mixed groupByRaw($sql, array $bindings)
+     * @method static mixed having($column, $operator, $value, $boolean)
+     * @method static mixed orHaving($column, $operator, $value)
+     * @method static mixed havingNested(Closure $callback, $boolean)
+     * @method static mixed addNestedHavingQuery($query, $boolean)
+     * @method static mixed havingNull($columns, $boolean, $not)
+     * @method static mixed orHavingNull($column)
+     * @method static mixed havingNotNull($columns, $boolean)
+     * @method static mixed orHavingNotNull($column)
+     * @method static mixed havingBetween($column, iterable $values, $boolean, $not)
+     * @method static mixed havingNotBetween($column, iterable $values, $boolean)
+     * @method static mixed orHavingBetween($column, iterable $values)
+     * @method static mixed orHavingNotBetween($column, iterable $values)
+     * @method static mixed resolveDatePeriodBounds(DatePeriod $period)
+     * @method static mixed havingRaw($sql, array $bindings, $boolean)
+     * @method static mixed orHavingRaw($sql, array $bindings)
+     * @method static mixed orderBy($column, $direction)
+     * @method static mixed orderByDesc($column)
+     * @method static mixed latest($column)
+     * @method static mixed oldest($column)
+     * @method static mixed orderByVectorDistance($column, $vector)
+     * @method static mixed inRandomOrder($seed)
+     * @method static mixed orderByRaw($sql, $bindings)
+     * @method static mixed skip($value)
+     * @method static mixed offset($value)
+     * @method static mixed take($value)
+     * @method static mixed limit($value)
+     * @method static mixed groupLimit($value, $column)
+     * @method static mixed forPage($page, $perPage)
+     * @method static mixed forPageBeforeId($perPage, $lastId, $column)
+     * @method static mixed forPageAfterId($perPage, $lastId, $column)
+     * @method static mixed reorder($column, $direction)
+     * @method static mixed reorderDesc($column)
+     * @method static mixed removeExistingOrdersFor($column)
+     * @method static mixed union($query, $all)
+     * @method static mixed unionAll($query)
+     * @method static mixed lock($value)
+     * @method static mixed lockForUpdate()
+     * @method static mixed sharedLock()
+     * @method static \Illuminate\Database\Eloquent\Builder<Kecamatan>|Kecamatan timeout(int $seconds)
+     * @method static mixed beforeQuery(callable $callback)
+     * @method static mixed applyBeforeQueryCallbacks()
+     * @method static mixed afterQuery(Closure $callback)
+     * @method static mixed applyAfterQueryCallbacks($result)
+     * @method static mixed toSql()
+     * @method static mixed toRawSql()
+     * @method static mixed find($id, $columns)
+     * @method static mixed findOr($id, $columns, Closure $callback)
+     * @method static mixed value($column)
+     * @method static mixed rawValue(string $expression, array $bindings)
+     * @method static mixed soleValue($column)
+     * @method static mixed get($columns)
+     * @method static mixed runSelect()
+     * @method static mixed withoutGroupLimitKeys($items)
+     * @method static mixed paginate($perPage, $columns, $pageName, $page, $total)
+     * @method static mixed simplePaginate($perPage, $columns, $pageName, $page)
+     * @method static mixed cursorPaginate($perPage, $columns, $cursorName, $cursor)
+     * @method static mixed ensureOrderForCursorPagination($shouldReverse)
+     * @method static mixed getCountForPagination($columns)
+     * @method static mixed runPaginationCountQuery($columns)
+     * @method static mixed cloneForPaginationCount()
+     * @method static mixed withoutSelectAliases(array $columns)
+     * @method static mixed cursor()
+     * @method static mixed enforceOrderBy()
+     * @method static mixed pluck($column, $key)
+     * @method static mixed stripTableForPluck($column)
+     * @method static mixed pluckFromObjectColumn($queryResult, $column, $key)
+     * @method static mixed pluckFromArrayColumn($queryResult, $column, $key)
+     * @method static mixed implode($column, $glue)
+     * @method static mixed exists()
+     * @method static mixed doesntExist()
+     * @method static mixed existsOr(Closure $callback)
+     * @method static mixed doesntExistOr(Closure $callback)
+     * @method static mixed count($columns)
+     * @method static mixed min($column)
+     * @method static mixed max($column)
+     * @method static mixed sum($column)
+     * @method static mixed avg($column)
+     * @method static mixed average($column)
+     * @method static mixed aggregate($function, $columns)
+     * @method static mixed numericAggregate($function, $columns)
+     * @method static mixed setAggregate($function, $columns)
+     * @method static mixed onceWithColumns($columns, $callback)
+     * @method static mixed insert(array $values)
+     * @method static mixed insertOrIgnore(array $values)
+     * @method static mixed insertGetId(array $values, $sequence)
+     * @method static mixed insertUsing(array $columns, $query)
+     * @method static mixed insertOrIgnoreUsing(array $columns, $query)
+     * @method static mixed update(array $values)
+     * @method static mixed updateFrom(array $values)
+     * @method static mixed updateOrInsert(array $attributes, callable|array $values)
+     * @method static mixed upsert(array $values, array|string $uniqueBy, array $update)
+     * @method static mixed increment($column, $amount, array $extra)
+     * @method static mixed incrementEach(array $columns, array $extra)
+     * @method static mixed decrement($column, $amount, array $extra)
+     * @method static mixed decrementEach(array $columns, array $extra)
+     * @method static mixed delete($id)
+     * @method static mixed truncate()
+     * @method static mixed newQuery()
+     * @method static mixed forSubQuery()
+     * @method static mixed getColumns()
+     * @method static mixed raw($value)
+     * @method static mixed getUnionBuilders()
+     * @method static mixed getLimit()
+     * @method static mixed getOffset()
+     * @method static mixed getBindings()
+     * @method static mixed getRawBindings()
+     * @method static mixed setBindings(array $bindings, $type)
+     * @method static mixed addBinding($value, $type)
+     * @method static mixed castBinding($value)
+     * @method static mixed mergeBindings(self $query)
+     * @method static mixed cleanBindings(array $bindings)
+     * @method static mixed flattenValue($value)
+     * @method static mixed defaultKeyName()
+     * @method static mixed getConnection()
+     * @method static mixed ensureConnectionSupportsVectors()
+     * @method static mixed getProcessor()
+     * @method static mixed getGrammar()
+     * @method static mixed useWritePdo()
+     * @method static mixed isQueryable($value)
+     * @method static mixed clone()
+     * @method static mixed cloneWithout(array $properties)
+     * @method static mixed cloneWithoutBindings(array $except)
+     * @method static mixed dump($args)
+     * @method static mixed dumpRawSql()
+     * @method static mixed dd()
+     * @method static mixed ddRawSql()
+     * @method static mixed wherePast($columns)
+     * @method static mixed whereNowOrPast($columns)
+     * @method static mixed orWherePast($columns)
+     * @method static mixed orWhereNowOrPast($columns)
+     * @method static mixed whereFuture($columns)
+     * @method static mixed whereNowOrFuture($columns)
+     * @method static mixed orWhereFuture($columns)
+     * @method static mixed orWhereNowOrFuture($columns)
+     * @method static mixed wherePastOrFuture($columns, $operator, $boolean)
+     * @method static mixed whereToday($columns, $boolean)
+     * @method static mixed whereBeforeToday($columns)
+     * @method static mixed whereTodayOrBefore($columns)
+     * @method static mixed whereAfterToday($columns)
+     * @method static mixed whereTodayOrAfter($columns)
+     * @method static mixed orWhereToday($columns)
+     * @method static mixed orWhereBeforeToday($columns)
+     * @method static mixed orWhereTodayOrBefore($columns)
+     * @method static mixed orWhereAfterToday($columns)
+     * @method static mixed orWhereTodayOrAfter($columns)
+     * @method static mixed whereTodayBeforeOrAfter($columns, $operator, $boolean)
+     * @method static mixed chunk($count, callable $callback)
+     * @method static mixed chunkMap(callable $callback, $count)
+     * @method static mixed each(callable $callback, $count)
+     * @method static mixed chunkById($count, callable $callback, $column, $alias)
+     * @method static mixed chunkByIdDesc($count, callable $callback, $column, $alias)
+     * @method static mixed orderedChunkById($count, callable $callback, $column, $alias, $descending)
+     * @method static mixed eachById(callable $callback, $count, $column, $alias)
+     * @method static mixed lazy($chunkSize)
+     * @method static mixed lazyById($chunkSize, $column, $alias)
+     * @method static mixed lazyByIdDesc($chunkSize, $column, $alias)
+     * @method static mixed orderedLazyById($chunkSize, $column, $alias, $descending)
+     * @method static mixed first($columns)
+     * @method static mixed firstOrFail($columns, $message)
+     * @method static mixed sole($columns)
+     * @method static mixed paginateUsingCursor($perPage, $columns, $cursorName, $cursor)
+     * @method static mixed getOriginalColumnNameForCursorPagination($builder, string $parameter)
+     * @method static mixed paginator($items, $total, $perPage, $currentPage, $options)
+     * @method static mixed simplePaginator($items, $perPage, $currentPage, $options)
+     * @method static mixed cursorPaginator($items, $perPage, $cursor, $options)
+     * @method static mixed tap($callback)
+     * @method static mixed pipe($callback)
+     * @method static mixed when($value, callable $callback, callable $default)
+     * @method static mixed unless($value, callable $callback, callable $default)
+     * @method static mixed explain()
+     * @method static mixed forwardCallTo($object, $method, $parameters)
+     * @method static mixed forwardDecoratedCallTo($object, $method, $parameters)
+     * @method static mixed throwBadMethodCallException($method)
+     * @method static mixed macro($name, $macro)
+     * @method static mixed mixin($mixin, $replace)
+     * @method static mixed hasMacro($name)
+     * @method static mixed flushMacros()
+     * @method static mixed macroCall($method, $parameters)
+     * @mixin \Illuminate\Database\Query\Builder
+     */
+    class Kecamatan extends \Illuminate\Database\Eloquent\Model
+    {
+        //
+    }
+
+    /**
      * App\Models\KinerjaCapaian
      *
      * @property \Illuminate\Support\Carbon|null $updated_at
@@ -3233,6 +3550,10 @@ namespace App\Models {
      * @property \Illuminate\Support\Carbon|null $end_date
      * @property \Illuminate\Support\Carbon|null $start_date
      * @property mixed $status
+     * @property int $duration_months
+     * @property float $amount
+     * @property string|null $order_id
+     * @property string|null $payment_token
      * @property string $package_name
      * @property int $bumdes_id
      * @property int $id
@@ -3243,6 +3564,10 @@ namespace App\Models {
      * @method static \Illuminate\Database\Eloquent\Builder<Langganan>|Langganan whereId($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Langganan>|Langganan whereBumdesId($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Langganan>|Langganan wherePackageName($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<Langganan>|Langganan wherePaymentToken($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<Langganan>|Langganan whereOrderId($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<Langganan>|Langganan whereAmount($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<Langganan>|Langganan whereDurationMonths($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Langganan>|Langganan whereStatus($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Langganan>|Langganan whereStartDate($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Langganan>|Langganan whereEndDate($value)
@@ -4589,12 +4914,14 @@ namespace App\Models {
      * @property \Illuminate\Support\Carbon|null $updated_at
      * @property \Illuminate\Support\Carbon|null $created_at
      * @property bool $is_active
+     * @property string|null $image
      * @property string $name
      * @property int $id
      * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\MitraKerjasama> $mitraKerjasamas
-     * @property-read int|null $mitraKerjasamas_count
+     * @property-read int|null $mitra_kerjasamas_count
      * @method static \Illuminate\Database\Eloquent\Builder<MitraOption>|MitraOption whereId($value)
      * @method static \Illuminate\Database\Eloquent\Builder<MitraOption>|MitraOption whereName($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<MitraOption>|MitraOption whereImage($value)
      * @method static \Illuminate\Database\Eloquent\Builder<MitraOption>|MitraOption whereIsActive($value)
      * @method static \Illuminate\Database\Eloquent\Builder<MitraOption>|MitraOption whereCreatedAt($value)
      * @method static \Illuminate\Database\Eloquent\Builder<MitraOption>|MitraOption whereUpdatedAt($value)
@@ -6263,7 +6590,25 @@ namespace App\Models {
     /**
      * App\Models\PricingConfig
      *
+     * @property \Illuminate\Support\Carbon|null $updated_at
+     * @property \Illuminate\Support\Carbon|null $created_at
+     * @property string|null $description
+     * @property boolean $is_active
+     * @property float $base_price_per_month
+     * @property int $months
+     * @property mixed $type
+     * @property string $name
+     * @property int $id
      * @property-read mixed $total_price
+     * @method static \Illuminate\Database\Eloquent\Builder<PricingConfig>|PricingConfig whereId($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<PricingConfig>|PricingConfig whereName($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<PricingConfig>|PricingConfig whereType($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<PricingConfig>|PricingConfig whereMonths($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<PricingConfig>|PricingConfig whereBasePricePerMonth($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<PricingConfig>|PricingConfig whereIsActive($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<PricingConfig>|PricingConfig whereDescription($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<PricingConfig>|PricingConfig whereCreatedAt($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<PricingConfig>|PricingConfig whereUpdatedAt($value)
      * @method static \Illuminate\Database\Eloquent\Builder<PricingConfig>|PricingConfig newModelQuery()
      * @method static \Illuminate\Database\Eloquent\Builder<PricingConfig>|PricingConfig newQuery()
      * @method static \Illuminate\Database\Eloquent\Builder<PricingConfig>|PricingConfig query()
@@ -6921,12 +7266,14 @@ namespace App\Models {
      *
      * @property \Illuminate\Support\Carbon|null $updated_at
      * @property \Illuminate\Support\Carbon|null $created_at
+     * @property string|null $image
      * @property string $name
      * @property int $id
      * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ProdukBumdes> $produkBumdes
-     * @property-read int|null $produkBumdes_count
+     * @property-read int|null $produk_bumdes_count
      * @method static \Illuminate\Database\Eloquent\Builder<ProdukBumdesOption>|ProdukBumdesOption whereId($value)
      * @method static \Illuminate\Database\Eloquent\Builder<ProdukBumdesOption>|ProdukBumdesOption whereName($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<ProdukBumdesOption>|ProdukBumdesOption whereImage($value)
      * @method static \Illuminate\Database\Eloquent\Builder<ProdukBumdesOption>|ProdukBumdesOption whereCreatedAt($value)
      * @method static \Illuminate\Database\Eloquent\Builder<ProdukBumdesOption>|ProdukBumdesOption whereUpdatedAt($value)
      * @method static \Illuminate\Database\Eloquent\Builder<ProdukBumdesOption>|ProdukBumdesOption newModelQuery()
@@ -7587,12 +7934,14 @@ namespace App\Models {
      *
      * @property \Illuminate\Support\Carbon|null $updated_at
      * @property \Illuminate\Support\Carbon|null $created_at
+     * @property string|null $image
      * @property string $name
      * @property int $id
      * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ProdukKetahananPangan> $produkKetahananPangans
-     * @property-read int|null $produkKetahananPangans_count
+     * @property-read int|null $produk_ketahanan_pangans_count
      * @method static \Illuminate\Database\Eloquent\Builder<ProdukKetapangOption>|ProdukKetapangOption whereId($value)
      * @method static \Illuminate\Database\Eloquent\Builder<ProdukKetapangOption>|ProdukKetapangOption whereName($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<ProdukKetapangOption>|ProdukKetapangOption whereImage($value)
      * @method static \Illuminate\Database\Eloquent\Builder<ProdukKetapangOption>|ProdukKetapangOption whereCreatedAt($value)
      * @method static \Illuminate\Database\Eloquent\Builder<ProdukKetapangOption>|ProdukKetapangOption whereUpdatedAt($value)
      * @method static \Illuminate\Database\Eloquent\Builder<ProdukKetapangOption>|ProdukKetapangOption newModelQuery()
@@ -7914,10 +8263,12 @@ namespace App\Models {
      *
      * @property \Illuminate\Support\Carbon|null $updated_at
      * @property \Illuminate\Support\Carbon|null $created_at
+     * @property string|null $image
      * @property string $name
      * @property int $id
      * @method static \Illuminate\Database\Eloquent\Builder<ProdukOption>|ProdukOption whereId($value)
      * @method static \Illuminate\Database\Eloquent\Builder<ProdukOption>|ProdukOption whereName($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<ProdukOption>|ProdukOption whereImage($value)
      * @method static \Illuminate\Database\Eloquent\Builder<ProdukOption>|ProdukOption whereCreatedAt($value)
      * @method static \Illuminate\Database\Eloquent\Builder<ProdukOption>|ProdukOption whereUpdatedAt($value)
      * @method static \Illuminate\Database\Eloquent\Builder<ProdukOption>|ProdukOption newModelQuery()
@@ -8244,7 +8595,7 @@ namespace App\Models {
      * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Kabupaten> $kabupatens
      * @property-read int|null $kabupatens_count
      * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\InfografisData> $infografisData
-     * @property-read int|null $infografisData_count
+     * @property-read int|null $infografis_data_count
      * @method static \Illuminate\Database\Eloquent\Builder<Province>|Province whereId($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Province>|Province whereName($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Province>|Province whereCreatedAt($value)
@@ -10606,12 +10957,14 @@ namespace App\Models {
      *
      * @property \Illuminate\Support\Carbon|null $updated_at
      * @property \Illuminate\Support\Carbon|null $created_at
+     * @property string|null $image
      * @property string $name
      * @property int $id
      * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\UnitUsahaAktif> $unitUsahaAktifs
-     * @property-read int|null $unitUsahaAktifs_count
+     * @property-read int|null $unit_usaha_aktifs_count
      * @method static \Illuminate\Database\Eloquent\Builder<UnitUsahaOption>|UnitUsahaOption whereId($value)
      * @method static \Illuminate\Database\Eloquent\Builder<UnitUsahaOption>|UnitUsahaOption whereName($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<UnitUsahaOption>|UnitUsahaOption whereImage($value)
      * @method static \Illuminate\Database\Eloquent\Builder<UnitUsahaOption>|UnitUsahaOption whereCreatedAt($value)
      * @method static \Illuminate\Database\Eloquent\Builder<UnitUsahaOption>|UnitUsahaOption whereUpdatedAt($value)
      * @method static \Illuminate\Database\Eloquent\Builder<UnitUsahaOption>|UnitUsahaOption newModelQuery()

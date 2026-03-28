@@ -39,12 +39,16 @@
                 <tbody>
                     @foreach($unitUsahaOptions as $opt)
                     <tr class="bg-white border-b hover:bg-gray-50">
-                        <td class="px-6 py-4 font-medium text-gray-900 group">
-                            <i class="{{ $opt->icon ?? 'fa-solid fa-tag' }} text-accent mr-2 w-5 text-center"></i>
+                        <td class="px-6 py-4 font-medium text-gray-900 group flex items-center">
+                            @if($opt->image)
+                                <img src="{{ asset('storage/'.$opt->image) }}" class="w-8 h-8 rounded object-cover mr-3 border" alt="img">
+                            @else
+                                <div class="w-8 h-8 rounded bg-gray-100 flex items-center justify-center mr-3 border text-gray-400"><i class="fa-solid fa-image"></i></div>
+                            @endif
                             <span class="data-editable underline-offset-4 decoration-dashed decoration-gray-300 hover:underline cursor-text focus:outline-none focus:bg-yellow-50 focus:ring-1 focus:ring-primary px-1 rounded transition" data-id="{{ $opt->id }}" data-type="unit_usaha" contenteditable="true" title="Klik ganda untuk mengedit langsung">{{ $opt->name }}</span>
                         </td>
                         <td class="px-6 py-4 text-right">
-                            <button onclick="editData('unit_usaha', {{ $opt->id }}, '{{ addslashes($opt->name) }}', '{{ addslashes($opt->icon ?? '') }}')" class="text-accent hover:text-yellow-600 bg-yellow-50 hover:bg-yellow-100 p-2 rounded-md transition-colors mr-1"><i class="fa-solid fa-pen"></i></button>
+                            <button onclick="editData('unit_usaha', {{ $opt->id }}, '{{ addslashes($opt->name) }}')" class="text-accent hover:text-yellow-600 bg-yellow-50 hover:bg-yellow-100 p-2 rounded-md transition-colors mr-1"><i class="fa-solid fa-pen"></i></button>
                             <form action="{{ route('superadmin.datamaster.destroy', $opt->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Yakin hapus opsi ini?');">
                                 @csrf @method('DELETE') <input type="hidden" name="type" value="unit_usaha">
                                 <button type="submit" class="text-red-500 hover:text-red-700 bg-red-50 hover:bg-red-100 p-2 rounded-md transition-colors"><i class="fa-solid fa-trash"></i></button>
@@ -67,12 +71,16 @@
                 <tbody>
                     @foreach($produkOptions as $opt)
                     <tr class="bg-white border-b hover:bg-gray-50">
-                        <td class="px-6 py-4 font-medium text-gray-900 group">
-                            <i class="{{ $opt->icon ?? 'fa-solid fa-box' }} text-accent mr-2 w-5 text-center"></i>
+                        <td class="px-6 py-4 font-medium text-gray-900 group flex items-center">
+                            @if($opt->image)
+                                <img src="{{ asset('storage/'.$opt->image) }}" class="w-8 h-8 rounded object-cover mr-3 border" alt="img">
+                            @else
+                                <div class="w-8 h-8 rounded bg-gray-100 flex items-center justify-center mr-3 border text-gray-400"><i class="fa-solid fa-image"></i></div>
+                            @endif
                             <span class="data-editable underline-offset-4 decoration-dashed decoration-gray-300 hover:underline cursor-text focus:outline-none focus:bg-yellow-50 focus:ring-1 focus:ring-primary px-1 rounded transition" data-id="{{ $opt->id }}" data-type="produk" contenteditable="true" title="Klik ganda untuk mengedit langsung">{{ $opt->name }}</span>
                         </td>
                         <td class="px-6 py-4 text-right">
-                            <button onclick="editData('produk', {{ $opt->id }}, '{{ addslashes($opt->name) }}', '{{ addslashes($opt->icon ?? '') }}')" class="text-accent hover:text-yellow-600 bg-yellow-50 hover:bg-yellow-100 p-2 rounded-md transition-colors mr-1"><i class="fa-solid fa-pen"></i></button>
+                            <button onclick="editData('produk', {{ $opt->id }}, '{{ addslashes($opt->name) }}')" class="text-accent hover:text-yellow-600 bg-yellow-50 hover:bg-yellow-100 p-2 rounded-md transition-colors mr-1"><i class="fa-solid fa-pen"></i></button>
                             <form action="{{ route('superadmin.datamaster.destroy', $opt->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Yakin hapus opsi ini?');">
                                 @csrf @method('DELETE') <input type="hidden" name="type" value="produk">
                                 <button type="submit" class="text-red-500 hover:text-red-700 bg-red-50 hover:bg-red-100 p-2 rounded-md transition-colors"><i class="fa-solid fa-trash"></i></button>
@@ -95,12 +103,16 @@
                 <tbody>
                     @foreach($ketapangOptions as $opt)
                     <tr class="bg-white border-b hover:bg-gray-50">
-                        <td class="px-6 py-4 font-medium text-gray-900 group">
-                            <i class="{{ $opt->icon ?? 'fa-solid fa-wheat-awn' }} text-accent mr-2 w-5 text-center"></i>
+                        <td class="px-6 py-4 font-medium text-gray-900 group flex items-center">
+                            @if($opt->image)
+                                <img src="{{ asset('storage/'.$opt->image) }}" class="w-8 h-8 rounded object-cover mr-3 border" alt="img">
+                            @else
+                                <div class="w-8 h-8 rounded bg-gray-100 flex items-center justify-center mr-3 border text-gray-400"><i class="fa-solid fa-image"></i></div>
+                            @endif
                             <span class="data-editable underline-offset-4 decoration-dashed decoration-gray-300 hover:underline cursor-text focus:outline-none focus:bg-yellow-50 focus:ring-1 focus:ring-primary px-1 rounded transition" data-id="{{ $opt->id }}" data-type="ketapang" contenteditable="true" title="Klik ganda untuk mengedit langsung">{{ $opt->name }}</span>
                         </td>
                         <td class="px-6 py-4 text-right">
-                            <button onclick="editData('ketapang', {{ $opt->id }}, '{{ addslashes($opt->name) }}', '{{ addslashes($opt->icon ?? '') }}')" class="text-accent hover:text-yellow-600 bg-yellow-50 hover:bg-yellow-100 p-2 rounded-md transition-colors mr-1"><i class="fa-solid fa-pen"></i></button>
+                            <button onclick="editData('ketapang', {{ $opt->id }}, '{{ addslashes($opt->name) }}')" class="text-accent hover:text-yellow-600 bg-yellow-50 hover:bg-yellow-100 p-2 rounded-md transition-colors mr-1"><i class="fa-solid fa-pen"></i></button>
                             <form action="{{ route('superadmin.datamaster.destroy', $opt->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Yakin hapus opsi ini?');">
                                 @csrf @method('DELETE') <input type="hidden" name="type" value="ketapang">
                                 <button type="submit" class="text-red-500 hover:text-red-700 bg-red-50 hover:bg-red-100 p-2 rounded-md transition-colors"><i class="fa-solid fa-trash"></i></button>
@@ -123,12 +135,16 @@
                 <tbody>
                     @foreach($mitraOptions as $opt)
                     <tr class="bg-white border-b hover:bg-gray-50">
-                        <td class="px-6 py-4 font-medium text-gray-900 group">
-                            <i class="{{ $opt->icon ?? 'fa-solid fa-handshake' }} text-accent mr-2 w-5 text-center"></i>
+                        <td class="px-6 py-4 font-medium text-gray-900 group flex items-center">
+                            @if($opt->image)
+                                <img src="{{ asset('storage/'.$opt->image) }}" class="w-8 h-8 rounded object-cover mr-3 border" alt="img">
+                            @else
+                                <div class="w-8 h-8 rounded bg-gray-100 flex items-center justify-center mr-3 border text-gray-400"><i class="fa-solid fa-image"></i></div>
+                            @endif
                             <span class="data-editable underline-offset-4 decoration-dashed decoration-gray-300 hover:underline cursor-text focus:outline-none focus:bg-yellow-50 focus:ring-1 focus:ring-primary px-1 rounded transition" data-id="{{ $opt->id }}" data-type="mitra" contenteditable="true" title="Klik ganda untuk mengedit langsung">{{ $opt->name }}</span>
                         </td>
                         <td class="px-6 py-4 text-right">
-                            <button onclick="editData('mitra', {{ $opt->id }}, '{{ addslashes($opt->name) }}', '{{ addslashes($opt->icon ?? '') }}')" class="text-accent hover:text-yellow-600 bg-yellow-50 hover:bg-yellow-100 p-2 rounded-md transition-colors mr-1"><i class="fa-solid fa-pen"></i></button>
+                            <button onclick="editData('mitra', {{ $opt->id }}, '{{ addslashes($opt->name) }}')" class="text-accent hover:text-yellow-600 bg-yellow-50 hover:bg-yellow-100 p-2 rounded-md transition-colors mr-1"><i class="fa-solid fa-pen"></i></button>
                             <form action="{{ route('superadmin.datamaster.destroy', $opt->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Yakin hapus opsi ini?');">
                                 @csrf @method('DELETE') <input type="hidden" name="type" value="mitra">
                                 <button type="submit" class="text-red-500 hover:text-red-700 bg-red-50 hover:bg-red-100 p-2 rounded-md transition-colors"><i class="fa-solid fa-trash"></i></button>
@@ -149,7 +165,7 @@
             <h3 class="text-xl font-bold text-gray-900">Tambah Data Kategori</h3>
             <button onclick="document.getElementById('modal-add').classList.add('hidden')" class="text-gray-400 hover:text-gray-900 text-2xl font-bold">&times;</button>
         </div>
-        <form action="{{ route('superadmin.datamaster.store') }}" method="POST" class="space-y-4">
+        <form action="{{ route('superadmin.datamaster.store') }}" method="POST" enctype="multipart/form-data" class="space-y-4">
             @csrf
             <div>
                 <label class="block text-sm font-medium text-gray-700">Tipe Data Master</label>
@@ -165,9 +181,9 @@
                 <input type="text" name="name" required placeholder="Cth: Pertanian & Perkebunan" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm border p-2">
             </div>
             <div>
-                <label class="block text-sm font-medium text-gray-700">Ikon FontAwesome (Opsional)</label>
-                <input type="text" name="icon" placeholder="Cth: fa-solid fa-leaf" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm border p-2 font-mono">
-                <p class="text-xs text-gray-500 mt-1">Cari ikon di <a href="https://fontawesome.com/search?o=r&m=free" target="_blank" class="text-primary hover:underline">FontAwesome Free</a></p>
+                <label class="block text-sm font-medium text-gray-700">Gambar (Opsional)</label>
+                <input type="file" name="image" accept="image/*" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm border p-2">
+                <p class="text-xs text-gray-500 mt-1">Upload gambar kategori, max 2MB.</p>
             </div>
             
             <div class="pt-4 border-t flex justify-end gap-2">
@@ -185,7 +201,7 @@
             <h3 class="text-xl font-bold text-gray-900">Ubah Data Kategori</h3>
             <button onclick="document.getElementById('modal-edit').classList.add('hidden')" class="text-gray-400 hover:text-gray-900 text-2xl font-bold">&times;</button>
         </div>
-        <form id="form-edit" method="POST" class="space-y-4">
+        <form id="form-edit" method="POST" enctype="multipart/form-data" class="space-y-4">
             @csrf
             @method('PUT')
             <input type="hidden" name="type" id="edit-type">
@@ -194,8 +210,8 @@
                 <input type="text" name="name" id="edit-name" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm border p-2">
             </div>
             <div>
-                <label class="block text-sm font-medium text-gray-700">Ikon FontAwesome</label>
-                <input type="text" name="icon" id="edit-icon" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm border p-2 font-mono">
+                <label class="block text-sm font-medium text-gray-700">Ubah Gambar (Biarkan kosong jika tidak diubah)</label>
+                <input type="file" name="image" accept="image/*" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm border p-2">
             </div>
             
             <div class="pt-4 border-t flex justify-end gap-2">
@@ -207,11 +223,10 @@
 </div>
 
 <script>
-    function editData(type, id, name, icon) {
+    function editData(type, id, name) {
         document.getElementById('form-edit').action = `/superadmin/datamaster/${id}`;
         document.getElementById('edit-type').value = type;
         document.getElementById('edit-name').value = name;
-        document.getElementById('edit-icon').value = icon;
         document.getElementById('modal-edit').classList.remove('hidden');
     }
 

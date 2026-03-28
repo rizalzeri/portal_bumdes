@@ -26,7 +26,16 @@
                 <div class="grid grid-cols-2 gap-4">
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Kecamatan <span class="text-red-500">*</span></label>
-                        <input type="text" name="kecamatan" value="{{ old('kecamatan', $bumde->kecamatan) }}" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm border p-2">
+                        <select name="kecamatan" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm border p-2">
+                            <option value="">-- Pilih Kecamatan --</option>
+                            @foreach($kecamatans as $kec)
+                                <option value="{{ $kec->name }}" {{ old('kecamatan', $bumde->kecamatan) == $kec->name ? 'selected' : '' }}>{{ $kec->name }}</option>
+                            @endforeach
+                        </select>
+                        @if($kecamatans->isEmpty())
+                        <div class="text-xs text-red-500 mt-1">Belum ada data kecamatan! Silakan <a href="{{ route('adminkab.kecamatan.index') }}" class="underline font-bold">Daftarkan Kecamatan</a> terlebih dahulu.</div>
+                        @endif
+                        @error('kecamatan') <span class="text-xs text-red-500">{{ $message }}</span> @enderror
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Desa <span class="text-red-500">*</span></label>
@@ -39,16 +48,7 @@
         <div>
             <h3 class="font-bold text-gray-900 border-l-4 border-accent pl-3 mb-4"><i class="fa-solid fa-stamp mr-2 text-accent"></i> Validasi Sistem</h3>
             <div class="space-y-4 px-3">
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">Klasifikasi BUMDesa</label>
-                        <select name="klasifikasi" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm border p-2">
-                            <option value="">-- Belum Dinilai --</option>
-                            <option value="Dasar" {{ old('klasifikasi', $bumde->klasifikasi) == 'Dasar' ? 'selected' : '' }}>Dasar</option>
-                            <option value="Berkembang" {{ old('klasifikasi', $bumde->klasifikasi) == 'Berkembang' ? 'selected' : '' }}>Berkembang</option>
-                            <option value="Maju" {{ old('klasifikasi', $bumde->klasifikasi) == 'Maju' ? 'selected' : '' }}>Maju</option>
-                        </select>
-                    </div>
+                <div class="grid grid-cols-1 gap-4">
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Status Sistem BUMDesa <span class="text-red-500">*</span></label>
                         <select name="status" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm border p-2 @if($bumde->status === 'inactive') bg-red-50 border-red-300 @endif">

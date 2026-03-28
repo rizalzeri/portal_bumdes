@@ -25,7 +25,15 @@
                 <div class="grid grid-cols-2 gap-4">
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Kecamatan <span class="text-red-500">*</span></label>
-                        <input type="text" name="kecamatan" value="{{ old('kecamatan') }}" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm border p-2">
+                        <select name="kecamatan" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm border p-2">
+                            <option value="">-- Pilih Kecamatan --</option>
+                            @foreach($kecamatans as $kec)
+                                <option value="{{ $kec->name }}" {{ old('kecamatan') == $kec->name ? 'selected' : '' }}>{{ $kec->name }}</option>
+                            @endforeach
+                        </select>
+                        @if($kecamatans->isEmpty())
+                        <div class="text-xs text-red-500 mt-1">Belum ada data kecamatan! Silakan <a href="{{ route('adminkab.kecamatan.index') }}" class="underline font-bold">Daftarkan Kecamatan</a> terlebih dahulu.</div>
+                        @endif
                         @error('kecamatan') <span class="text-xs text-red-500">{{ $message }}</span> @enderror
                     </div>
                     <div>

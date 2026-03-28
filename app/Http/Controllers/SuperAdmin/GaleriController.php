@@ -27,30 +27,31 @@ class GaleriController extends Controller
     {
         $request->validate([
             'title' => 'required|string|max:255',
-            'type' => 'required|in:photo,video',
-            'image_url' => 'required_if:type,photo|nullable|image|max:5120',
-            'video_url' => 'required_if:type,video|nullable|url',
+            'image' => 'required|image|max:5120',
+            'description' => 'nullable|string',
+            'event_date' => 'nullable|date',
         ]);
 
         $imagePath = null;
-        if ($request->hasFile('image_url')) {
-            $imagePath = $request->file('image_url')->store('gallery', 'public');
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('galeri', 'public');
         }
 
-        Gallery::create([
+        \App\Models\Galeri::create([
             'title' => $request->title,
-            'type' => $request->type,
-            'image_url' => $imagePath,
-            'video_url' => $request->video_url,
+            'type' => 'portal',
+            'image' => $imagePath,
+            'description' => $request->description,
+            'event_date' => $request->event_date,
         ]);
 
         return redirect()->route('superadmin.galeri.index')->with('success', 'Media galeri berhasil ditambahkan.');
     }
 
-    public function destroy(Gallery $galeri)
+    public function destroy(\App\Models\Galeri $galeri)
     {
-        if ($galeri->image_url && Storage::disk('public')->exists($galeri->image_url)) {
-            Storage::disk('public')->delete($galeri->image_url);
+        if ($galeri->image && Storage::disk('public')->exists($galeri->image)) {
+            Storage::disk('public')->delete($galeri->image);
         }
         $galeri->delete();
 

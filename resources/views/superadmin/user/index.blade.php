@@ -166,7 +166,7 @@
     function toggleKabupaten(selectId, divId) {
         const val = document.getElementById(selectId).value;
         const div = document.getElementById(divId);
-        if(val === 'admin_kabupaten') {
+        if(val === 'admin_kabupaten' || val === 'user') {
             div.classList.remove('hidden');
         } else {
             div.classList.add('hidden');

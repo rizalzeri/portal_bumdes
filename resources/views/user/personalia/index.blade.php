@@ -5,11 +5,15 @@
 <div class="mb-6 flex justify-between items-center">
     <div>
         <h2 class="text-2xl font-bold text-gray-800">Personalia BUMDesa</h2>
-        <p class="text-gray-500 text-sm mt-1">Daftarkan Kepala Desa (Penasihat), Direkturutama, Sekretaris, Bendahara, dan Pengawas BUMDesa.</p>
+        <p class="text-gray-500 text-sm mt-1">Daftarkan Kepala Desa (Penasihat), Direkturutama, Sekretaris, Bendahara, dan Pengawas BUMDesa (Maks. 5).</p>
     </div>
+    @if($pengurus->count() < 5)
     <button onclick="document.getElementById('modal-add').classList.remove('hidden')" class="bg-primary hover:bg-primary-900 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-colors shadow-sm">
         <i class="fa-solid fa-user-plus mr-2"></i> Tambah Pengurus
     </button>
+    @else
+    <span class="text-sm text-red-500 font-bold bg-red-50 py-2 px-3 rounded-lg"><i class="fa-solid fa-lock text-red-400 mr-2"></i> Kuota Pengurus Penuh</span>
+    @endif
 </div>
 
 <!-- Tampilan Struktur ala Card (lebih rapi untuk organigram list) -->
@@ -37,16 +41,8 @@
             <div class="text-xs text-gray-500 mb-3 bg-gray-50 px-2 py-1 rounded-md"><i class="fa-solid fa-phone mr-1"></i> {{ $p->phone }}</div>
             @endif
             
-            <div class="mt-auto w-full pt-3 border-t flex justify-center gap-2">
-                <button onclick="editPengurus({{ $p->id }}, '{{ addslashes($p->name) }}', '{{ addslashes($p->role) }}', '{{ addslashes($p->phone ?? '') }}')" class="text-xs text-white bg-yellow-500 hover:bg-yellow-600 px-3 py-1.5 rounded-md transition-colors font-medium">
-                    <i class="fa-solid fa-pen mr-1"></i> Edit
-                </button>
-                <form action="{{ route('user.personalia.destroy', $p->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Hapus profil pengurus ini?');">
-                    @csrf @method('DELETE')
-                    <button type="submit" class="text-xs text-white bg-red-500 hover:bg-red-600 px-3 py-1.5 rounded-md transition-colors font-medium">
-                        <i class="fa-solid fa-trash mr-1"></i> Hapus
-                    </button>
-                </form>
+            <div class="mt-auto w-full pt-3 border-t text-center text-xs text-gray-400">
+                Data yang tersimpan tidak dapat diubah (Read-only)
             </div>
         </div>
     @empty

@@ -21,7 +21,6 @@
                         <th class="px-6 py-3">Nama BUMDesa</th>
                         <th class="px-6 py-3">Kecamatan / Desa</th>
                         <th class="px-6 py-3">User & Kontak</th>
-                        <th class="px-6 py-3">Klasifikasi</th>
                         <th class="px-6 py-3">Status Sistem</th>
                         <th class="px-6 py-3 text-right">Aksi</th>
                     </tr>
@@ -42,20 +41,6 @@
                                 <div class="font-medium text-primary">{{ $b->user->email ?? 'Tanpa Akun' }}</div>
                                 <div class="text-xs text-gray-500 mt-1"><i class="fa-solid fa-phone mr-1"></i>
                                     {{ $b->phone ?? '-' }}</div>
-                            </td>
-                            <td class="px-6 py-4">
-                                @if ($b->klasifikasi == 'Dasar')
-                                    <span
-                                        class="bg-orange-100 text-orange-800 text-xs font-semibold px-2.5 py-0.5 rounded border border-orange-200 uppercase">Dasar</span>
-                                @elseif($b->klasifikasi == 'Berkembang')
-                                    <span
-                                        class="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded border border-blue-200 uppercase">Berkembang</span>
-                                @elseif($b->klasifikasi == 'Maju')
-                                    <span
-                                        class="bg-green-100 text-green-800 text-xs font-semibold px-2.5 py-0.5 rounded border border-green-200 uppercase">Maju</span>
-                                @else
-                                    <span class="text-gray-400 text-xs italic">Belum dinilai</span>
-                                @endif
                             </td>
                             <td class="px-6 py-4">
                                 @if ($b->is_active || $b->status === 'active')

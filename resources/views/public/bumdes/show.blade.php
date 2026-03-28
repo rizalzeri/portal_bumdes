@@ -23,7 +23,7 @@
                             class="fa-solid {{ $bumdes->status === 'active' ? 'fa-circle-check' : 'fa-circle-xmark' }} mr-2"></i>
                         Status BUMDesa: {{ $bumdes->status === 'active' ? 'Aktif' : 'Tidak Aktif' }}
                     </span>
-                    <h1 class="text-3xl md:text-5xl font-extrabold mb-4">BUMDesa "{{ $bumdes->name }}" Desa</h1>
+                    <h1 class="text-3xl md:text-5xl font-extrabold mb-4">BUMDesa {{ $bumdes->name }} Desa {{ $bumdes->desa ?? '' }}</h1>
                     <div
                         class="flex flex-col sm:flex-row flex-wrap gap-4 justify-center md:justify-start text-blue-100 text-sm md:text-base">
                         <div class="flex items-center"><i class="fa-solid fa-map-location-dot w-5 text-accent"></i>
@@ -93,12 +93,11 @@
                 @if ($bumdes->unitUsahaAktifs->isEmpty())
                     <p class="text-sm text-gray-500 italic">Belum ada unit usaha didaftarkan.</p>
                 @else
-                    <div class="flex flex-wrap gap-3">
+                    <div class="flex flex-wrap gap-4 mt-2">
                         @foreach ($bumdes->unitUsahaAktifs as $unit)
-                            <span
-                                class="bg-blue-100 text-blue-800 text-xs font-bold px-4 py-2 rounded-full border border-blue-200">
+                            <div class="border-2 border-primary bg-blue-50 text-primary text-xl font-bold px-6 py-3 rounded-lg shadow-sm">
                                 {{ $unit->unitUsahaOption->name ?? $unit->sektor }}
-                            </span>
+                            </div>
                         @endforeach
                     </div>
                 @endif
@@ -154,7 +153,7 @@
             <!-- 4. Produk Desa -->
             <div class="bg-white rounded-xl shadow-sm border p-6" id="produk-desa">
                 <h2 class="text-2xl font-bold text-primary border-b pb-2 mb-6"><i
-                        class="fa-solid fa-box-open mr-2 text-accent"></i> Produk Desa</h2>
+                        class="fa-solid fa-box-open mr-2 text-accent"></i> Produk BUMDesa / Desa</h2>
                 @if ($bumdes->katalogProduks->isEmpty())
                     <div class="text-center py-8 text-gray-400 border border-dashed rounded-lg">
                         <i class="fa-solid fa-box text-3xl mb-2"></i>
@@ -210,7 +209,7 @@
                                     <i class="fa-solid fa-wheat-awn"></i>
                                 </div>
                                 <span
-                                    class="text-xs font-bold text-gray-500 uppercase tracking-tighter mb-1">Kategori</span>
+                                    class="text-xs font-bold text-gray-500 uppercase tracking-tighter mb-1">Komoditas</span>
                                 <h4 class="font-black text-primary uppercase text-sm mb-2">
                                     {{ $pangan->produkKetapangOption->name ?? 'Pangan' }}</h4>
 
@@ -226,37 +225,74 @@
             </div>
 
             <!-- 6. Kinerja & Capaian -->
-            <div class="bg-white rounded-xl shadow-sm border p-6" id="kinerja-capaian">
+            <div class="bg-white rounded-xl shadow-sm border p-6" id="kinerja-capaian" x-data="kinerjaBumdesData()">
                 <h3 class="text-2xl font-bold text-primary border-b pb-2 mb-6"><i class="fa-solid fa-chart-line mr-2 text-accent"></i> Kinerja & Capaian</h3>
                 
-                @if ($bumdes->kinerjaCapaians->isEmpty())
+                @if (empty($kinerjaTahunan))
                     <div class="text-center py-8 text-gray-400 border border-dashed rounded-lg">
                         <i class="fa-solid fa-chart-line text-3xl mb-2"></i>
-                        <p>Belum ada data kinerja yang dipublikasikan.</p>
+                        <p>Belum ada data laporan keuangan untuk menampilkan kinerja.</p>
                     </div>
                 @else
-                    <div class="space-y-6">
-                        @php
-                            $kinerjaGrouped = $bumdes->kinerjaCapaians->sortByDesc('year')->groupBy('year');
-                        @endphp
-                        
-                        @foreach($kinerjaGrouped as $year => $items)
-                        <div class="border rounded-lg overflow-hidden">
-                            <div class="bg-gray-50 px-4 py-3 border-b font-bold text-gray-800 flex justify-between items-center">
-                                <span>Periode Tahun {{ $year }}</span>
-                            </div>
-                            <div class="p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                                @foreach($items as $item)
-                                <div class="bg-white border p-3 rounded-lg shadow-sm hover:shadow-md transition">
-                                    <span class="text-[10px] uppercase font-bold text-gray-400 block mb-1">{{ $item->description }}</span>
-                                    <h5 class="text-sm font-bold text-gray-900 mb-2">{{ $item->title }}</h5>
-                                    <p class="text-base font-mono text-primary font-bold">Rp {{ number_format($item->value, 0, ',', '.') }}</p>
-                                </div>
-                                @endforeach
-                            </div>
-                        </div>
-                        @endforeach
+                    <div class="bg-gray-50 rounded-xl border border-gray-200 px-5 py-3 shadow-sm mb-8 flex items-center gap-4 text-gray-900 w-full sm:w-1/3">
+                        <label class="font-bold text-sm text-gray-600 whitespace-nowrap">Periode :</label>
+                        <select x-model="selectedTahun" class="border border-gray-300 rounded-lg px-4 py-1.5 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-primary w-full bg-white">
+                            <template x-for="tahun in getReverseTahunList()" :key="tahun">
+                                <option :value="tahun" x-text="tahun"></option>
+                            </template>
+                        </select>
                     </div>
+
+                    <!-- Hasil Pemeringkatan -->
+                    <h4 class="text-md font-bold text-gray-900 mb-4">1. Hasil Pemeringkatan</h4>
+                    <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 mb-8 max-w-sm flex flex-col">
+                        <span class="text-xs font-semibold text-gray-400 mb-1 block">Klasifikasi</span>
+                        <span class="text-2xl font-black text-primary">{{ $bumdes->klasifikasi ?? 'Perintis' }}</span>
+                    </div>
+
+                    <!-- Kegiatan Reguler -->
+                    <h4 class="text-md font-bold text-gray-900 mb-4">2. Kegiatan Reguler</h4>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-2">
+                        <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
+                            <span class="text-xs font-semibold text-gray-400 mb-1 block tracking-wide uppercase">Omset</span>
+                            <span class="text-xl font-black text-primary" x-text="'Rp ' + formatRupiah(getCurrentData().reguler.omset)"></span>
+                        </div>
+                        <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
+                            <span class="text-xs font-semibold text-gray-400 mb-1 block tracking-wide uppercase">Laba</span>
+                            <span class="text-xl font-black text-primary" x-text="'Rp ' + formatRupiah(getCurrentData().reguler.laba)"></span>
+                        </div>
+                        <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
+                            <span class="text-xs font-semibold text-gray-400 mb-1 block tracking-wide uppercase">PADes</span>
+                            <span class="text-xl font-black text-primary" x-text="'Rp ' + formatRupiah(getCurrentData().reguler.pades)"></span>
+                        </div>
+                        <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
+                            <span class="text-xs font-semibold text-gray-400 mb-1 block tracking-wide uppercase">Aset</span>
+                            <span class="text-xl font-black text-primary" x-text="'Rp ' + formatRupiah(getCurrentData().reguler.aset)"></span>
+                        </div>
+                    </div>
+                    <p class="text-xs text-gray-400 mb-8 italic ml-1">Akumulasi dari laporan dokumen BUMDesa</p>
+
+                    <!-- Kegiatan Ketahanan Pangan -->
+                    <h4 class="text-md font-bold text-gray-900 mb-4">3. Kegiatan Ketahanan Pangan</h4>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-2">
+                        <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
+                            <span class="text-xs font-semibold text-gray-400 mb-1 block tracking-wide uppercase">Omset</span>
+                            <span class="text-xl font-black text-primary" x-text="'Rp ' + formatRupiah(getCurrentData().ketapang.omset)"></span>
+                        </div>
+                        <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
+                            <span class="text-xs font-semibold text-gray-400 mb-1 block tracking-wide uppercase">Laba</span>
+                            <span class="text-xl font-black text-primary" x-text="'Rp ' + formatRupiah(getCurrentData().ketapang.laba)"></span>
+                        </div>
+                        <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
+                            <span class="text-xs font-semibold text-gray-400 mb-1 block tracking-wide uppercase">PADes</span>
+                            <span class="text-xl font-black text-primary" x-text="'Rp ' + formatRupiah(getCurrentData().ketapang.pades)"></span>
+                        </div>
+                        <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
+                            <span class="text-xs font-semibold text-gray-400 mb-1 block tracking-wide uppercase">Aset</span>
+                            <span class="text-xl font-black text-primary" x-text="'Rp ' + formatRupiah(getCurrentData().ketapang.aset)"></span>
+                        </div>
+                    </div>
+                    <p class="text-xs text-gray-400 italic ml-1 mb-4">Akumulasi dari laporan dokumen BUMDesa</p>
                 @endif
             </div>
 
@@ -321,7 +357,14 @@
             </div>
 
             <!-- 9. Galeri Kegiatan -->
-            <div class="bg-white rounded-xl shadow-sm border p-6" id="galeri-kegiatan">
+            <div class="bg-white rounded-xl shadow-sm border p-6" id="galeri-kegiatan" x-data="{ imgModal: false, imgModalSrc: '' }">
+                <!-- Modal -->
+                <template x-if="imgModal">
+                    <div @click="imgModal = false" class="fixed inset-0 z-[100] flex items-center justify-center bg-black bg-opacity-90 p-4 cursor-zoom-out duration-300 transition-opacity">
+                        <img :src="imgModalSrc" class="max-h-full max-w-full rounded-lg shadow-2xl">
+                    </div>
+                </template>
+
                 <h3 class="text-2xl font-bold text-primary border-b pb-2 mb-6"><i
                         class="fa-solid fa-images mr-2 text-accent"></i> Galeri Kegiatan BUMDesa</h3>
                 @if ($bumdes->galeris->isEmpty())
@@ -329,7 +372,8 @@
                 @else
                     <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
                         @foreach ($bumdes->galeris as $galeri)
-                            <div class="relative group rounded-xl overflow-hidden shadow-sm hover:shadow-md transition">
+                            <div class="relative group rounded-xl overflow-hidden shadow-sm hover:shadow-md transition cursor-zoom-in"
+                                 @click="imgModalSrc = '{{ asset('storage/' . $galeri->image) }}'; imgModal = true;">
                                 <img src="{{ asset('storage/' . $galeri->image) }}"
                                     class="w-full h-40 object-cover group-hover:scale-110 transition duration-300">
                                 <div
@@ -343,68 +387,55 @@
                 @endif
             </div>
 
-            <!-- 10. Kabar & Opini -->
-            @if ($bumdes->pengumuman->count() > 0 || $bumdes->artikels->count() > 0)
-                <div class="bg-white rounded-xl shadow-sm border p-6" id="kabar-opini">
-                    <h2 class="text-2xl font-bold text-primary mb-6"><i
-                            class="fa-solid fa-newspaper mr-2 text-accent"></i> Kabar & Opini BUMDesa</h2>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <!-- Pengumuman -->
-                        <div>
-                            <h3 class="font-bold text-lg mb-4 text-accent"><i class="fa-solid fa-bullhorn mr-2"></i>
-                                Pengumuman Terbaru</h3>
-                            <div class="space-y-4">
-                                @forelse($bumdes->pengumuman->sortByDesc('created_at')->take(3) as $umum)
-                                    <div class="border rounded-lg p-4 bg-gray-50 hover:shadow transition">
-                                        <h4 class="font-bold text-gray-900">{{ $umum->title }}</h4>
-                                        <p class="text-[10px] font-bold text-accent uppercase tracking-wider mt-1">
-                                            @if ($umum->bumdes)
-                                                {{ $umum->bumdes->name }}
-                                            @elseif($umum->type === 'kabupaten' && $umum->kabupaten)
-                                                Portal {{ $umum->kabupaten->name }}
-                                            @else
-                                                Portal Pusat
-                                            @endif
-                                        </p>
-                                        <p class="text-xs text-gray-400 mb-2">
-                                            {{ $umum->created_at->translatedFormat('d F Y') }}</p>
-                                        <p class="text-sm text-gray-700 line-clamp-2">
-                                            {{ Str::limit(strip_tags($umum->content), 100) }}</p>
-                                    </div>
-                                @empty
-                                    <p class="text-sm text-gray-500 italic">Belum ada pengumuman.</p>
-                                @endforelse
-                            </div>
-                        </div>
-
-                        <!-- Artikel -->
-                        <div>
-                            <h3 class="font-bold text-lg mb-4 text-accent"><i class="fa-solid fa-pen-nib mr-2"></i>
-                                Artikel & Opini</h3>
-                            <div class="space-y-4">
-                                @forelse($bumdes->artikels->sortByDesc('created_at')->take(3) as $art)
-                                    <div class="border rounded-lg p-4 bg-gray-50 hover:shadow transition flex gap-4">
-                                        @if ($art->image)
-                                            <div
-                                                class="w-20 h-20 flex-shrink-0 bg-gray-200 rounded-lg overflow-hidden hidden sm:block">
-                                                <img src="{{ asset('storage/' . $art->image) }}"
-                                                    class="w-full h-full object-cover">
-                                            </div>
+            <!-- 10. Papan Pengumuman -->
+            @if ($bumdes->pengumuman->count() > 0)
+                <div class="bg-white rounded-xl shadow-sm border p-6" id="papan-pengumuman">
+                    <h2 class="text-2xl font-bold text-primary mb-6"><i class="fa-solid fa-bullhorn mr-2 text-accent"></i> Papan Pengumuman BUMDesa</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        @foreach($bumdes->pengumuman->sortByDesc('created_at')->take(3) as $umum)
+                            <div class="border rounded-lg p-5 bg-gray-50 hover:shadow-md transition">
+                                <h4 class="font-bold text-gray-900 text-lg mb-2">{{ $umum->title }}</h4>
+                                <div class="flex items-center gap-2 mb-3">
+                                    <span class="text-[10px] font-bold text-white bg-accent px-2 py-1 rounded-full uppercase tracking-wider">
+                                        @if ($umum->bumdes)
+                                            {{ $umum->bumdes->name }}
+                                        @elseif($umum->type === 'kabupaten' && $umum->kabupaten)
+                                            Portal {{ $umum->kabupaten->name }}
+                                        @else
+                                            Portal Pusat
                                         @endif
-                                        <div>
-                                            <h4 class="font-bold text-gray-900 line-clamp-1">{{ $art->title }}</h4>
-                                            <p class="text-xs text-gray-500 mt-1 mb-2">
-                                                {{ $art->created_at->translatedFormat('d F Y') }} |
-                                                {{ $art->author ?? 'Admin' }}</p>
-                                            <p class="text-sm text-gray-700 line-clamp-2">
-                                                {{ Str::limit(strip_tags($art->content), 80) }}</p>
-                                        </div>
-                                    </div>
-                                @empty
-                                    <p class="text-sm text-gray-500 italic">Belum ada artikel.</p>
-                                @endforelse
+                                    </span>
+                                    <span class="text-xs text-gray-400"><i class="fa-regular fa-clock mr-1"></i> {{ $umum->created_at->translatedFormat('d F Y') }}</span>
+                                </div>
+                                <p class="text-sm text-gray-700 line-clamp-3">{{ Str::limit(strip_tags($umum->content), 150) }}</p>
                             </div>
-                        </div>
+                        @endforeach
+                    </div>
+                </div>
+            @endif
+
+            <!-- 11. Artikel & Opini -->
+            @if ($bumdes->artikels->count() > 0)
+                <div class="bg-white rounded-xl shadow-sm border p-6" id="artikel-opini">
+                    <h2 class="text-2xl font-bold text-primary mb-6"><i class="fa-solid fa-pen-nib mr-2 text-accent"></i> Artikel dan Opini BUMDesa</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        @foreach($bumdes->artikels->sortByDesc('created_at')->take(4) as $art)
+                            <div class="border rounded-lg p-4 bg-gray-50 hover:shadow-md transition flex flex-col sm:flex-row gap-4">
+                                @if ($art->image)
+                                    <div class="w-full sm:w-32 h-32 flex-shrink-0 bg-gray-200 rounded-lg overflow-hidden">
+                                        <img src="{{ asset('storage/' . $art->image) }}" class="w-full h-full object-cover">
+                                    </div>
+                                @endif
+                                <div class="flex flex-col">
+                                    <h4 class="font-bold text-gray-900 text-lg leading-tight mb-2 line-clamp-2">{{ $art->title }}</h4>
+                                    <div class="flex items-center text-xs text-gray-500 mb-2 gap-3">
+                                        <span><i class="fa-regular fa-calendar mr-1"></i> {{ $art->created_at->translatedFormat('d F Y') }}</span>
+                                        <span><i class="fa-solid fa-user-pen mr-1"></i> {{ $art->author ?? 'Admin' }}</span>
+                                    </div>
+                                    <p class="text-sm text-gray-700 line-clamp-2 mt-auto">{{ Str::limit(strip_tags($art->content), 100) }}</p>
+                                </div>
+                            </div>
+                        @endforeach
                     </div>
                 </div>
             @endif
@@ -413,3 +444,63 @@
     </div>
 
 @endsection
+
+@push('scripts')
+<script>
+    document.addEventListener('alpine:init', () => {
+        Alpine.data('kinerjaBumdesData', () => ({
+            rawData: @json($kinerjaTahunan ?? []),
+            selectedTahun: new Date().getFullYear(),
+            
+            getReverseTahunList() {
+                const currentYear = new Date().getFullYear();
+                if (!this.rawData || this.rawData.length === 0) {
+                    return [currentYear];
+                }
+                const years = this.rawData.map(v => parseInt(v.thn));
+                if (!years.includes(currentYear)) {
+                    years.push(currentYear);
+                }
+                return [...new Set(years)].sort((a,b) => b-a);
+            },
+            
+            getCurrentData() {
+                let yearData = this.rawData.find(d => parseInt(d.thn) === parseInt(this.selectedTahun));
+                if(!yearData) {
+                    yearData = { omset: 0, aset: 0, pades: 0 };
+                }
+                
+                let omset = parseFloat(yearData.omset || 0);
+                let pades = parseFloat(yearData.pades || 0);
+                let aset = parseFloat(yearData.aset || 0);
+                
+                // Similar proportion logic for displaying Kinerja (85% regular, 15% ketapang)
+                let laba = pades * (100/30);
+                
+                return {
+                    reguler: {
+                        omset: Math.round(omset * 0.85),
+                        laba: Math.round(laba * 0.85), 
+                        pades: Math.round(pades * 0.85),
+                        aset: Math.round(aset * 0.85)
+                    },
+                    ketapang: {
+                        omset: Math.round(omset * 0.15),
+                        laba: Math.round(laba * 0.15),
+                        pades: Math.round(pades * 0.15),
+                        aset: Math.round(aset * 0.15)
+                    }
+                }
+            },
+            
+            formatRupiah(value) {
+                if (value === 0 || !value) return '0';
+                const num = parseFloat(value);
+                if (num >= 1000000000) return (num / 1000000000).toLocaleString('id-ID', {minimumFractionDigits: 1, maximumFractionDigits: 1}) + ' M';
+                if (num >= 1000000) return (num / 1000000).toLocaleString('id-ID', {minimumFractionDigits: 1, maximumFractionDigits: 1}) + ' Jt';
+                return num.toLocaleString('id-ID');
+            }
+        }))
+    });
+</script>
+@endpush
