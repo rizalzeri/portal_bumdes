@@ -5,7 +5,7 @@
 <div class="mb-6 flex justify-between items-center">
     <div>
         <h2 class="text-2xl font-bold text-gray-800">Manajemen Pengguna</h2>
-        <p class="text-gray-500 text-sm mt-1">Kelola akun Super Admin, Admin Kabupaten, dan Pengguna BUMDesa.</p>
+        <p class="text-gray-500 text-sm mt-1">Kelola akun Operator, Admin Kabupaten, dan Pengguna BUMDesa.</p>
     </div>
     <button onclick="document.getElementById('modal-add').classList.remove('hidden')" class="bg-primary hover:bg-primary-900 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-colors shadow-sm">
         <i class="fa-solid fa-plus mr-2"></i> Tambah Pengguna
@@ -34,7 +34,7 @@
                     </td>
                     <td class="px-6 py-4">
                         @if($user->role === 'superadmin')
-                            <span class="bg-purple-100 text-purple-800 text-xs font-semibold px-2.5 py-0.5 rounded border border-purple-200">Super Admin</span>
+                            <span class="bg-purple-100 text-purple-800 text-xs font-semibold px-2.5 py-0.5 rounded border border-purple-200">Operator</span>
                         @elseif($user->role === 'admin_kabupaten')
                             <span class="bg-green-100 text-green-800 text-xs font-semibold px-2.5 py-0.5 rounded border border-green-200">Admin Kab.</span>
                         @else
@@ -91,7 +91,7 @@
                 <select name="role" id="add-role" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm border p-2" onchange="toggleKabupaten('add-role', 'add-kabupaten-div')">
                     <option value="user">User BUMDes / Pengunjung</option>
                     <option value="admin_kabupaten">Admin Kabupaten</option>
-                    <option value="superadmin">Super Admin</option>
+                    <option value="superadmin">Operator</option>
                 </select>
             </div>
             <div id="add-kabupaten-div" class="hidden">
@@ -142,7 +142,7 @@
                 <select name="role" id="edit-role" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm border p-2" onchange="toggleKabupaten('edit-role', 'edit-kabupaten-div')">
                     <option value="user">User BUMDes / Pengunjung</option>
                     <option value="admin_kabupaten">Admin Kabupaten</option>
-                    <option value="superadmin">Super Admin</option>
+                    <option value="superadmin">Operator</option>
                 </select>
             </div>
             <div id="edit-kabupaten-div" class="hidden">

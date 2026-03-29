@@ -48,7 +48,7 @@
                     </td>
                     <td class="px-6 py-4 text-right">
                         @if($lang->status === 'pending')
-                        <button class="text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1.5 rounded transition font-bold tooltip" title="Tunggu Super Admin untuk mengkonfirmasi pembayaran.">
+                        <button class="text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1.5 rounded transition font-bold tooltip" title="Tunggu Operator untuk mengkonfirmasi pembayaran.">
                             <i class="fa-solid fa-clock mr-1 text-yellow-500"></i> Menunggu...
                         </button>
                         @endif
@@ -80,7 +80,7 @@
                     @endforeach
                 </select>
                 @if($pricingConfigs->isEmpty())
-                <p class="text-xs text-red-500 mt-1">Super Admin belum menambahkan paket harga untuk Kabupaten.</p>
+                <p class="text-xs text-red-500 mt-1">Operator belum menambahkan paket harga untuk Kabupaten.</p>
                 @endif
             </div>
 

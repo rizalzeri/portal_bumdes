@@ -1,10 +1,10 @@
 @extends('layouts.admin')
-@section('title', 'Super Admin Dashboard')
+@section('title', 'Operator Dashboard')
 
 @section('content')
     <div class="mb-6 flex justify-between items-center">
         <div>
-            <h2 class="text-2xl font-bold text-gray-800">Dashboard Super Admin</h2>
+            <h2 class="text-2xl font-bold text-gray-800">Dashboard Operator</h2>
             <p class="text-gray-500 text-sm mt-1">Ringkasan aktivitas dan metrik aplikasi Portal BUMDesa.</p>
         </div>
         <div>

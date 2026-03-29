@@ -1,11 +1,11 @@
 @extends('layouts.public')
-@section('title', 'Login Super Admin')
+@section('title', 'Login Operator')
 
 @section('content')
 <div class="flex items-center justify-center min-h-[70vh]">
     <div class="w-full max-w-md p-8 bg-white rounded-xl shadow-lg border-t-4 border-accent">
         <div class="text-center mb-8">
-            <h2 class="text-3xl font-extrabold text-primary">Login Super Admin</h2>
+            <h2 class="text-3xl font-extrabold text-primary">Login Operator</h2>
             <p class="text-gray-500 mt-2">Portal BUMDesa</p>
         </div>
 
@@ -53,7 +53,7 @@
 
             <div>
                 <button type="submit" class="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-bold text-white bg-primary hover:bg-primary-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors">
-                    Login Super Admin
+                    Login Operator
                 </button>
             </div>
             

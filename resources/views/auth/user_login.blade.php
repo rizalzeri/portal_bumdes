@@ -59,7 +59,7 @@
                     <a href="{{ route('adminkab.login') }}"
                         class="text-sm font-medium text-gray-500 hover:text-gray-900">Login sebagai Admin Kabupaten</a>
                     <a href="{{ route('superadmin.login') }}"
-                        class="text-sm font-medium text-gray-500 hover:text-gray-900">Login sebagai Super Admin</a>
+                        class="text-sm font-medium text-gray-500 hover:text-gray-900">Login sebagai Operator</a>
                 </div>
             </form>
         </div>
