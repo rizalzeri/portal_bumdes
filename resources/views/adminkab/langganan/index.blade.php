@@ -59,7 +59,7 @@
                 </tr>
             </thead>
             <tbody>
-                @forelse($langganans as $lang)
+                @foreach($langganans as $lang)
                 <tr class="bg-white border-b hover:bg-gray-50">
                     <td class="px-6 py-4 font-bold text-accent">{{ $lang->package_name }}</td>
                     <td class="px-6 py-4 text-green-600 font-bold">Rp {{ number_format($lang->amount, 0, ',', '.') }}</td>
@@ -99,14 +99,7 @@
                         @endif
                     </td>
                 </tr>
-                @empty
-                <tr>
-                    <td colspan="5" class="text-center py-10 text-gray-400">
-                        <i class="fa-solid fa-crown text-3xl mb-2 block"></i>
-                        Belum ada riwayat langganan. Klik <strong>"Langganan Paket Baru"</strong> untuk mulai.
-                    </td>
-                </tr>
-                @endforelse
+                @endforeach
             </tbody>
         </table>
     </div>
