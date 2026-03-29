@@ -1,15 +1,15 @@
 @extends('layouts.admin')
-@section('title', 'Produk Ketahanan Pangan')
+@section('title', 'Komoditas Ketahanan Pangan')
 
 @section('content')
     <div class="mb-6 flex justify-between items-center">
         <div>
-            <h2 class="text-2xl font-bold text-gray-800">Produk Ketahanan Pangan</h2>
-            <p class="text-gray-500 text-sm mt-1">Kelola data produk ketahanan pangan BUMDesa Anda.</p>
+            <h2 class="text-2xl font-bold text-gray-800">Komoditas Ketahanan Pangan</h2>
+            <p class="text-gray-500 text-sm mt-1">Kelola data komoditas ketahanan pangan BUMDesa Anda.</p>
         </div>
         <button onclick="document.getElementById('modalTambah').classList.remove('hidden')"
             class="bg-primary text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-primary-700 transition flex items-center gap-2">
-            <i class="fa-solid fa-plus"></i> Tambah Produk
+            <i class="fa-solid fa-plus"></i> Tambah Komoditas
         </button>
     </div>
 

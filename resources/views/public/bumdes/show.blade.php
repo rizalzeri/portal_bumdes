@@ -193,7 +193,7 @@
             <!-- 5. Produk Ketahanan Pangan -->
             <div class="bg-white rounded-xl shadow-sm border p-6">
                 <h2 class="text-2xl font-bold text-primary border-b pb-2 mb-6"><i
-                        class="fa-solid fa-wheat-awn mr-2 text-accent"></i> Produk Ketahanan Pangan</h2>
+                        class="fa-solid fa-wheat-awn mr-2 text-accent"></i> Komoditas Ketahanan Pangan</h2>
                 @if ($bumdes->produkKetahananPangans->isEmpty())
                     <div class="text-center py-8 text-gray-400 border border-dashed rounded-lg">
                         <i class="fa-solid fa-seedling text-3xl mb-2"></i>
