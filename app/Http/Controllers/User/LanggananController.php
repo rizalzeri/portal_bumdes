@@ -55,15 +55,19 @@ class LanggananController extends Controller
 
         $snapToken = null;
 
-        // If there's a pending bill, generate/re-use snap token
+        // Selalu generate snap token BARU setiap page load.
+        // Token Midtrans bisa kadaluarsa, dan order_id lama yang sudah
+        // 'expire' di Midtrans tidak bisa dipakai lagi — perlu order_id baru.
         if ($pending) {
             $this->configureMidtrans();
-            $orderId     = $pending->order_id ?? ('BUMDES-' . $bumdes->id . '-' . $pending->id . '-' . time());
+
+            // Buat order_id baru setiap refresh agar Midtrans tidak menolak
+            $orderId     = 'BUMDES-' . $bumdes->id . '-' . time();
             $grossAmount = (int) $pending->amount;
 
             $params = [
                 'transaction_details' => [
-                    'order_id'    => $orderId,
+                    'order_id'     => $orderId,
                     'gross_amount' => $grossAmount,
                 ],
                 'customer_details' => [
@@ -81,9 +85,11 @@ class LanggananController extends Controller
 
             try {
                 $snapToken = \Midtrans\Snap::getSnapToken($params);
-                if (!$pending->order_id) {
-                    $pending->update(['order_id' => $orderId]);
-                }
+                // Update order_id dan token baru agar webhook tetap bisa mencocokkan
+                $pending->update([
+                    'order_id'      => $orderId,
+                    'payment_token' => $snapToken,
+                ]);
             } catch (\Exception $e) {
                 Log::error('Midtrans Snap Error: ' . $e->getMessage());
             }

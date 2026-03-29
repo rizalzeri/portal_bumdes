@@ -27,7 +27,7 @@ class LanggananController extends Controller
             'bumdes_id' => 'required_without:kabupaten_id|nullable|exists:bumdes,id',
             'kabupaten_id' => 'required_without:bumdes_id|nullable|exists:kabupatens,id',
             'package_name' => 'required|string|max:255',
-            'status' => 'required|in:active,inactive,pending',
+            'status' => 'required|in:active,expired,pending',
             'start_date' => 'required|date',
             'end_date' => 'required|date|after:start_date',
         ]);
@@ -40,7 +40,7 @@ class LanggananController extends Controller
     public function update(Request $request, Langganan $langganan)
     {
         $request->validate([
-            'status' => 'required|in:active,inactive,pending',
+            'status' => 'required|in:active,expired,pending',
             'end_date' => 'required|date',
         ]);
 

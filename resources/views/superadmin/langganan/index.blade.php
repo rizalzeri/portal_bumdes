@@ -87,7 +87,7 @@
                 <label class="block text-sm font-medium text-gray-700">Status Langganan</label>
                 <select name="status" id="edit-status" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm border p-2">
                     <option value="active">Aktif</option>
-                    <option value="inactive">Tidak Aktif (Expired)</option>
+                    <option value="expired">Tidak Aktif (Expired)</option>
                     <option value="pending">Pending Payment</option>
                 </select>
             </div>

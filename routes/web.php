@@ -118,6 +118,7 @@ Route::prefix('admin-kabupaten')->name('adminkab.')->group(function () {
         Route::get('monitoring', [\App\Http\Controllers\AdminKabupaten\MonitoringBumdesController::class, 'index'])->name('monitoring.index');
         
         Route::resource('pengumuman', AKPengumuman::class);
+        Route::get('langganan/success', [AKLangganan::class, 'successCallback'])->name('langganan.success');
         Route::resource('langganan', AKLangganan::class);
     });
 });
@@ -154,6 +155,7 @@ Route::get('/user/login', [AuthController::class, 'showUserLogin'])->name('login
 Route::post('/user/login', [AuthController::class, 'userLogin'])->name('user.login.post');
 
 // ------------- MIDTRANS WEBHOOK (S2S Notification) -------------
+// Handles both BUMDes and Kabupaten orders (order_id prefix: BUMDES- or KAB-)
 Route::post('/midtrans/notification', [ULangganan::class, 'notification'])->name('midtrans.notification');
 
 // Catch-all route for dynamic BUMDes domains (must be at the very end)
