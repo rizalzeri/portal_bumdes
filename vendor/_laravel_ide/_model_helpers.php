@@ -2894,6 +2894,16 @@ namespace App\Models {
     /**
      * App\Models\Kecamatan
      *
+     * @property \Illuminate\Support\Carbon|null $updated_at
+     * @property \Illuminate\Support\Carbon|null $created_at
+     * @property string $name
+     * @property int $kabupaten_id
+     * @property int $id
+     * @method static \Illuminate\Database\Eloquent\Builder<Kecamatan>|Kecamatan whereId($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<Kecamatan>|Kecamatan whereKabupatenId($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<Kecamatan>|Kecamatan whereName($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<Kecamatan>|Kecamatan whereCreatedAt($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<Kecamatan>|Kecamatan whereUpdatedAt($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Kecamatan>|Kecamatan newModelQuery()
      * @method static \Illuminate\Database\Eloquent\Builder<Kecamatan>|Kecamatan newQuery()
      * @method static \Illuminate\Database\Eloquent\Builder<Kecamatan>|Kecamatan query()

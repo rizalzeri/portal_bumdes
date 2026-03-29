@@ -22,7 +22,7 @@
             Kategori Produk BUMDes
         </button>
         <button @click="activeTab = 'ketapang'" :class="{'border-accent text-primary font-bold border-b-2': activeTab === 'ketapang', 'text-gray-500 hover:text-gray-700': activeTab !== 'ketapang'}" class="whitespace-nowrap pb-3 px-2 text-sm md:text-base font-medium transition-colors">
-            Kategori Ketahanan Pangan
+            Komoditas Ketahanan Pangan
         </button>
         <button @click="activeTab = 'mitra'" :class="{'border-accent text-primary font-bold border-b-2': activeTab === 'mitra', 'text-gray-500 hover:text-gray-700': activeTab !== 'mitra'}" class="whitespace-nowrap pb-3 px-2 text-sm md:text-base font-medium transition-colors">
             Kategori Mitra Kerjasama
@@ -34,7 +34,7 @@
         <div class="table-responsive w-full overflow-x-auto">
             <table class="datatable w-full whitespace-nowrap text-sm text-left text-gray-500">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50">
-                    <tr><th class="px-6 py-3">Ikon & Nama Kategori</th><th class="px-6 py-3 text-right">Aksi</th></tr>
+                    <tr><th class="px-6 py-3">Nama Kategori</th><th class="px-6 py-3 text-right">Aksi</th></tr>
                 </thead>
                 <tbody>
                     @foreach($unitUsahaOptions as $opt)
@@ -66,7 +66,7 @@
         <div class="table-responsive w-full overflow-x-auto">
             <table class="datatable w-full whitespace-nowrap text-sm text-left text-gray-500">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50">
-                    <tr><th class="px-6 py-3">Ikon & Nama Kategori</th><th class="px-6 py-3 text-right">Aksi</th></tr>
+                    <tr><th class="px-6 py-3">Nama Kategori</th><th class="px-6 py-3 text-right">Aksi</th></tr>
                 </thead>
                 <tbody>
                     @foreach($produkOptions as $opt)
@@ -98,7 +98,7 @@
         <div class="table-responsive w-full overflow-x-auto">
             <table class="datatable w-full whitespace-nowrap text-sm text-left text-gray-500">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50">
-                    <tr><th class="px-6 py-3">Ikon & Nama Kategori</th><th class="px-6 py-3 text-right">Aksi</th></tr>
+                    <tr><th class="px-6 py-3">Nama Kategori</th><th class="px-6 py-3 text-right">Aksi</th></tr>
                 </thead>
                 <tbody>
                     @foreach($ketapangOptions as $opt)
@@ -130,7 +130,7 @@
         <div class="table-responsive w-full overflow-x-auto">
             <table class="datatable w-full whitespace-nowrap text-sm text-left text-gray-500">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50">
-                    <tr><th class="px-6 py-3">Ikon & Nama Kategori</th><th class="px-6 py-3 text-right">Aksi</th></tr>
+                    <tr><th class="px-6 py-3">Nama Kategori</th><th class="px-6 py-3 text-right">Aksi</th></tr>
                 </thead>
                 <tbody>
                     @foreach($mitraOptions as $opt)
