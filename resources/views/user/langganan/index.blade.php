@@ -101,7 +101,6 @@
 @endif
 
 {{-- ── Plan Cards ──────────────────────────────────── --}}
-@if(!$active || $active->is_expired || $active->days_remaining <= 30)
 <div class="mb-8">
     <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
         <i class="fa-solid fa-rocket text-primary"></i>
@@ -170,7 +169,6 @@
     </div>
     @endif
 </div>
-@endif
 
 {{-- ── Riwayat Pembayaran ──────────────────────────── --}}
 <div class="bg-white rounded-xl shadow-sm border p-6">

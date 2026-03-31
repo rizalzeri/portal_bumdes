@@ -112,14 +112,20 @@ class PublicController extends Controller
 
         // Step 4: If kabupaten selected
         $selectedKabupaten = null;
-        $bumdes = [];
+        $bumdes = collect();
         if ($request->has('kabupaten_id')) {
             $selectedKabupaten = Kabupaten::find($request->kabupaten_id);
-            $bumdes = Bumdes::where('kabupaten_id', $request->kabupaten_id)->where('is_active', true)->orderBy('name')->get();
-            // Need to reload province to match kabupaten if user jumped straight to kabupaten
             if ($selectedKabupaten) {
+                $query = Bumdes::where('kabupaten_id', $request->kabupaten_id)->where('is_active', true);
+                if ($request->has('q')) {
+                    $query->where('name', 'like', '%' . $request->q . '%');
+                }
+                $bumdes = $query->orderBy('name')->get();
                 $selectedProvince = $selectedKabupaten->province;
             }
+        } elseif ($request->has('q')) {
+            // If they search without selecting Kabupaten, maybe we don't return here but wait for them to select, OR we just let it be. But wait, if they are not in Kabupaten, they are in Province or Country.
+            // Let's just adjust if NO kabupaten selected BUT have q... actually, let's just let them continue selecting.
         }
 
         return view('public.bumdes.index', compact('provinces', 'selectedProvince', 'kabupatens', 'selectedKabupaten', 'bumdes'));
@@ -144,23 +150,8 @@ class PublicController extends Controller
             }
         ])->where('slug', $slug)->firstOrFail();
 
-        // Fetch multiple types of announcements for this BUMDes page
-        // 1. Own BUMDes announcements
-        // 2. Kabupaten announcements for this BUMDes area
-        // 3. Global portal announcements
-        $mergedPengumuman = \App\Models\Pengumuman::with(['bumdes', 'kabupaten'])
-            ->where(function ($q) use ($bumdes) {
-                $q->where('bumdes_id', $bumdes->id)
-                    ->orWhere(function ($sq) use ($bumdes) {
-                        $sq->where('type', 'kabupaten')->where('kabupaten_id', $bumdes->kabupaten_id);
-                    })
-                    ->orWhere('type', 'portal');
-            })
-            ->orderBy('created_at', 'desc')
-            ->get();
-
-        // Replace the default relationship-based pengumuman with the merged list
-        $bumdes->setRelation('pengumuman', $mergedPengumuman);
+        // User requested: "Papan Pengumuman BUMDesa : Cukup tampilkan pengumuman yang dibuat BUMDesa"
+        // So we just use the native $bumdes->pengumuman relationship.
 
         $labels = [];
         $pendapatanData = [];
@@ -202,6 +193,13 @@ class PublicController extends Controller
     public function infografisKabupaten($id)
     {
         $kabupaten = \App\Models\Kabupaten::with('province')->findOrFail($id);
+        
+        // Cek status premium admin kabupaten
+        $admin= \App\Models\User::where('kabupaten_id', $id)->where('role', 'admin_kabupaten')->first();
+        if (!$admin || $admin->subscription_status !== 'active' || $admin->subscription_expiry < now()) {
+            abort(403, 'Infografis Kabupaten ini tidak tersedia karena paket langganan tidak aktif (Bukan Kabupaten Premium).');
+        }
+
         $bumdesIds = \App\Models\Bumdesa::where('kabupaten_id', $id)->pluck('id');
 
         $total_bumdes = count($bumdesIds);
@@ -393,5 +391,47 @@ class PublicController extends Controller
             'items' => $items,
             'anchor' => '#pengumuman',
         ]);
+    }
+
+    public function about()
+    {
+        return view('public.about');
+    }
+
+    public function services()
+    {
+        return view('public.services');
+    }
+
+    public function faq()
+    {
+        return view('public.faq');
+    }
+
+    public function contact()
+    {
+        return view('public.contact');
+    }
+
+    public function searchBumdes(Request $request)
+    {
+        $q = $request->q;
+        if (!$q || strlen($q) < 2) {
+            return response()->json([]);
+        }
+
+        $bumdes = Bumdes::where('name', 'like', '%' . $q . '%')
+            ->where('is_active', true)
+            ->take(8)
+            ->get(['name', 'slug', 'desa']);
+
+        $results = $bumdes->map(function ($b) {
+            return [
+                'name' => 'BUMDesa ' . $b->name . ' Desa ' . ($b->desa ?? ''),
+                'url' => route('public.bumdes.profile', $b->slug)
+            ];
+        });
+
+        return response()->json($results);
     }
 }

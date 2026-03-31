@@ -351,6 +351,9 @@ namespace App\Models {
     /**
      * App\Models\Bumdes
      *
+     * @property string|null $monitoring_catatan
+     * @property bool $is_monitored
+     * @property string|null $pemeringkatan_tahun
      * @property string|null $pemeringkatan
      * @property string|null $audit_internal_terakhir
      * @property string|null $laporan_dinas_link
@@ -450,6 +453,9 @@ namespace App\Models {
      * @method static \Illuminate\Database\Eloquent\Builder<Bumdes>|Bumdes whereLaporanDinasLink($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Bumdes>|Bumdes whereAuditInternalTerakhir($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Bumdes>|Bumdes wherePemeringkatan($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<Bumdes>|Bumdes wherePemeringkatanTahun($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<Bumdes>|Bumdes whereIsMonitored($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<Bumdes>|Bumdes whereMonitoringCatatan($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Bumdes>|Bumdes newModelQuery()
      * @method static \Illuminate\Database\Eloquent\Builder<Bumdes>|Bumdes newQuery()
      * @method static \Illuminate\Database\Eloquent\Builder<Bumdes>|Bumdes query()
@@ -767,6 +773,9 @@ namespace App\Models {
     /**
      * App\Models\Bumdesa
      *
+     * @property string|null $monitoring_catatan
+     * @property bool $is_monitored
+     * @property string|null $pemeringkatan_tahun
      * @property string|null $pemeringkatan
      * @property string|null $audit_internal_terakhir
      * @property string|null $laporan_dinas_link
@@ -883,6 +892,9 @@ namespace App\Models {
      * @method static \Illuminate\Database\Eloquent\Builder<Bumdesa>|Bumdesa whereLaporanDinasLink($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Bumdesa>|Bumdesa whereAuditInternalTerakhir($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Bumdesa>|Bumdesa wherePemeringkatan($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<Bumdesa>|Bumdesa wherePemeringkatanTahun($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<Bumdesa>|Bumdesa whereIsMonitored($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<Bumdesa>|Bumdesa whereMonitoringCatatan($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Bumdesa>|Bumdesa newModelQuery()
      * @method static \Illuminate\Database\Eloquent\Builder<Bumdesa>|Bumdesa newQuery()
      * @method static \Illuminate\Database\Eloquent\Builder<Bumdesa>|Bumdesa query()
@@ -3559,13 +3571,16 @@ namespace App\Models {
      * @property \Illuminate\Support\Carbon|null $created_at
      * @property \Illuminate\Support\Carbon|null $end_date
      * @property \Illuminate\Support\Carbon|null $start_date
+     * @property string|null $payment_method
      * @property mixed $status
      * @property int $duration_months
      * @property float $amount
      * @property string|null $order_id
      * @property string|null $payment_token
      * @property string $package_name
-     * @property int $bumdes_id
+     * @property int|null $pricing_config_id
+     * @property int|null $kabupaten_id
+     * @property int|null $bumdes_id
      * @property int $id
      * @property-read mixed $days_remaining
      * @property-read mixed $is_expired
@@ -3573,12 +3588,15 @@ namespace App\Models {
      * @property-read \App\Models\Kabupaten $kabupaten
      * @method static \Illuminate\Database\Eloquent\Builder<Langganan>|Langganan whereId($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Langganan>|Langganan whereBumdesId($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<Langganan>|Langganan whereKabupatenId($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<Langganan>|Langganan wherePricingConfigId($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Langganan>|Langganan wherePackageName($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Langganan>|Langganan wherePaymentToken($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Langganan>|Langganan whereOrderId($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Langganan>|Langganan whereAmount($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Langganan>|Langganan whereDurationMonths($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Langganan>|Langganan whereStatus($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<Langganan>|Langganan wherePaymentMethod($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Langganan>|Langganan whereStartDate($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Langganan>|Langganan whereEndDate($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Langganan>|Langganan whereCreatedAt($value)

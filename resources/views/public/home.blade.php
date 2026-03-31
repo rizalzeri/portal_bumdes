@@ -59,8 +59,7 @@
                                 penjuru Indonesia.</p>
                         </div>
                         <div class="shrink-0 flex items-center gap-2">
-                            <span
-                                class="text-xs font-semibold text-gray-400 group-hover:text-primary opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-2 group-hover:translate-x-0 hidden sm:block">Lihat
+                            <span class="text-xs font-semibold text-gray-400 group-hover:text-primary transition-all duration-300 hidden sm:block">Lihat
                                 lebih lanjut</span>
                             <div
                                 class="w-9 h-9 rounded-full bg-gray-100 group-hover:bg-primary flex items-center justify-center transition-colors shadow-sm group-hover:shadow">
@@ -85,8 +84,7 @@
                                             <i class="fa-solid fa-store text-gray-400"></i>
                                         @endif
                                     </div>
-                                    <span
-                                        class="text-xs font-semibold text-gray-700 group-hover/item:text-primary transition-colors line-clamp-2 leading-tight">BUMDesa "{{ $item->name }}" Desa</span>
+                                    <span class="text-xs font-semibold text-gray-700 group-hover/item:text-primary transition-colors line-clamp-2 leading-tight">BUMDesa {{ $item->name }} Desa {{ $item->desa ?? '' }}</span>
                                     <span class="text-xs text-gray-400">{{ $item->kabupaten->name ?? '-' }}</span>
                                 </a>
                             @endforeach
@@ -112,8 +110,7 @@
                                 real-time.</p>
                         </div>
                         <div class="shrink-0 flex items-center gap-2">
-                            <span
-                                class="text-xs font-semibold text-gray-400 group-hover:text-blue-500 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-2 group-hover:translate-x-0 hidden sm:block">Lihat
+                            <span class="text-xs font-semibold text-gray-400 group-hover:text-blue-500 transition-all duration-300 hidden sm:block">Lihat
                                 lebih lanjut</span>
                             <div
                                 class="w-9 h-9 rounded-full bg-gray-100 group-hover:bg-blue-500 flex items-center justify-center transition-colors shadow-sm group-hover:shadow">
@@ -159,8 +156,7 @@
                                 BUMDesa.</p>
                         </div>
                         <div class="shrink-0 flex items-center gap-2">
-                            <span
-                                class="text-xs font-semibold text-gray-400 group-hover:text-green-500 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-2 group-hover:translate-x-0 hidden sm:block">Lihat
+                            <span class="text-xs font-semibold text-gray-400 group-hover:text-green-500 transition-all duration-300 hidden sm:block">Lihat
                                 lebih lanjut</span>
                             <div
                                 class="w-9 h-9 rounded-full bg-gray-100 group-hover:bg-green-500 flex items-center justify-center transition-colors shadow-sm group-hover:shadow">
@@ -182,8 +178,7 @@
                                     </div>
                                     <span
                                         class="text-xs font-semibold text-gray-700 group-hover/item:text-green-700 transition-colors line-clamp-2 leading-tight">{{ $item->title }}</span>
-                                    <span
-                                        class="text-[10px] text-gray-400 line-clamp-1">BUMDesa "{{ $item->bumdes->name ?? 'Portal Pusat' }}" Desa</span>
+                                    <span class="text-[10px] text-gray-400 line-clamp-1">BUMDesa {{ $item->bumdes->name ?? 'Portal Pusat' }} Desa {{ $item->bumdes->desa ?? '' }}</span>
                                 </a>
                             @endforeach
                         </div>
@@ -208,8 +203,7 @@
                                 dan BUMDesa.</p>
                         </div>
                         <div class="shrink-0 flex items-center gap-2">
-                            <span
-                                class="text-xs font-semibold text-gray-400 group-hover:text-indigo-500 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-2 group-hover:translate-x-0 hidden sm:block">Lihat
+                            <span class="text-xs font-semibold text-gray-400 group-hover:text-indigo-500 transition-all duration-300 hidden sm:block">Lihat
                                 lebih lanjut</span>
                             <div
                                 class="w-9 h-9 rounded-full bg-gray-100 group-hover:bg-indigo-500 flex items-center justify-center transition-colors shadow-sm group-hover:shadow">
@@ -237,7 +231,7 @@
                                     @endif
                                     <span
                                         class="text-xs font-semibold text-gray-700 group-hover/item:text-indigo-700 transition-colors line-clamp-2 leading-tight">{{ $item->title }}</span>
-                                    <span class="text-xs text-gray-400">BUMDesa "{{ $item->bumdes->name ?? 'Portal Pusat' }}" Desa</span>
+                                    <span class="text-xs text-gray-400">BUMDesa {{ $item->bumdes->name ?? 'Portal Pusat' }} Desa {{ $item->bumdes->desa ?? '' }}</span>
                                 </a>
                             @endforeach
                         </div>
@@ -262,8 +256,7 @@
                                 seluruh Indonesia.</p>
                         </div>
                         <div class="shrink-0 flex items-center gap-2">
-                            <span
-                                class="text-xs font-semibold text-gray-400 group-hover:text-teal-500 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-2 group-hover:translate-x-0 hidden sm:block">Lihat
+                            <span class="text-xs font-semibold text-gray-400 group-hover:text-teal-500 transition-all duration-300 hidden sm:block">Lihat
                                 lebih lanjut</span>
                             <div
                                 class="w-9 h-9 rounded-full bg-gray-100 group-hover:bg-teal-500 flex items-center justify-center transition-colors shadow-sm group-hover:shadow">
@@ -295,7 +288,7 @@
                                         <span class="text-xs text-teal-600 font-bold">Rp
                                             {{ number_format($item->price, 0, ',', '.') }}</span>
                                     @endif
-                                    <span class="text-xs text-gray-400">BUMDesa "{{ $item->bumdes->name ?? '-' }}" Desa</span>
+                                    <span class="text-xs text-gray-400">BUMDesa {{ $item->bumdes->name ?? '-' }} Desa {{ $item->bumdes->desa ?? '' }}</span>
                                 </a>
                             @endforeach
                         </div>
@@ -320,8 +313,7 @@
                                 kemajuan desa.</p>
                         </div>
                         <div class="shrink-0 flex items-center gap-2">
-                            <span
-                                class="text-xs font-semibold text-gray-400 group-hover:text-red-500 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-2 group-hover:translate-x-0 hidden sm:block">Lihat
+                            <span class="text-xs font-semibold text-gray-400 group-hover:text-red-500 transition-all duration-300 hidden sm:block">Lihat
                                 lebih lanjut</span>
                             <div
                                 class="w-9 h-9 rounded-full bg-gray-100 group-hover:bg-red-500 flex items-center justify-center transition-colors shadow-sm group-hover:shadow">
@@ -351,8 +343,7 @@
                                         <p
                                             class="text-xs font-semibold text-gray-700 group-hover/item:text-red-700 transition-colors line-clamp-1">
                                             {{ $item->name }}</p>
-                                        <p class="text-xs text-gray-400 line-clamp-1">
-                                            BUMDesa "{{ $item->bumdes->name ?? 'Portal Pusat' }}" Desa</p>
+                                            BUMDesa {{ $item->bumdes->name ?? 'Portal Pusat' }} Desa {{ $item->bumdes->desa ?? '' }}</p>
                                     </div>
                                 </a>
                             @endforeach
@@ -378,8 +369,7 @@
                                 pejuang desa.</p>
                         </div>
                         <div class="shrink-0 flex items-center gap-2">
-                            <span
-                                class="text-xs font-semibold text-gray-400 group-hover:text-purple-500 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-2 group-hover:translate-x-0 hidden sm:block">Lihat
+                            <span class="text-xs font-semibold text-gray-400 group-hover:text-purple-500 transition-all duration-300 hidden sm:block">Lihat
                                 lebih lanjut</span>
                             <div
                                 class="w-9 h-9 rounded-full bg-gray-100 group-hover:bg-purple-500 flex items-center justify-center transition-colors shadow-sm group-hover:shadow">
@@ -423,8 +413,7 @@
                                     <div class="flex flex-col min-w-0">
                                         <span
                                             class="text-xs font-semibold text-gray-700 group-hover/item:text-purple-700 transition-colors line-clamp-1 leading-tight">{{ $item->title }}</span>
-                                        <span
-                                            class="text-[10px] text-gray-400 line-clamp-1">BUMDesa "{{ $item->bumdes->name ?? 'Portal Pusat' }}" Desa</span>
+                                        <span class="text-[10px] text-gray-400 line-clamp-1">BUMDesa {{ $item->bumdes->name ?? 'Portal Pusat' }} Desa {{ $item->bumdes->desa ?? '' }}</span>
                                     </div>
                                 </a>
                             @endforeach
@@ -451,8 +440,7 @@
                                 BUMDesa.</p>
                         </div>
                         <div class="shrink-0 flex items-center gap-2">
-                            <span
-                                class="text-xs font-semibold text-gray-400 group-hover:text-amber-500 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-2 group-hover:translate-x-0 hidden sm:block">Lihat
+                            <span class="text-xs font-semibold text-gray-400 group-hover:text-amber-500 transition-all duration-300 hidden sm:block">Lihat
                                 semua</span>
                             <div
                                 class="w-9 h-9 rounded-full bg-gray-100 group-hover:bg-amber-500 flex items-center justify-center transition-colors shadow-sm group-hover:shadow">
@@ -505,8 +493,7 @@
                                 BUMDesa.</p>
                         </div>
                         <div class="shrink-0 flex items-center gap-2">
-                            <span
-                                class="text-xs font-semibold text-gray-400 group-hover:text-emerald-500 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-2 group-hover:translate-x-0 hidden sm:block">Lihat
+                            <span class="text-xs font-semibold text-gray-400 group-hover:text-emerald-500 transition-all duration-300 hidden sm:block">Lihat
                                 semua</span>
                             <div
                                 class="w-9 h-9 rounded-full bg-gray-100 group-hover:bg-emerald-500 flex items-center justify-center transition-colors shadow-sm group-hover:shadow">
@@ -532,8 +519,7 @@
                                     </div>
                                     <span
                                         class="text-xs font-semibold text-gray-700 group-hover/item:text-emerald-700 transition-colors line-clamp-2 leading-tight">{{ $item->title }}</span>
-                                    <span class="text-[10px] text-gray-400 mt-auto">
-                                        BUMDesa "{{ $item->bumdes->name ?? 'BUMDesa' }}" Desa
+                                        BUMDesa {{ $item->bumdes->name ?? 'BUMDesa' }} Desa {{ $item->bumdes->desa ?? '' }}
                                     </span>
                                 </a>
                             @endforeach
@@ -559,8 +545,7 @@
                                 dari Pusat.</p>
                         </div>
                         <div class="shrink-0 flex items-center gap-2">
-                            <span
-                                class="text-xs font-semibold text-gray-400 group-hover:text-blue-500 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-2 group-hover:translate-x-0 hidden sm:block">Lihat
+                            <span class="text-xs font-semibold text-gray-400 group-hover:text-blue-500 transition-all duration-300 hidden sm:block">Lihat
                                 semua</span>
                             <div
                                 class="w-9 h-9 rounded-full bg-gray-100 group-hover:bg-blue-500 flex items-center justify-center transition-colors shadow-sm group-hover:shadow">
@@ -597,232 +582,6 @@
         </div>
     </div>
 
-    <!-- Section: Tentang Kami -->
-    <section class="py-20 bg-white relative overflow-hidden" id="tentang-kami">
-        <div class="absolute top-0 right-0 -mr-20 -mt-20 w-64 h-64 rounded-full bg-blue-50 opacity-50"></div>
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div class="text-center mb-16">
-                <span class="text-accent font-bold tracking-wider uppercase text-sm">Portal BUMDesa</span>
-                <h2 class="mt-2 text-3xl font-extrabold text-gray-900 sm:text-4xl">Tentang Kami</h2>
-                <div class="mt-4 w-24 h-1 bg-accent mx-auto rounded-full"></div>
-            </div>
-            
-            <div class="max-w-4xl mx-auto">
-                <div class="space-y-6 text-gray-600 leading-relaxed text-lg text-center">
-                    <p><strong class="text-primary">PortalBUMDes</strong> merupakan platform digital yang dirancang untuk mendukung pengelolaan dan pengembangan Badan Usaha Milik Desa (BUMDesa) secara modern, transparan, dan terintegrasi.</p>
-                    
-                    <p>Platform ini hadir sebagai solusi praktis bagi BUMDesa untuk memiliki website resmi secara gratis, tanpa memerlukan kemampuan teknis atau keahlian coding. Dengan demikian, setiap BUMDesa dapat dengan mudah menyampaikan informasi kepada masyarakat, meningkatkan transparansi, serta memperkuat kepercayaan publik.</p>
-                    
-                    <p>Selain sebagai sarana informasi publik, <strong class="text-primary">PortalBUMDes</strong> juga berfungsi sebagai alat bantu bagi pemerintah kabupaten dalam melakukan identifikasi, pemantauan, dan analisa data BUMDesa secara lebih efektif dan terstruktur. Data yang terintegrasi memungkinkan pengambilan kebijakan yang lebih tepat sasaran dalam pengembangan ekonomi desa.</p>
-                    
-                    <p><strong class="text-primary">PortalBUMDes</strong> dikembangkan oleh <strong class="text-accent">BumdesPro Official</strong>, sebuah inisiatif yang berfokus pada digitalisasi pengelolaan BUMDesa. Selain platform ini, BumdesPro juga menyediakan aplikasi pendukung melalui <strong class="text-accent">bumdespro.my.id</strong>, yang dirancang untuk mempermudah pengurus BUMDesa dalam:</p>
-                    
-                    <ul class="text-left max-w-md mx-auto space-y-2 bg-blue-50 p-6 rounded-2xl border-l-4 border-accent">
-                        <li class="flex items-center gap-3">
-                            <i class="fa-solid fa-check text-accent"></i>
-                            <span>Menyusun laporan keuangan</span>
-                        </li>
-                        <li class="flex items-center gap-3">
-                            <i class="fa-solid fa-check text-accent"></i>
-                            <span>Membuat SPJ (Surat Pertanggungjawaban) secara digital</span>
-                        </li>
-                        <li class="flex items-center gap-3">
-                            <i class="fa-solid fa-check text-accent"></i>
-                            <span>Mengelola administrasi usaha desa secara lebih efisien</span>
-                        </li>
-                    </ul>
 
-                    <p>Tidak hanya itu, BumdesPro juga menyediakan berbagai materi, panduan, serta template yang dibutuhkan oleh pengurus BUMDesa dalam menjalankan operasional dan tata kelola yang baik.</p>
-                    
-                    <p>Ke depan, <strong class="text-primary">PortalBUMDes</strong> akan terus berinovasi dan berkembang untuk memberikan layanan terbaik. Oleh karena itu, kritik dan saran dari pengguna sangat kami harapkan sebagai bagian dari proses penyempurnaan platform ini.</p>
-
-                    <div class="p-8 bg-primary rounded-3xl mt-10 shadow-xl transform transition hover:scale-[1.02]">
-                        <p class="text-white italic font-semibold text-xl leading-relaxed">"Kami juga mengajak seluruh pihak untuk mendukung dan meramaikan PortalBUMDes, sebagai upaya bersama dalam memajukan BUMDesa dan memperkuat ekonomi desa di seluruh Indonesia."</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Section: Layanan & Produk -->
-    <section class="py-20 bg-gray-50" id="layanan-produk">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
-                <span class="text-accent font-bold tracking-wider uppercase text-sm">Solusi Digital</span>
-                <h2 class="mt-2 text-3xl font-extrabold text-gray-900 sm:text-4xl">Layanan & Produk</h2>
-                <div class="mt-4 w-24 h-1 bg-accent mx-auto rounded-full"></div>
-                <p class="mt-4 text-xl text-gray-500 max-w-3xl mx-auto">Kami menyediakan berbagai layanan dan produk untuk mendukung digitalisasi dan administrasi BUMDesa.</p>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Layanan 1 -->
-                <div class="bg-white p-8 rounded-3xl shadow-sm hover:shadow-xl transition-shadow border border-gray-100 group">
-                    <div class="w-14 h-14 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center text-2xl mb-6 group-hover:scale-110 group-hover:bg-blue-600 group-hover:text-white transition-all">
-                        <i class="fa-solid fa-globe"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-gray-900 mb-3">Aplikasi Pengelolaan Website (<a href="https://portalbumdes.com" target="_blank" class="text-blue-600 hover:underline">portalbumdes.com</a>) </h3>
-                    <p class="text-gray-500 mb-4">Platform ini memungkinkan BUMDesa memiliki website resmi secara gratis tanpa perlu kemampuan 
-coding. Website dapat digunakan sebagai sarana publikasi profil, unit usaha, kegiatan, serta 
-transparansi informasi kepada masyarakat. </p>
-                </div>
-
-                <!-- Layanan 2 -->
-                <div class="bg-white p-8 rounded-3xl shadow-sm hover:shadow-xl transition-shadow border border-gray-100 group">
-                    <div class="w-14 h-14 bg-green-50 text-green-600 rounded-2xl flex items-center justify-center text-2xl mb-6 group-hover:scale-110 group-hover:bg-green-600 group-hover:text-white transition-all">
-                        <i class="fa-solid fa-calculator"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-gray-900 mb-3">Aplikasi Keuangan BUMDesa (<a href="https://bumdespro.my.id" target="_blank" class="text-green-600 hover:underline">bumdespro.my.id</a>)</h3>
-                    <p class="text-gray-500 mb-4">Aplikasi ini dirancang untuk membantu pengurus dalam mengelola keuangan secara tertib dan 
-sistematis, mulai dari pencatatan transaksi, laporan keuangan, hingga rekapitulasi data yang siap 
-digunakan untuk pelaporan.</p>
-                </div>
-
-                <!-- Layanan 3 -->
-                <div class="bg-white p-8 rounded-3xl shadow-sm hover:shadow-xl transition-shadow border border-gray-100 group">
-                    <div class="w-14 h-14 bg-purple-50 text-purple-600 rounded-2xl flex items-center justify-center text-2xl mb-6 group-hover:scale-110 group-hover:bg-purple-600 group-hover:text-white transition-all">
-                        <i class="fa-solid fa-file-invoice"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-gray-900 mb-3">Aplikasi Dokumen & SPJ (<a href="https://bumdespro.my.id" target="_blank" class="text-purple-600 hover:underline">bumdespro.my.id</a>)</h3>
-                    <p class="text-gray-500 mb-4">Mendukung pengelolaan administrasi secara digital, aplikasi ini memudahkan dalam penyusunan 
-dokumen dan SPJ (Surat Pertanggungjawaban) secara cepat, rapi, dan sesuai kebutuhan 
-pelaporan. </p>
-                </div>
-
-                <!-- Layanan 4 -->
-                <div class="bg-white p-8 rounded-3xl shadow-sm hover:shadow-xl transition-shadow border border-gray-100 group">
-                    <div class="w-14 h-14 bg-amber-50 text-amber-600 rounded-2xl flex items-center justify-center text-2xl mb-6 group-hover:scale-110 group-hover:bg-amber-600 group-hover:text-white transition-all">
-                        <i class="fa-solid fa-box-open"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-gray-900 mb-3">Produk Digital (<a href="https://lynk.id/danyndeso" target="_blank" class="text-amber-600 hover:underline">lynk.id/danyndeso</a>)</h3>
-                    <p class="text-gray-500 mb-4">Menyediakan berbagai template, dokumen, dan kebutuhan administrasi BUMDesa yang siap 
-pakai, sehingga membantu pengurus dalam mempercepat pekerjaan tanpa harus membuat dari awal. </p>
-                </div>
-
-                <!-- Layanan 5 -->
-                <div class="bg-white p-8 rounded-3xl shadow-sm hover:shadow-xl transition-shadow border border-gray-100 group">
-                    <div class="w-14 h-14 bg-red-50 text-red-600 rounded-2xl flex items-center justify-center text-2xl mb-6 group-hover:scale-110 group-hover:bg-red-600 group-hover:text-white transition-all">
-                        <i class="fa-brands fa-youtube"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-gray-900 mb-3">Edukasi Digital (<a href="https://www.youtube.com/@danyndeso" target="_blank" class="text-red-600 hover:underline">www.youtube.com/@danyndeso</a>)</h3>
-                    <p class="text-gray-500 mb-4">Melalui kanal edukasi digital, kami menyediakan materi pembelajaran, tutorial, dan informasi 
-praktis seputar pengelolaan BUMDesa untuk meningkatkan kapasitas dan pemahaman pengurus.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Section: FAQ -->
-    <section class="py-20 bg-white" id="faq">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
-                <span class="text-accent font-bold tracking-wider uppercase text-sm">Pertanyaan</span>
-                <h2 class="mt-2 text-3xl font-extrabold text-gray-900 sm:text-4xl">FAQ (Frequently Asked Questions)</h2>
-                <div class="mt-4 w-24 h-1 bg-accent mx-auto rounded-full"></div>
-            </div>
-
-            <div class="space-y-4" x-data="{ active: null }">
-                @php
-                    $faqs = [
-                        ['q' => 'Apa itu PortalBUMDes?', 'a' => 'PortalBUMDes adalah platform digital yang membantu BUMDesa memiliki website resmi, serta memudahkan pengelolaan data dan informasi secara terintegrasi.'],
-                        ['q' => 'Apakah BUMDesa harus bisa coding?', 'a' => 'Tidak. PortalBUMDes dirancang agar mudah digunakan tanpa kemampuan coding, sehingga pengurus BUMDesa dapat langsung mengelola website dan data secara mandiri.'],
-                        ['q' => 'Apakah layanan PortalBUMDes berbayar?', 'a' => 'Untuk pembuatan dan pengelolaan website BUMDesa, layanan ini disediakan secara gratis. Beberapa paket atau layanan tambahan dapat bersifat opsional.'],
-                        ['q' => 'Apa manfaat PortalBUMDes bagi pemerintah kabupaten?', 'a' => 'PortalBUMDes membantu monitoring perkembangan BUMDesa, identifikasi data secara cepat, dan analisa kinerja BUMDesa berbasis data.'],
-                        ['q' => 'Apa itu BumdesPro?', 'a' => 'BumdesPro adalah pengembang PortalBUMDes yang juga menyediakan aplikasi tambahan: Pengelolaan & Penyusunan laporan keuangan (bumdespro.my.id) dan Pembuatan SPJ digital.'],
-                        ['q' => 'Bagaimana cara mendaftar atau mendapatkan akun?', 'a' => 'Akun biasanya diberikan melalui admin kabupaten atau pihak terkait. Anda juga dapat menghubungi kontak yang tersedia untuk informasi lebih lanjut.'],
-                        ['q' => 'Apakah bisa mengunggah dokumen laporan?', 'a' => 'Ya. BUMDesa dapat mengunggah atau mengirimkan dokumen laporan melalui link (misalnya Google Drive) yang kemudian dapat dipantau dari admin.'],
-                        ['q' => 'Apakah tersedia panduan pengguna?', 'a' => 'Ya. Kami menyediakan berbagai materi, template, dan tutorial yang dapat diakses melalui kanal edukasi digital.'],
-                        ['q' => 'Bagaimana jika mengalami kendala?', 'a' => 'Silakan hubungi kami melalui WhatsApp, email, atau kanal YouTube. Tim kami siap membantu memberikan solusi.'],
-                    ];
-                @endphp
-
-                @foreach ($faqs as $i => $faq)
-                    <div class="border-2 border-gray-100 rounded-2xl overflow-hidden hover:border-blue-100 transition-colors">
-                        <button 
-                            @click="active === {{ $i }} ? active = null : active = {{ $i }}"
-                            class="w-full px-6 py-5 text-left flex justify-between items-center bg-white hover:bg-gray-50 transition-colors"
-                        >
-                            <span class="font-bold text-gray-900 flex gap-4 pr-4">
-                                <span class="text-accent">{{ $i + 1 }}.</span>
-                                {{ $faq['q'] }}
-                            </span>
-                            <span class="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center text-primary shrink-0 transition-transform duration-300 transform" :class="{'rotate-180': active === {{ $i }}}">
-                                <i class="fa-solid fa-chevron-down text-sm"></i>
-                            </span>
-                        </button>
-                        <div x-show="active === {{ $i }}" x-collapse>
-                            <div class="px-6 pb-6 pt-2 text-gray-600 leading-relaxed border-t border-gray-50 pl-14">
-                                {{ $faq['a'] }}
-                            </div>
-                        </div>
-                    </div>
-                @endforeach
-            </div>
-        </div>
-    </section>
-
-    <!-- Section: Kontak -->
-    <section class="py-20 bg-primary relative overflow-hidden text-white" id="kontak">
-        <!-- Decoration -->
-        <div class="absolute top-0 left-0 w-full h-full overflow-hidden opacity-10 pointer-events-none">
-            <div class="absolute -top-24 -left-24 w-96 h-96 rounded-full bg-white"></div>
-            <div class="absolute top-1/2 right-10 w-64 h-64 rounded-full bg-accent"></div>
-        </div>
-
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-                <div>
-                    <span class="text-accent font-bold tracking-wider uppercase text-sm">Hubungi Kami</span>
-                    <h2 class="mt-2 text-3xl font-extrabold text-white sm:text-5xl mb-6">Butuh Bantuan atau Ingin Bekerja Sama?</h2>
-                    <p class="text-blue-100 text-lg mb-10 leading-relaxed">
-                        Kami terbuka untuk komunikasi, kerja sama, serta dukungan dalam pengembangan BUMDesa. Tim kami siap membantu dan merespons setiap pertanyaan, masukan, maupun kebutuhan terkait layanan PortalBUMDes.
-                    </p>
-                    
-                    <div class="space-y-6">
-                        <a href="https://wa.me/6282247758730" target="_blank" class="flex items-center gap-6 group">
-                            <div class="w-16 h-16 rounded-2xl bg-white/10 flex items-center justify-center text-accent text-3xl group-hover:bg-accent group-hover:text-primary transition-all">
-                                <i class="fa-brands fa-whatsapp"></i>
-                            </div>
-                            <div>
-                                <p class="text-blue-200 text-sm mb-1 uppercase tracking-wider font-semibold">WhatsApp</p>
-                                <p class="text-2xl font-bold group-hover:text-accent transition-colors">0822-4775-8730</p>
-                            </div>
-                        </a>
-                        
-                        <a href="mailto:dany.dwin@gmail.com" class="flex items-center gap-6 group">
-                            <div class="w-16 h-16 rounded-2xl bg-white/10 flex items-center justify-center text-accent text-2xl group-hover:bg-accent group-hover:text-primary transition-all">
-                                <i class="fa-solid fa-envelope"></i>
-                            </div>
-                            <div>
-                                <p class="text-blue-200 text-sm mb-1 uppercase tracking-wider font-semibold">Email</p>
-                                <p class="text-xl font-bold group-hover:text-accent transition-colors">dany.dwin@gmail.com</p>
-                            </div>
-                        </a>
-
-                        <a href="https://www.youtube.com/@danyndeso" target="_blank" class="flex items-center gap-6 group">
-                            <div class="w-16 h-16 rounded-2xl bg-white/10 flex items-center justify-center text-accent text-2xl group-hover:bg-accent group-hover:text-primary transition-all">
-                                <i class="fa-brands fa-youtube"></i>
-                            </div>
-                            <div>
-                                <p class="text-blue-200 text-sm mb-1 uppercase tracking-wider font-semibold">YouTube Channel</p>
-                                <p class="text-xl font-bold group-hover:text-accent transition-colors">Dany Ndeso</p>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-                
-                <!-- CTA / Quick form placeholder -->
-                <div class="bg-white rounded-3xl p-8 lg:p-12 shadow-2xl text-gray-900 text-center">
-                    <div class="w-20 h-20 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-6 text-primary text-3xl">
-                        <i class="fa-solid fa-headset"></i>
-                    </div>
-                    <h3 class="text-2xl font-bold mb-4">Mari Berdiskusi</h3>
-                    <p class="text-gray-500 mb-8">Kirim pesan langsung ke WhatsApp kami untuk respon yang lebih cepat mengenai kebutuhan BUMDesa Anda.</p>
-                    <a href="https://wa.me/6282247758730" target="_blank" class="block w-full py-4 px-6 bg-accent hover:bg-yellow-400 text-primary font-bold rounded-xl transition-colors text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1">
-                        <i class="fa-brands fa-whatsapp mr-2"></i> Chat WhatsApp Sekarang
-                    </a>
-                </div>
-            </div>
-        </div>
-    </section>
 
 @endsection

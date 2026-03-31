@@ -56,9 +56,13 @@ class KinerjaController extends Controller
 
         $request->validate([
             'pemeringkatan' => 'required|in:Maju,Berkembang,Perintis,Pemula',
+            'pemeringkatan_tahun' => 'required|integer|min:2000|max:'.(date('Y')+1)
         ]);
 
-        $bumdes->update(['pemeringkatan' => $request->pemeringkatan]);
+        $bumdes->update([
+            'pemeringkatan' => $request->pemeringkatan,
+            'pemeringkatan_tahun' => $request->pemeringkatan_tahun
+        ]);
 
         return redirect()->route('user.kinerja.index', ['slug' => $slug])
             ->with('success', 'Hasil Pemeringkatan berhasil diperbarui!');

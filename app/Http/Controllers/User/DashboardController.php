@@ -20,4 +20,10 @@ class DashboardController extends Controller
 
         return view('user.dashboard', compact('bumdes', 'latestReports', 'subscription'));
     }
+
+    public function readNotifications()
+    {
+        auth()->user()->unreadNotifications->markAsRead();
+        return redirect()->back()->with('success', 'Semua notifikasi telah ditandai sebagai dibaca.');
+    }
 }

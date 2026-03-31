@@ -41,6 +41,14 @@ class LanggananController extends Controller
             ->where('type', 'kabupaten')
             ->get();
 
+        // Cek langganan aktif untuk countdown
+        $active = Langganan::where('kabupaten_id', $kabupatenId)
+            ->whereNull('bumdes_id')
+            ->where('status', 'active')
+            ->where('end_date', '>', now())
+            ->orderBy('end_date', 'desc')
+            ->first();
+
         // Cek apakah ada tagihan pending — kalau ada, generate snap token
         $pending = Langganan::where('kabupaten_id', $kabupatenId)
             ->whereNull('bumdes_id')
@@ -88,7 +96,7 @@ class LanggananController extends Controller
         }
 
         return view('adminkab.langganan.index', compact(
-            'langganans', 'pricingConfigs', 'kabupaten', 'pending', 'snapToken'
+            'langganans', 'pricingConfigs', 'kabupaten', 'pending', 'snapToken', 'active'
         ));
     }
 
@@ -168,35 +176,65 @@ class LanggananController extends Controller
     {
         $kabupatenId = auth()->user()->kabupaten_id;
 
-        $active = Langganan::where('kabupaten_id', $kabupatenId)
+        // Cari pending terakhir (atau yang sudah terupdate jadi active via webhook)
+        $pending = Langganan::where('kabupaten_id', $kabupatenId)
             ->whereNull('bumdes_id')
-            ->where('status', 'active')
-            ->where('end_date', '>', now())
+            ->latest()
             ->first();
 
-        if ($active) {
+        if (!$pending) {
+            return redirect()->route('adminkab.langganan.index');
+        }
+
+        if ($pending->status === 'active') {
             return redirect()->route('adminkab.langganan.index')
                 ->with('success', 'Pembayaran berhasil! Paket premium Kabupaten Anda sudah aktif.');
         }
 
-        // Fallback: aktifkan pending terakhir jika webhook belum terpicu
-        $pending = Langganan::where('kabupaten_id', $kabupatenId)
-            ->whereNull('bumdes_id')
-            ->where('status', 'pending')
-            ->latest()
-            ->first();
-
-        if ($pending) {
+        if ($pending->status === 'pending') {
+            // Cek ada langganan aktif sebelumnya, perpanjang dari sana
+            $currentActive = Langganan::where('kabupaten_id', $kabupatenId)
+                ->whereNull('bumdes_id')
+                ->where('status', 'active')
+                ->where('end_date', '>', now())
+                ->where('id', '!=', $pending->id)
+                ->orderBy('end_date', 'desc')
+                ->first();
+            $startFrom = $currentActive ? \Carbon\Carbon::parse($currentActive->end_date) : now();
+            if ($currentActive) { $currentActive->update(['status' => 'expired']); }
+            // Hapus pending lainnya
+            Langganan::where('kabupaten_id', $kabupatenId)
+                ->whereNull('bumdes_id')
+                ->where('status', 'pending')
+                ->where('id', '!=', $pending->id)
+                ->update(['status' => 'expired']);
             $pending->update([
                 'status'     => 'active',
-                'start_date' => now(),
-                'end_date'   => now()->addMonths($pending->duration_months ?? 1),
+                'start_date' => $startFrom,
+                'end_date'   => $startFrom->copy()->addMonths($pending->duration_months ?? 1),
             ]);
             return redirect()->route('adminkab.langganan.index')
                 ->with('success', 'Pembayaran berhasil dikonfirmasi!');
         }
 
         return redirect()->route('adminkab.langganan.index')
-            ->with('info', 'Pembayaran sedang diverifikasi. Status akan diperbarui otomatis.');
+            ->with('info', 'Status langganan: ' . ucfirst($pending->status));
+    }
+
+    /**
+     * Cancel a pending subscription order
+     */
+    public function destroy(Langganan $langganan)
+    {
+        $kabupatenId = auth()->user()->kabupaten_id;
+
+        if ($langganan->kabupaten_id !== $kabupatenId || $langganan->status !== 'pending') {
+            abort(403);
+        }
+
+        $langganan->update(['status' => 'expired']);
+
+        return redirect()->route('adminkab.langganan.index')
+            ->with('success', 'Pesanan berhasil dibatalkan.');
     }
 }

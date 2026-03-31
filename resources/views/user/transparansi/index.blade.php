@@ -11,6 +11,21 @@
 
     <!-- Edit Form -->
     <div class="bg-white rounded-xl shadow-sm border p-6">
+        @if ($errors->any())
+            <div class="bg-red-50 text-red-600 p-4 rounded-lg mb-4 text-sm font-semibold border border-red-200">
+                <ul class="list-disc list-inside">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+        @if (session('success'))
+            <div class="bg-green-50 text-green-700 p-4 rounded-lg mb-4 text-sm font-semibold border border-green-200">
+                <i class="fa-solid fa-circle-check mr-2"></i> {{ session('success') }}
+            </div>
+        @endif
+
         <form action="{{ route('user.transparansi.store', ['slug' => $bumdes->slug ?? 'default']) }}" method="POST">
             @csrf
             

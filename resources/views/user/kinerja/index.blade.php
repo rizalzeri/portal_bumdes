@@ -13,7 +13,7 @@
         <form action="{{ route('user.kinerja.update', ['slug' => auth()->user()->username, 'kinerja' => 'pemeringkatan']) }}" method="POST" class="flex flex-col md:flex-row gap-4 items-end">
             @csrf
             @method('PUT')
-            <div class="flex-1 w-full">
+            <div class="flex-1 w-full md:w-3/5">
                 <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Status Pemeringkatan BUMDesa</label>
                 <select name="pemeringkatan" required class="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm border p-2">
                     <option value="">-- Pilih Hasil Pemeringkatan --</option>
@@ -21,6 +21,15 @@
                     <option value="Berkembang" {{ $bumdes->pemeringkatan == 'Berkembang' ? 'selected' : '' }}>Berkembang</option>
                     <option value="Perintis" {{ $bumdes->pemeringkatan == 'Perintis' ? 'selected' : '' }}>Perintis</option>
                     <option value="Pemula" {{ $bumdes->pemeringkatan == 'Pemula' ? 'selected' : '' }}>Pemula</option>
+                </select>
+            </div>
+            <div class="flex-1 w-full md:w-2/5">
+                <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Periode Tahun</label>
+                <select name="pemeringkatan_tahun" required class="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm border p-2">
+                    <option value="">-- Tahun --</option>
+                    @for($i = date('Y') + 1; $i >= 2015; $i--)
+                        <option value="{{ $i }}" {{ $bumdes->pemeringkatan_tahun == $i ? 'selected' : '' }}>{{ $i }}</option>
+                    @endfor
                 </select>
             </div>
             <button type="submit" class="bg-primary hover:bg-primary-900 text-white px-6 py-2 rounded-lg font-bold shadow-sm transition-colors w-full md:w-auto text-sm">

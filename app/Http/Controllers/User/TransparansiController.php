@@ -26,7 +26,7 @@ class TransparansiController extends Controller
             'musdes_terakhir' => 'nullable|date',
             'audit_internal_terakhir' => 'nullable|date',
             'laporan_dinas_status' => 'nullable|in:sudah,belum',
-            'laporan_dinas_link' => 'nullable|url',
+            'laporan_dinas_link' => 'nullable|string',
         ]);
 
         $bumdes->update($request->only([

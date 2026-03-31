@@ -97,16 +97,24 @@ class BumdesController extends Controller
         }
 
         try {
-            $userId = $bumde->user_id;
-            $bumde->delete();
-            
-            if ($userId) {
-                User::find($userId)?->delete();
-            }
+            \Illuminate\Support\Facades\DB::transaction(function () use ($bumde) {
+                $userId = $bumde->user_id;
+                
+                // Hapus BUMDesa terlebih dahulu untuk melepas foreign key pada tabel ini (jika ada cascade)
+                $bumde->delete();
+                
+                // Pastikan menghapus user juga di dalam transaksi
+                if ($userId) {
+                    $user = User::find($userId);
+                    if ($user) {
+                        $user->delete();
+                    }
+                }
+            });
 
             return redirect()->route('adminkab.bumdes.index')->with('success', 'BUMDesa beserta akun pengurusnya berhasil dihapus.');
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Gagal menghapus! BUMDesa ini masih memiliki data aktif (laporan, unit usaha, dll) di sistem.');
+            return redirect()->back()->with('error', 'Gagal menghapus! BUMDesa atau Akun Pengurus masih digunakan pada data lain (laporan, langganan, dll) di sistem. Pesan: ' . $e->getMessage());
         }
     }
 

@@ -41,8 +41,17 @@
             <div class="text-xs text-gray-500 mb-3 bg-gray-50 px-2 py-1 rounded-md"><i class="fa-solid fa-phone mr-1"></i> {{ $p->phone }}</div>
             @endif
             
-            <div class="mt-auto w-full pt-3 border-t text-center text-xs text-gray-400">
-                Data yang tersimpan tidak dapat diubah (Read-only)
+            <div class="mt-auto w-full pt-3 border-t flex justify-center gap-2">
+                <button onclick="editPengurus({{ $p->id }}, '{{ addslashes($p->name) }}', '{{ addslashes($p->role) }}', '{{ addslashes($p->phone ?? '') }}')" class="bg-blue-100 hover:bg-blue-200 text-blue-700 px-3 py-1.5 rounded-md text-xs font-semibold tooltip transition-colors" title="Ubah Data">
+                    <i class="fa-solid fa-pen-to-square mr-1"></i> Edit
+                </button>
+                <form action="{{ route('user.personalia.destroy', $p->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Apakah Anda yakin ingin menghapus anggota ini?');">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="bg-red-100 hover:bg-red-200 text-red-700 px-3 py-1.5 rounded-md text-xs font-semibold tooltip transition-colors" title="Hapus Data">
+                        <i class="fa-solid fa-trash mr-1"></i> Hapus
+                    </button>
+                </form>
             </div>
         </div>
     @empty
@@ -138,7 +147,10 @@
 
 <script>
     function editPengurus(id, name, role, phone) {
-        document.getElementById('form-edit').action = `/user/personalia/${id}`;
+        let routeTemplate = "{{ route('user.personalia.update', ['personalia' => ':id']) }}";
+        let actionUrl = routeTemplate.replace(':id', id);
+        
+        document.getElementById('form-edit').action = actionUrl;
         document.getElementById('edit-name').value = name;
         document.getElementById('edit-role').value = role;
         document.getElementById('edit-phone').value = phone;

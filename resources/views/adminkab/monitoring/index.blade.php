@@ -13,17 +13,50 @@
     <h3 class="font-bold text-lg mb-4 text-gray-800 border-b pb-2"><i class="fa-solid fa-list-check text-primary mr-2"></i> Kategori Monitoring</h3>
     
     <div class="flex flex-wrap gap-2">
-        <!-- 1, 2, 3 -->
+        <a href="{{ route('adminkab.monitoring.index', ['tab' => 'manual']) }}" class="px-5 py-2.5 text-sm font-semibold rounded-lg border {{ $tab == 'manual' ? 'bg-primary text-white border-primary shadow-sm' : 'bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100' }}">
+            <i class="fa-solid fa-hand-holding-hand mr-1 text-blue-400"></i> Pantauan Manual
+        </a>
         <a href="{{ route('adminkab.monitoring.index', ['tab' => 'sudah_mengirim']) }}" class="px-5 py-2.5 text-sm font-semibold rounded-lg border {{ $tab == 'sudah_mengirim' ? 'bg-primary text-white border-primary shadow-sm' : 'bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100' }}">
-            <i class="fa-solid fa-check-circle mr-1 text-green-400"></i> Sudah Mengirim Dokumen Laporan
+            <i class="fa-solid fa-check-circle mr-1 text-green-400"></i> Sudah Mengirim Laporan
         </a>
         <a href="{{ route('adminkab.monitoring.index', ['tab' => 'belum_mengirim']) }}" class="px-5 py-2.5 text-sm font-semibold rounded-lg border {{ $tab == 'belum_mengirim' ? 'bg-primary text-white border-primary shadow-sm' : 'bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100' }}">
-            <i class="fa-solid fa-clock mr-1 text-orange-400"></i> Belum Mengirim Dokumen Laporan
+            <i class="fa-solid fa-clock mr-1 text-orange-400"></i> Belum Mengirim Laporan
         </a>
         <a href="{{ route('adminkab.monitoring.index', ['tab' => 'perhatian_khusus']) }}" class="px-5 py-2.5 text-sm font-semibold rounded-lg border {{ $tab == 'perhatian_khusus' ? 'bg-primary text-white border-primary shadow-sm' : 'bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100' }}">
-            <i class="fa-solid fa-triangle-exclamation mr-1 text-red-400"></i> Dalam Perhatian Khusus
+            <i class="fa-solid fa-triangle-exclamation mr-1 text-red-400"></i> Perhatian Khusus
         </a>
     </div>
+
+    @if($tab == 'manual')
+    <div class="mt-6 pt-6 border-t border-gray-200" x-data="{ showAddForm: false }">
+        <button @click="showAddForm = !showAddForm" class="bg-primary text-white px-4 py-2 rounded-lg font-bold hover:bg-primary-900 transition text-sm">
+            <i class="fa-solid fa-plus mr-1"></i> Tambah BUMDesa ke Monitoring Manual
+        </button>
+
+        <div x-show="showAddForm" class="mt-4 p-4 border rounded-lg bg-gray-50" style="display: none;">
+            <form action="{{ route('adminkab.monitoring.store') }}" method="POST" class="space-y-4">
+                @csrf
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-1">Pilih BUMDesa</label>
+                    <select name="bumdes_id" class="w-full border-gray-300 rounded-md shadow-sm focus:ring-primary focus:border-primary p-2 dropdown-select" required>
+                        <option value="">-- Pilih BUMDesa --</option>
+                        @foreach($allBumdes as $bd)
+                            <option value="{{ $bd->id }}">{{ $bd->name }} ({{ $bd->desa }})</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-1">Catatan Monitoring (Opsional)</label>
+                    <textarea name="catatan" rows="2" class="w-full border-gray-300 rounded-md shadow-sm focus:ring-primary focus:border-primary p-2" placeholder="Alasan mengapa dimasukkan ke daftar pantauan khusus..."></textarea>
+                </div>
+                <div>
+                    <button type="submit" class="bg-accent text-primary px-4 py-2 rounded-lg font-bold hover:bg-yellow-400 transition text-sm">Simpan Data</button>
+                    <button type="button" @click="showAddForm = false" class="ml-2 text-sm text-gray-500 hover:text-gray-700">Batal</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    @endif
 </div>
 
 <div class="bg-white rounded-xl shadow-sm border p-6">
@@ -66,9 +99,21 @@
                         @endif
                     </td>
                     <td class="px-6 py-4 text-center">
-                        <a href="mailto:{{ $b->user->email ?? '' }}" class="bg-blue-100 hover:bg-blue-200 text-blue-700 p-2 rounded-md tooltip text-xs font-semibold {{ !$b->user ? 'opacity-50 cursor-not-allowed' : '' }}" title="Kirim Surat Email Pengingat">
-                            <i class="fa-regular fa-envelope mr-1"></i> Ingatkan
-                        </a>
+                        @if($tab == 'manual')
+                            <form action="{{ route('adminkab.monitoring.destroy', $b->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Hapus dari pantauan manual?');">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="bg-red-100 hover:bg-red-200 text-red-700 p-2 rounded-md tooltip text-xs font-semibold" title="Hapus dari Daftar">
+                                    <i class="fa-solid fa-trash mr-1"></i> Hapus
+                                </button>
+                            </form>
+                        @endif
+                        <form action="{{ route('adminkab.monitoring.ingatkan', $b->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Kirim pengingat ke dashboard BUMDesa ini?');">
+                            @csrf
+                            <button type="submit" class="bg-blue-100 hover:bg-blue-200 text-blue-700 p-2 rounded-md tooltip text-xs font-semibold {{ !$b->user ? 'opacity-50 cursor-not-allowed' : '' }}" title="Kirim Pengingat Notifikasi" {{ !$b->user ? 'disabled' : '' }}>
+                                <i class="fa-regular fa-bell mr-1"></i> Ingatkan
+                            </button>
+                        </form>
                     </td>
                 </tr>
                 @empty

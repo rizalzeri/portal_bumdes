@@ -37,7 +37,7 @@ class LanggananController extends Controller
             ->orWhere('id', '=', auth()->user()->bumdes_id)
             ->firstOrFail();
 
-        $plans   = PricingConfig::active()->get();
+        $plans   = PricingConfig::active()->where('type', 'bumdes')->get();
         $active  = Langganan::where('bumdes_id', '=', $bumdes->id)
             ->where('status', '=', 'active')
             ->where('end_date', '>', now())
@@ -188,20 +188,58 @@ class LanggananController extends Controller
                 return response()->json(['message' => 'Order not found'], 404);
             }
 
+            $activatePayment = function() use ($langganan) {
+                if ($langganan->status === 'active') {
+                    return; // Sudah diaktifkan oleh successCallback
+                }
+
+                // Cek apakah ada langganan aktif, jika ada perpanjang dari end_date-nya
+                if ($langganan->kabupaten_id && !$langganan->bumdes_id) {
+                    // Kabupaten: perpanjang dari end_date aktif
+                    $currentActive = Langganan::where('kabupaten_id', $langganan->kabupaten_id)
+                        ->whereNull('bumdes_id')
+                        ->where('status', 'active')
+                        ->where('end_date', '>', now())
+                        ->where('id', '!=', $langganan->id)
+                        ->orderBy('end_date', 'desc')
+                        ->first();
+                    $startFrom = $currentActive ? \Carbon\Carbon::parse($currentActive->end_date) : now();
+                    if ($currentActive) { $currentActive->update(['status' => 'expired']); }
+                    // Hapus pending lainnya
+                    Langganan::where('kabupaten_id', $langganan->kabupaten_id)
+                        ->whereNull('bumdes_id')
+                        ->where('status', 'pending')
+                        ->where('id', '!=', $langganan->id)
+                        ->update(['status' => 'expired']);
+                } else {
+                    // BUMDesa: perpanjang dari end_date aktif
+                    $currentActive = Langganan::where('bumdes_id', $langganan->bumdes_id)
+                        ->where('status', 'active')
+                        ->where('end_date', '>', now())
+                        ->where('id', '!=', $langganan->id)
+                        ->orderBy('end_date', 'desc')
+                        ->first();
+                    $startFrom = $currentActive ? \Carbon\Carbon::parse($currentActive->end_date) : now();
+                    if ($currentActive) { $currentActive->update(['status' => 'expired']); }
+                    // Hapus pending lainnya
+                    Langganan::where('bumdes_id', $langganan->bumdes_id)
+                        ->where('status', 'pending')
+                        ->where('id', '!=', $langganan->id)
+                        ->update(['status' => 'expired']);
+                }
+                $langganan->update([
+                    'status'     => 'active',
+                    'start_date' => $startFrom,
+                    'end_date'   => $startFrom->copy()->addMonths($langganan->duration_months ?? 1),
+                ]);
+            };
+
             if ($transactionStatus === 'capture') {
                 if ($fraudStatus === 'accept') {
-                    $langganan->update([
-                        'status' => 'active',
-                        'start_date' => now(),
-                        'end_date' => now()->addMonths($langganan->duration_months ?? 1)
-                    ]);
+                    $activatePayment();
                 }
             } elseif ($transactionStatus === 'settlement') {
-                $langganan->update([
-                    'status' => 'active',
-                    'start_date' => now(),
-                    'end_date' => now()->addMonths($langganan->duration_months ?? 1)
-                ]);
+                $activatePayment();
             } elseif (in_array($transactionStatus, ['cancel', 'deny', 'expire'])) {
                 $langganan->update(['status' => 'expired']);
             } elseif ($transactionStatus === 'pending') {
@@ -226,35 +264,46 @@ class LanggananController extends Controller
             ->orWhere('id', '=', auth()->user()->bumdes_id)
             ->firstOrFail();
 
-        // Check if Midtrans already activated via webhook
-        $active = Langganan::where('bumdes_id', '=', $bumdes->id)
-            ->where('status', '=', 'active')
-            ->where('end_date', '>', now())
+        // Cari pending terakhir (atau yang sudah terupdate jadi active)
+        $pending = Langganan::where('bumdes_id', '=', $bumdes->id)
+            ->latest()
             ->first();
 
-        if ($active) {
+        if (!$pending) {
+            return redirect()->route('user.langganan.index', $slug);
+        }
+
+        if ($pending->status === 'active') {
             return redirect()->route('user.langganan.index', $slug)
                 ->with('success', 'Pembayaran berhasil! Paket premium Anda sudah aktif.');
         }
 
-        // Fallback: activate the most recent pending if webhook hasn't fired yet
-        $pending = Langganan::where('bumdes_id', '=', $bumdes->id)
-            ->where('status', '=', 'pending')
-            ->latest()
-            ->first();
-
-        if ($pending) {
+        if ($pending->status === 'pending') {
+            // Cek ada langganan aktif sebelumnya, perpanjang dari sana
+            $currentActive = Langganan::where('bumdes_id', $bumdes->id)
+                ->where('status', 'active')
+                ->where('end_date', '>', now())
+                ->where('id', '!=', $pending->id)
+                ->orderBy('end_date', 'desc')
+                ->first();
+            $startFrom = $currentActive ? \Carbon\Carbon::parse($currentActive->end_date) : now();
+            if ($currentActive) { $currentActive->update(['status' => 'expired']); }
+            // Hapus pending lainnya
+            Langganan::where('bumdes_id', $bumdes->id)
+                ->where('status', 'pending')
+                ->where('id', '!=', $pending->id)
+                ->update(['status' => 'expired']);
             $pending->update([
-                'status' => 'active',
-                'start_date' => now(),
-                'end_date' => now()->addMonths($pending->duration_months ?? 1)
+                'status'     => 'active',
+                'start_date' => $startFrom,
+                'end_date'   => $startFrom->copy()->addMonths($pending->duration_months ?? 1),
             ]);
             return redirect()->route('user.langganan.index', $slug)
                 ->with('success', 'Pembayaran berhasil dikonfirmasi! Paket premium Anda telah aktif.');
         }
 
         return redirect()->route('user.langganan.index', $slug)
-            ->with('info', 'Pembayaran Anda sedang diverifikasi. Status akan diperbarui otomatis.');
+            ->with('info', 'Status langganan: ' . ucfirst($pending->status));
     }
 
     /**

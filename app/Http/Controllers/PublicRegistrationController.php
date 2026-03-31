@@ -16,7 +16,11 @@ class PublicRegistrationController extends Controller
     {
         // Fix duplicate provinces by name
         $provinces = Province::orderBy('name')->get()->unique('name');
-        $pricingConfigs = \App\Models\PricingConfig::active()->get();
+        // Only get packages intended for BUMDesa
+        $pricingConfigs = \App\Models\PricingConfig::active()
+            ->where('type', 'bumdes')
+            ->get();
+            
         return view('public.register', compact('provinces', 'pricingConfigs'));
     }
 

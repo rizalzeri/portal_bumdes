@@ -11,73 +11,74 @@ class AnalisaDataController extends Controller
     public function index(Request $request)
     {
         $kabupatenId = auth()->user()->kabupaten_id;
-        $tab = $request->get('tab', 'aktif');
         $query = Bumdesa::where('kabupaten_id', $kabupatenId)->with(['user']);
 
-        switch ($tab) {
-            case 'aktif':
-                $query->where(function($q) {
-                    $q->where('status', 'active')->orWhere('is_active', true);
-                });
-                break;
-            case 'tidak_aktif':
-                $query->where(function($q) {
-                    $q->where('status', '!=', 'active')->where('is_active', false);
-                });
-                break;
-            case 'berbadan_hukum':
-                $query->whereNotNull('nomor_sertifikat')->where('nomor_sertifikat', '!=', '');
-                break;
-            case 'belum_berbadan_hukum':
-                $query->where(function($q) {
-                    $q->whereNull('nomor_sertifikat')->orWhere('nomor_sertifikat', '');
-                });
-                break;
-            case 'kategori_usaha':
-                $query->whereHas('unitUsaha');
-                if ($request->filled('filter_val')) {
-                    $query->whereHas('unitUsaha', fn($q) => $q->where('unit_usaha_option_id', $request->filter_val));
-                }
-                break;
-            case 'komoditas_pangan':
-                $query->whereHas('produkKetahananPangans');
-                if ($request->filled('filter_val')) {
-                    $query->whereHas('produkKetahananPangans', fn($q) => $q->where('produk_ketapang_option_id', $request->filter_val));
-                }
-                break;
-            case 'pemeringkatan':
-                $query->whereNotNull('klasifikasi')->where('klasifikasi', '!=', '');
-                if ($request->filled('filter_val')) {
-                    $query->where('klasifikasi', $request->filter_val);
-                }
-                break;
-            case 'omset_regular':
-                // Join or sort by Laporan Keuangan Omset/Laba etc.
-                // Simplified: Must have laporan keuangan
-                $query->whereHas('laporanKeuangan');
-                $query->withSum('laporanKeuangan', 'pendapatan');
-                $query->withSum('laporanKeuangan', 'laba_rugi');
-                $query->orderBy('laporan_keuangan_sum_pendapatan', 'desc');
-                break;
-            case 'omset_ketapang':
-                // Must have ketapang and laporan keuangan
-                $query->whereHas('produkKetahananPangans')->whereHas('laporanKeuangan');
-                $query->withSum('laporanKeuangan', 'pendapatan');
-                $query->withSum('laporanKeuangan', 'laba_rugi');
-                $query->orderBy('laporan_keuangan_sum_pendapatan', 'desc');
-                break;
-            case 'mitra':
-                $query->whereHas('mitraKerjasama');
-                break;
-            default:
-                break;
+        // 1. Keaktifan BUMDesa
+        if ($request->filled('status') && $request->status !== 'semua') {
+            if ($request->status === 'aktif') {
+                $query->where(fn($q) => $q->where('status', 'active')->orWhere('is_active', true));
+            } else {
+                $query->where(fn($q) => $q->where('status', '!=', 'active')->where('is_active', false));
+            }
+        }
+
+        // 2. Berbadan Hukum
+        if ($request->filled('badan_hukum') && $request->badan_hukum !== 'semua') {
+            if ($request->badan_hukum === 'berbadan_hukum') {
+                $query->whereNotNull('nomor_sertifikat')->where('nomor_sertifikat', '!=', '')->where('nomor_sertifikat', '!=', 'proses');
+            } elseif ($request->badan_hukum === 'proses') {
+                $query->where('nomor_sertifikat', 'proses');
+            } elseif ($request->badan_hukum === 'belum') {
+                $query->where(fn($q) => $q->whereNull('nomor_sertifikat')->orWhere('nomor_sertifikat', ''));
+            }
+        }
+
+        // 3. Kategori Unit Usaha
+        if ($request->filled('kategori_usaha') && $request->kategori_usaha !== 'semua') {
+            $query->whereHas('unitUsaha', fn($q) => $q->where('unit_usaha_option_id', $request->kategori_usaha));
+        }
+
+        // 4. Komoditas Pangan
+        if ($request->filled('komoditas') && $request->komoditas !== 'semua') {
+            $query->whereHas('produkKetahananPangans', fn($q) => $q->where('produk_ketapang_option_id', $request->komoditas));
+        }
+
+        // 5. Mitra Kerjasama
+        if ($request->filled('mitra') && $request->mitra !== 'semua') {
+            $query->whereHas('mitraKerjasama', fn($q) => $q->where('mitra_option_id', $request->mitra));
+        }
+
+        // 6. Hasil Pemeringkatan
+        if ($request->filled('pemeringkatan') && $request->pemeringkatan !== 'semua') {
+            $query->where('klasifikasi', $request->pemeringkatan);
+        }
+
+        $tahun = $request->get('tahun', date('Y'));
+        
+        // 7. Laporan Keuangan Sorting (Reguler / Ketapang mapping to the same base for now if not distinct in DB)
+        $sort_keuangan = $request->get('sort_keuangan', 'semua');
+        if ($sort_keuangan !== 'semua') {
+            $query->whereHas('laporanKeuangan', fn($q) => $q->where('tahun', $tahun));
+            
+            if ($sort_keuangan == 'omset') {
+                $query->withSum(['laporanKeuangan' => fn($q) => $q->where('tahun', $tahun)], 'pendapatan')->orderByDesc('laporan_keuangan_sum_pendapatan');
+            } elseif ($sort_keuangan == 'laba') {
+                $query->withSum(['laporanKeuangan' => fn($q) => $q->where('tahun', $tahun)], 'laba_rugi')->orderByDesc('laporan_keuangan_sum_laba_rugi');
+            } elseif ($sort_keuangan == 'aset') {
+                $query->withSum(['laporanKeuangan' => fn($q) => $q->where('tahun', $tahun)], 'total_aset')->orderByDesc('laporan_keuangan_sum_total_aset');
+            }
         }
 
         $bumdes = $query->paginate(20)->withQueryString();
 
-        $kategoriList = \App\Models\UnitUsahaOption::all();
-        $komoditasList = \App\Models\ProdukKetapangOption::all();
+        $kategoriList = \App\Models\UnitUsahaOption::orderBy('name')->get();
+        $komoditasList = \App\Models\ProdukKetapangOption::orderBy('name')->get();
+        $mitraList = class_exists('\App\Models\MitraOption') ? \App\Models\MitraOption::orderBy('name')->get() : [];
+        $tahunList = \App\Models\LaporanKeuangan::select('tahun')->distinct()->orderByDesc('tahun')->pluck('tahun')->toArray();
+        if(empty($tahunList) || !in_array(date('Y'), $tahunList)) {
+            array_unshift($tahunList, date('Y'));
+        }
 
-        return view('adminkab.analisa_data.index', compact('bumdes', 'tab', 'kategoriList', 'komoditasList'));
+        return view('adminkab.analisa_data.index', compact('bumdes', 'kategoriList', 'komoditasList', 'mitraList', 'tahunList', 'tahun', 'sort_keuangan'));
     }
 }

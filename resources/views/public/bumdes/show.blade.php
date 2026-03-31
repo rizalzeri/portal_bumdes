@@ -1,5 +1,5 @@
 @extends('layouts.public')
-@section('title', 'BUMDesa "' . $bumdes->name . '" Desa')
+@section('title', 'BUMDesa ' . $bumdes->name . ' Desa ' . ($bumdes->desa ?? ''))
 
 @section('content')
     <!-- Header Section -->
@@ -121,7 +121,7 @@
 
                     <div class="flex flex-wrap justify-center gap-6 mt-4">
                         @php
-                            $allowedRoles = ['Penasehat', 'Pengawas', 'Direktur', 'Sekertaris', 'Bendahara'];
+                            $allowedRoles = ['Penasehat', 'Pengawas', 'Direktur', 'Sekretaris', 'Bendahara'];
                             $filteredPersonils = $bumdes->personils
                                 ->filter(function ($p) use ($allowedRoles) {
                                     return in_array($p->role ?? $p->position, $allowedRoles);
@@ -150,7 +150,15 @@
                 @endif
             </div>
 
+            @php
+                $isPremium = $bumdes->langganan()->where('status', 'active')->where('end_date', '>', now())->exists();
+                if (!$isPremium && $bumdes->user && $bumdes->user->subscription_status == 'active' && $bumdes->user->subscription_expiry > now()) {
+                    $isPremium = true;
+                }
+            @endphp
+
             <!-- 4. Produk Desa -->
+            @if($isPremium)
             <div class="bg-white rounded-xl shadow-sm border p-6" id="produk-desa">
                 <h2 class="text-2xl font-bold text-primary border-b pb-2 mb-6"><i
                         class="fa-solid fa-box-open mr-2 text-accent"></i> Produk BUMDesa / Desa</h2>
@@ -189,6 +197,7 @@
                     </div>
                 @endif
             </div>
+            @endif
 
             <!-- 5. Produk Ketahanan Pangan -->
             <div class="bg-white rounded-xl shadow-sm border p-6">
@@ -228,12 +237,8 @@
             <div class="bg-white rounded-xl shadow-sm border p-6" id="kinerja-capaian" x-data="kinerjaBumdesData()">
                 <h3 class="text-2xl font-bold text-primary border-b pb-2 mb-6"><i class="fa-solid fa-chart-line mr-2 text-accent"></i> Kinerja & Capaian</h3>
                 
-                @if (empty($kinerjaTahunan))
-                    <div class="text-center py-8 text-gray-400 border border-dashed rounded-lg">
-                        <i class="fa-solid fa-chart-line text-3xl mb-2"></i>
-                        <p>Belum ada data laporan keuangan untuk menampilkan kinerja.</p>
-                    </div>
-                @else
+                
+
                     <div class="bg-gray-50 rounded-xl border border-gray-200 px-5 py-3 shadow-sm mb-8 flex items-center gap-4 text-gray-900 w-full sm:w-1/3">
                         <label class="font-bold text-sm text-gray-600 whitespace-nowrap">Periode :</label>
                         <select x-model="selectedTahun" class="border border-gray-300 rounded-lg px-4 py-1.5 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-primary w-full bg-white">
@@ -245,9 +250,14 @@
 
                     <!-- Hasil Pemeringkatan -->
                     <h4 class="text-md font-bold text-gray-900 mb-4">1. Hasil Pemeringkatan</h4>
-                    <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 mb-8 max-w-sm flex flex-col">
+                    <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 mb-8 max-w-sm flex flex-col relative">
                         <span class="text-xs font-semibold text-gray-400 mb-1 block">Klasifikasi</span>
-                        <span class="text-2xl font-black text-primary">{{ $bumdes->klasifikasi ?? 'Perintis' }}</span>
+                        <span class="text-2xl font-black text-primary">{{ $bumdes->pemeringkatan ?? $bumdes->klasifikasi ?? 'Perintis' }}</span>
+                        @if ($bumdes->pemeringkatan_tahun)
+                            <div class="absolute top-4 right-4 bg-gray-100 text-gray-600 text-xs font-bold px-2 py-1 rounded-md">
+                                Tahun {{ $bumdes->pemeringkatan_tahun }}
+                            </div>
+                        @endif
                     </div>
 
                     <!-- Kegiatan Reguler -->
@@ -292,9 +302,7 @@
                             <span class="text-xl font-black text-primary" x-text="'Rp ' + formatRupiah(getCurrentData().ketapang.aset)"></span>
                         </div>
                     </div>
-                    <p class="text-xs text-gray-400 italic ml-1 mb-4">Akumulasi dari laporan dokumen BUMDesa</p>
-                @endif
-            </div>
+                    <p class="text-xs text-gray-400 italic ml-1 mb-4">Akumulasi dari laporan dokumen BUMDesa</p>            </div>
 
             <!-- 7. Transparansi -->
             <div class="bg-white rounded-xl shadow-sm border p-6" id="materi-template">
@@ -367,11 +375,14 @@
 
                 <h3 class="text-2xl font-bold text-primary border-b pb-2 mb-6"><i
                         class="fa-solid fa-images mr-2 text-accent"></i> Galeri Kegiatan BUMDesa</h3>
-                @if ($bumdes->galeris->isEmpty())
+                @php
+                    $galeriList = $isPremium ? $bumdes->galeris : $bumdes->galeris->take(1);
+                @endphp
+                @if ($galeriList->isEmpty())
                     <p class="text-gray-500 italic text-center py-6">Galeri kegiatan belum tersedia.</p>
                 @else
                     <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-                        @foreach ($bumdes->galeris as $galeri)
+                        @foreach ($galeriList as $galeri)
                             <div class="relative group rounded-xl overflow-hidden shadow-sm hover:shadow-md transition cursor-zoom-in"
                                  @click="imgModalSrc = '{{ asset('storage/' . $galeri->image) }}'; imgModal = true;">
                                 <img src="{{ asset('storage/' . $galeri->image) }}"
@@ -388,7 +399,7 @@
             </div>
 
             <!-- 10. Papan Pengumuman -->
-            @if ($bumdes->pengumuman->count() > 0)
+            @if ($isPremium && $bumdes->pengumuman->count() > 0)
                 <div class="bg-white rounded-xl shadow-sm border p-6" id="papan-pengumuman">
                     <h2 class="text-2xl font-bold text-primary mb-6"><i class="fa-solid fa-bullhorn mr-2 text-accent"></i> Papan Pengumuman BUMDesa</h2>
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -415,7 +426,7 @@
             @endif
 
             <!-- 11. Artikel & Opini -->
-            @if ($bumdes->artikels->count() > 0)
+            @if ($isPremium && $bumdes->artikels->count() > 0)
                 <div class="bg-white rounded-xl shadow-sm border p-6" id="artikel-opini">
                     <h2 class="text-2xl font-bold text-primary mb-6"><i class="fa-solid fa-pen-nib mr-2 text-accent"></i> Artikel dan Opini BUMDesa</h2>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">

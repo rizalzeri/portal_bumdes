@@ -50,10 +50,15 @@ Route::get('/katalog-produk', [PublicController::class, 'katalog'])->name('publi
 Route::get('/mitra', [PublicController::class, 'mitra'])->name('public.mitra');
 Route::get('/galeri', [PublicController::class, 'galeri'])->name('public.galeri');
 Route::get('/pengumuman', [PublicController::class, 'pengumuman'])->name('public.pengumuman');
+Route::get('/tentang-kami', [PublicController::class, 'about'])->name('public.about');
+Route::get('/layanan-produk', [PublicController::class, 'services'])->name('public.services');
+Route::get('/faq', [PublicController::class, 'faq'])->name('public.faq');
+Route::get('/kontak', [PublicController::class, 'contact'])->name('public.contact');
 
 Route::get('/buat-website', [\App\Http\Controllers\PublicRegistrationController::class, 'create'])->name('public.register');
 Route::post('/buat-website', [\App\Http\Controllers\PublicRegistrationController::class, 'store'])->name('public.register.store');
 Route::get('/api/kabupatens/{province}', [\App\Http\Controllers\PublicRegistrationController::class, 'getKabupatens'])->name('api.kabupatens');
+Route::get('/api/search-bumdes', [PublicController::class, 'searchBumdes'])->name('api.search.bumdes');
 
 // Generic route for login fallback
 Route::get('/login', [AuthController::class, 'showUserLogin'])->name('login');
@@ -115,7 +120,10 @@ Route::prefix('admin-kabupaten')->name('adminkab.')->group(function () {
         Route::get('analisa-data', [\App\Http\Controllers\AdminKabupaten\AnalisaDataController::class, 'index'])->name('analisa_data.index');
         
         // Added Monitoring
-        Route::get('monitoring', [\App\Http\Controllers\AdminKabupaten\MonitoringBumdesController::class, 'index'])->name('monitoring.index');
+        Route::get('/monitoring', [\App\Http\Controllers\AdminKabupaten\MonitoringBumdesController::class, 'index'])->name('monitoring.index');
+        Route::post('/monitoring', [\App\Http\Controllers\AdminKabupaten\MonitoringBumdesController::class, 'store'])->name('monitoring.store');
+        Route::post('/monitoring/{id}/ingatkan', [\App\Http\Controllers\AdminKabupaten\MonitoringBumdesController::class, 'ingatkan'])->name('monitoring.ingatkan');
+        Route::delete('/monitoring/{id}', [\App\Http\Controllers\AdminKabupaten\MonitoringBumdesController::class, 'destroy'])->name('monitoring.destroy');
         
         Route::resource('pengumuman', AKPengumuman::class);
         Route::get('langganan/success', [AKLangganan::class, 'successCallback'])->name('langganan.success');
@@ -126,6 +134,7 @@ Route::prefix('admin-kabupaten')->name('adminkab.')->group(function () {
 // ------------- USER BUMDES ROUTES (Dynamic Slug Based) -------------
 Route::prefix('{slug}')->middleware(['auth', 'user'])->name('user.')->where(['slug' => '^(?!storage|build|css|js|images|fonts)[^/]+$'])->group(function () {
     Route::get('/dashboard', [UDashboard::class, 'index'])->name('dashboard');
+    Route::post('/notifications/read', [UDashboard::class, 'readNotifications'])->name('notifications.read');
 
     // Langganan routes (di luar premium_check agar bisa diakses user gratis untuk upgrade)
     Route::get('langganan', [ULangganan::class, 'index'])->name('langganan.index');
@@ -136,7 +145,7 @@ Route::prefix('{slug}')->middleware(['auth', 'user'])->name('user.')->where(['sl
     Route::middleware(['premium_check'])->group(function () {
         Route::get('/profil', [UProfil::class, 'index'])->name('profil.index');
         Route::put('/profil', [UProfil::class, 'update'])->name('profil.update');
-        Route::resource('personalia', UPersonalia::class);
+        Route::resource('personalia', UPersonalia::class)->parameters(['personalia' => 'personalia']);
         Route::resource('unit_usaha', UUnitUsaha::class);
         Route::resource('produk', UProduk::class);
         Route::resource('ketapang', UKetapang::class);

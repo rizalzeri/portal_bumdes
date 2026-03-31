@@ -39,6 +39,39 @@
             </ol>
         </nav>
 
+        <!-- Search Feature -->
+        <div class="mb-8 p-4 bg-gray-50 border rounded-xl flex items-center justify-between gap-4 flex-wrap" x-data="bumdesSearch()">
+            <h2 class="text-lg font-bold text-gray-800"><i class="fa-solid fa-search mr-2 text-accent"></i> Cari BUMDesa</h2>
+            <div class="flex-grow max-w-lg relative w-full">
+                <div class="flex relative">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-3">
+                        <i class="fa-solid fa-search text-gray-400"></i>
+                    </span>
+                    <input type="text" x-model="query" @input.debounce.500ms="searchBumdes" placeholder="Ketik nama BUMDesa..." class="w-full border border-gray-300 rounded-lg pl-10 pr-4 py-3 focus:ring-primary focus:border-primary focus:outline-none shadow-inner text-sm">
+                </div>
+                
+                <!-- Dropdown suggest -->
+                <div x-show="showDropdown" @click.away="showDropdown = false" class="absolute z-50 w-full mt-2 bg-white border border-gray-100 rounded-xl shadow-2xl overflow-hidden" style="display: none;" x-transition>
+                    <div x-show="isLoading" class="p-4 text-center text-sm text-gray-500">
+                        <i class="fa-solid fa-spinner fa-spin text-primary text-xl"></i>
+                    </div>
+                    <div x-show="!isLoading && results.length === 0" class="p-4 text-center text-sm text-gray-500">
+                        BUMDesa tidak ditemukan.
+                    </div>
+                    <ul x-show="!isLoading && results.length > 0" class="max-h-72 overflow-y-auto divide-y divide-gray-100">
+                        <template x-for="item in results" :key="item.url">
+                            <li>
+                                <a :href="item.url" class="flex flex-col px-4 py-3 hover:bg-blue-50 transition-colors">
+                                    <span class="font-bold text-gray-800 text-sm" x-text="item.name"></span>
+                                    <span class="text-[10px] text-gray-400 mt-1 uppercase tracking-wider"><i class="fa-solid fa-arrow-right-long text-accent mr-1"></i> Kunjungi Profil</span>
+                                </a>
+                            </li>
+                        </template>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
         <!-- Dynamic Content Rendering -->
 
         @if(!$selectedProvince && !$selectedKabupaten)
@@ -58,7 +91,13 @@
         @elseif($selectedProvince && !$selectedKabupaten)
             <!-- Step 2: Listing Kabupatens inside Province -->
             <div class="flex items-center justify-between mb-6">
-                <h2 class="text-2xl font-bold text-gray-900">Kabupaten di {{ $selectedProvince->name }}</h2>
+                <h2 class="text-2xl font-bold text-gray-900">
+                    @if(request('q'))
+                        Hasil Pencarian "{{ request('q') }}" (Pilih Kabupaten)
+                    @else
+                        Kabupaten di {{ $selectedProvince->name }}
+                    @endif
+                </h2>
                 <a href="{{ route('public.bumdes.list') }}" class="text-sm text-primary hover:text-accent"><i class="fa-solid fa-arrow-left"></i> Kembali ke Provinsi</a>
             </div>
             
@@ -82,7 +121,13 @@
             <!-- Step 3: Listing BUMDes inside Kabupaten -->
             <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 gap-4">
                 <div>
-                    <h2 class="text-2xl font-bold text-gray-900">Daftar BUMDesa di {{ $selectedKabupaten->name }}</h2>
+                    <h2 class="text-2xl font-bold text-gray-900">
+                        @if(request('q'))
+                            Hasil Pencarian "{{ request('q') }}" di {{ $selectedKabupaten->name }}
+                        @else
+                            Daftar BUMDesa di {{ $selectedKabupaten->name }}
+                        @endif
+                    </h2>
                     <p class="text-gray-500 text-sm">Ditemukan {{ $bumdes->count() }} BUMDesa aktif.</p>
                 </div>
                 <a href="{{ route('public.bumdes.list', ['province_id' => $selectedProvince->id]) }}" class="text-sm inline-flex items-center px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition"><i class="fa-solid fa-arrow-left mr-2"></i> Kembali</a>
@@ -111,7 +156,7 @@
                                 </div>
                             </div>
                             <div class="p-6 pt-10 flex-grow flex flex-col">
-                                <h3 class="font-bold text-lg text-gray-900 tracking-tight">BUMDesa "{{ $bd->name }}" Desa</h3>
+                                <h3 class="font-bold text-lg text-gray-900 tracking-tight">BUMDesa {{ $bd->name }} Desa {{ $bd->desa ?? '' }}</h3>
                                 <p class="text-[10px] font-bold uppercase tracking-wider mb-3 {{ $bd->status === 'active' ? 'text-emerald-600' : 'text-red-600' }}">
                                     <i class="fa-solid {{ $bd->status === 'active' ? 'fa-circle-check' : 'fa-circle-xmark' }}"></i> 
                                     Status BUMDesa: {{ $bd->status === 'active' ? 'Aktif' : 'Tidak Aktif' }}
@@ -133,3 +178,37 @@
     </div>
 </div>
 @endsection
+
+@push('scripts')
+<script>
+    document.addEventListener('alpine:init', () => {
+        Alpine.data('bumdesSearch', () => ({
+            query: '',
+            results: [],
+            isLoading: false,
+            showDropdown: false,
+            
+            async searchBumdes() {
+                if (this.query.length < 2) {
+                    this.results = [];
+                    this.showDropdown = false;
+                    return;
+                }
+                
+                this.isLoading = true;
+                this.showDropdown = true;
+                
+                try {
+                    const response = await fetch(`/api/search-bumdes?q=${encodeURIComponent(this.query)}`);
+                    this.results = await response.json();
+                } catch (error) {
+                    console.error('Search error:', error);
+                    this.results = [];
+                } finally {
+                    this.isLoading = false;
+                }
+            }
+        }));
+    });
+</script>
+@endpush

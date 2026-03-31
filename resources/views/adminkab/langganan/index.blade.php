@@ -7,28 +7,90 @@
         <h2 class="text-2xl font-bold text-gray-800">Manajemen Langganan Akun Kabupaten</h2>
         <p class="text-gray-500 text-sm mt-1">Kelola dan tingkatkan batas monitoring atau fitur khusus Kabupaten Anda.</p>
     </div>
-    @if(!$pending)
     <button onclick="document.getElementById('modal-add').classList.remove('hidden')"
         class="bg-primary hover:bg-primary-900 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-colors shadow-sm">
-        <i class="fa-solid fa-crown mr-2"></i> Langganan Paket Baru
+        <i class="fa-solid fa-clock-rotate-left mr-2"></i> Perpanjang Masa Aktif
     </button>
-    @endif
 </div>
+
+{{-- ── Active Subscription Banner ──────────────────── --}}
+@if($active && !$active->is_expired)
+    @php
+        $daysLeft  = $active->days_remaining;
+        $endDate   = \Carbon\Carbon::parse($active->end_date);
+        $isWarning = $daysLeft <= 7;
+    @endphp
+    <div class="mb-6 rounded-2xl p-1 {{ $isWarning ? 'bg-gradient-to-r from-orange-400 to-red-500' : 'bg-gradient-to-r from-emerald-500 to-teal-600' }}">
+        <div class="bg-white rounded-xl px-6 py-4 flex flex-col sm:flex-row sm:items-center gap-4">
+            <div class="flex-1">
+                <div class="flex items-center gap-2 mb-1">
+                    <span class="inline-flex items-center gap-1.5 {{ $isWarning ? 'bg-orange-100 text-orange-700' : 'bg-emerald-100 text-emerald-700' }} text-xs font-bold px-3 py-1 rounded-full">
+                        <i class="fa-solid fa-circle-check text-xs"></i> PREMIUM AKTIF
+                    </span>
+                    @if($isWarning)
+                        <span class="text-xs font-semibold text-red-600 animate-pulse"><i class="fa-solid fa-triangle-exclamation mr-1"></i>Segera Perpanjang!</span>
+                    @endif
+                </div>
+                <p class="font-bold text-gray-900 text-lg">{{ $active->package_name }}</p>
+                <p class="text-sm text-gray-500">Berlaku hingga <strong>{{ $endDate->format('d F Y') }}</strong></p>
+            </div>
+            <div class="text-center shrink-0 min-w-[140px]">
+                <div id="kab-premium-countdown" data-expiry="{{ $endDate->toIso8601String() }}"
+                    class="text-2xl font-black {{ $isWarning ? 'text-red-500' : 'text-emerald-600' }} tracking-tighter">
+                    {{ $daysLeft }} Hari
+                </div>
+                <div class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Sisa Waktu Premium</div>
+                <script>
+                    function updateKabCountdown() {
+                        const el = document.getElementById('kab-premium-countdown');
+                        if (!el) return;
+                        const expiry = new Date(el.dataset.expiry).getTime();
+                        const now    = new Date().getTime();
+                        const diff   = expiry - now;
+                        if (diff <= 0) { el.innerHTML = "EXPIRED"; return; }
+                        const days    = Math.floor(diff / (1000 * 60 * 60 * 24));
+                        const hours   = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+                        el.innerHTML  = `${days}h ${hours}j ${minutes}m ${seconds}s`;
+                    }
+                    setInterval(updateKabCountdown, 1000);
+                    updateKabCountdown();
+                </script>
+                @php
+                    $totalDays = \Carbon\Carbon::parse($active->start_date)->diffInDays($endDate) ?: 1;
+                    $pct       = max(0, min(100, round($daysLeft / $totalDays * 100)));
+                @endphp
+                <div class="w-32 h-2 bg-gray-200 rounded-full mt-2 mx-auto overflow-hidden">
+                    <div class="{{ $isWarning ? 'bg-red-500' : 'bg-emerald-500' }} h-full rounded-full transition-all" style="width: {{ $pct }}%"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+@endif
 
 {{-- Alert: Ada tagihan pending --}}
 @if($pending && $snapToken)
-<div class="bg-amber-50 border border-amber-300 rounded-xl p-4 mb-5 flex items-start gap-4">
-    <div class="text-amber-500 text-2xl mt-0.5"><i class="fa-solid fa-circle-exclamation"></i></div>
+<div class="bg-amber-50 border border-amber-300 rounded-xl p-4 mb-5 flex flex-col sm:flex-row items-start sm:items-center gap-4">
+    <div class="text-amber-500 text-2xl mt-0.5 hidden sm:block"><i class="fa-solid fa-circle-exclamation"></i></div>
     <div class="flex-1">
         <p class="font-bold text-amber-700">Tagihan Belum Dibayar</p>
         <p class="text-sm text-amber-600 mt-1">Anda memiliki tagihan <strong>{{ $pending->package_name }}</strong> sebesar <strong>Rp {{ number_format($pending->amount, 0, ',', '.') }}</strong> yang belum diselesaikan.</p>
     </div>
-    <button id="btn-pay-pending"
-        data-token="{{ $snapToken }}"
-        onclick="openMidtrans(this)"
-        class="flex-shrink-0 bg-amber-500 hover:bg-amber-600 text-white px-4 py-2 rounded-lg text-sm font-bold transition-colors flex items-center gap-2 shadow">
-        <i class="fa-solid fa-credit-card"></i> Bayar Sekarang
-    </button>
+    <div class="flex flex-wrap gap-2 w-full sm:w-auto mt-2 sm:mt-0">
+        <button id="btn-pay-pending"
+            data-token="{{ $snapToken }}"
+            onclick="openMidtrans(this)"
+            class="flex-1 sm:flex-none justify-center bg-amber-500 hover:bg-amber-600 text-white px-4 py-2 rounded-lg text-sm font-bold transition-colors flex items-center gap-2 shadow">
+            <i class="fa-solid fa-credit-card"></i> Bayar
+        </button>
+        <form action="{{ route('adminkab.langganan.destroy', $pending->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin membatalkan pesanan ini?')" class="flex-1 sm:flex-none flex">
+            @csrf @method('DELETE')
+            <button type="submit" class="w-full justify-center bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 px-4 py-2 rounded-lg text-sm font-bold transition-colors flex items-center gap-2 shadow-sm">
+                Batalkan
+            </button>
+        </form>
+    </div>
 </div>
 @endif
 
@@ -109,7 +171,7 @@
 <div id="modal-add" class="fixed inset-0 z-50 hidden bg-gray-900 bg-opacity-50 overflow-y-auto h-full w-full flex items-center justify-center p-4">
     <div class="relative w-full max-w-lg shadow-2xl rounded-2xl bg-white border overflow-hidden">
         <div class="flex justify-between items-center p-5 border-b bg-gray-50">
-            <h3 class="text-xl font-bold text-gray-900"><i class="fa-solid fa-crown text-accent mr-2"></i> Langganan Paket Admin Kabupaten</h3>
+            <h3 class="text-xl font-bold text-gray-900"><i class="fa-solid fa-clock-rotate-left text-accent mr-2"></i> Perpanjang Masa Aktif Premium</h3>
             <button onclick="document.getElementById('modal-add').classList.add('hidden')" class="text-gray-400 hover:text-gray-900 text-2xl font-bold leading-none">&times;</button>
         </div>
         <form action="{{ route('adminkab.langganan.store') }}" method="POST" class="p-6 space-y-5">

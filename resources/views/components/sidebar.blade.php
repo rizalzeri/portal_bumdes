@@ -97,33 +97,43 @@
             @endif
 
             @if (Auth::user()->role === 'admin_kabupaten')
+            @php
+                $isKabPremium = \App\Models\Langganan::where('kabupaten_id', Auth::user()->kabupaten_id)
+                    ->whereNull('bumdes_id')
+                    ->where('status', 'active')
+                    ->where('end_date', '>', now())
+                    ->exists();
+            @endphp
                 <div class="text-xs font-semibold text-gray-400 uppercase tracking-wider mt-4 mb-2 px-3">Menu Kabupaten
                 </div>
-                <a href="{{ route('adminkab.kecamatan.index') }}"
-                    class="flex items-center px-3 py-2 text-gray-200 transition-colors rounded-lg hover:bg-primary-800 hover:text-white">
-                    <i class="fa-solid fa-map-location-dot w-5 h-5"></i>
-                    <span class="mx-2 text-sm font-medium">Daftarkan Kecamatan</span>
-                </a>
                 <a href="{{ route('adminkab.bumdes.index') }}"
                     class="flex items-center px-3 py-2 text-gray-200 transition-colors rounded-lg hover:bg-primary-800 hover:text-white">
                     <i class="fa-solid fa-house-flag w-5 h-5"></i>
                     <span class="mx-2 text-sm font-medium">Daftar Akun BUMDesa</span>
                 </a>
-                <a href="{{ route('adminkab.analisa_data.index') }}"
-                    class="flex items-center px-3 py-2 text-gray-200 transition-colors rounded-lg hover:bg-primary-800 hover:text-white">
-                    <i class="fa-solid fa-chart-line w-5 h-5"></i>
-                    <span class="mx-2 text-sm font-medium">Detail dan Analisa Data</span>
-                </a>
-                <a href="{{ route('adminkab.monitoring.index') }}"
-                    class="flex items-center px-3 py-2 text-gray-200 transition-colors rounded-lg hover:bg-primary-800 hover:text-white">
-                    <i class="fa-solid fa-magnifying-glass-chart w-5 h-5"></i>
-                    <span class="mx-2 text-sm font-medium">Monitoring BUMDesa</span>
-                </a>
-                <a href="{{ route('adminkab.pengumuman.index') }}"
-                    class="flex items-center px-3 py-2 text-gray-200 transition-colors rounded-lg hover:bg-primary-800 hover:text-white">
-                    <i class="fa-solid fa-bullhorn w-5 h-5"></i>
-                    <span class="mx-2 text-sm font-medium">Pengumuman Portal</span>
-                </a>
+                
+                @if($isKabPremium)
+                    <a href="{{ route('adminkab.kecamatan.index') }}"
+                        class="flex items-center px-3 py-2 text-gray-200 transition-colors rounded-lg hover:bg-primary-800 hover:text-white">
+                        <i class="fa-solid fa-map-location-dot w-5 h-5"></i>
+                        <span class="mx-2 text-sm font-medium">Daftarkan Kecamatan</span>
+                    </a>
+                    <a href="{{ route('adminkab.analisa_data.index') }}"
+                        class="flex items-center px-3 py-2 text-gray-200 transition-colors rounded-lg hover:bg-primary-800 hover:text-white">
+                        <i class="fa-solid fa-chart-line w-5 h-5"></i>
+                        <span class="mx-2 text-sm font-medium">Detail dan Analisa Data</span>
+                    </a>
+                    <a href="{{ route('adminkab.monitoring.index') }}"
+                        class="flex items-center px-3 py-2 text-gray-200 transition-colors rounded-lg hover:bg-primary-800 hover:text-white">
+                        <i class="fa-solid fa-magnifying-glass-chart w-5 h-5"></i>
+                        <span class="mx-2 text-sm font-medium">Monitoring BUMDesa</span>
+                    </a>
+                    <a href="{{ route('adminkab.pengumuman.index') }}"
+                        class="flex items-center px-3 py-2 text-gray-200 transition-colors rounded-lg hover:bg-primary-800 hover:text-white">
+                        <i class="fa-solid fa-bullhorn w-5 h-5"></i>
+                        <span class="mx-2 text-sm font-medium">Pengumuman Portal</span>
+                    </a>
+                @endif
                 <a href="{{ route('adminkab.langganan.index') }}"
                     class="flex items-center px-3 py-2 text-gray-200 transition-colors rounded-lg hover:bg-primary-800 hover:text-white">
                     <i class="fa-solid fa-crown w-5 h-5 text-accent"></i>
