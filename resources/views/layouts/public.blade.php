@@ -6,6 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Portal BUMDesa') - Pusat Inspirasi dan Informasi BUMDesa</title>
 
+    <!-- Favicon and Manifest -->
+    <link rel="icon" type="image/png" href="{{ asset('logo-leaf.png') }}">
+    <link rel="manifest" href="{{ asset('manifest.json') }}">
+    <meta name="theme-color" content="#1e3a5f">
+
     <!-- Tailwind CSS (via CDN as requested) -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
