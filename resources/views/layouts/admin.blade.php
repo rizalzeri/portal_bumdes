@@ -7,8 +7,8 @@
     <title>@yield('title', 'Admin Panel') - Portal BUMDesa</title>
 
     <!-- Favicon and Manifest -->
-    <link rel="icon" type="image/png" href="{{ asset('logo-leaf.png') }}">
-    <link rel="manifest" href="{{ asset('manifest.json') }}">
+    <link rel="icon" type="image/png" href="{{ asset('logo-leaf.png') }}?v=1">
+    <link rel="manifest" href="{{ asset('manifest.json') }}?v=1">
     <meta name="theme-color" content="#1e3a5f">
 
     <!-- Tailwind CSS (via CDN) -->
