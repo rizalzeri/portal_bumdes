@@ -461,51 +461,49 @@
     document.addEventListener('alpine:init', () => {
         Alpine.data('kinerjaBumdesData', () => ({
             rawData: @json($kinerjaTahunan ?? []),
-            selectedTahun: new Date().getFullYear(),
-            
+            selectedTahun: null,
+
+            init() {
+                // Inisialisasi ke tahun pertama dalam data (terbaru), bukan hardcode tahun ini
+                if (this.rawData && this.rawData.length > 0) {
+                    this.selectedTahun = this.rawData[0].thn;
+                } else {
+                    this.selectedTahun = String(new Date().getFullYear());
+                }
+            },
+
             getReverseTahunList() {
-                const currentYear = new Date().getFullYear();
                 if (!this.rawData || this.rawData.length === 0) {
-                    return [currentYear];
+                    return [String(new Date().getFullYear())];
                 }
-                const years = this.rawData.map(v => parseInt(v.thn));
-                if (!years.includes(currentYear)) {
-                    years.push(currentYear);
-                }
-                return [...new Set(years)].sort((a,b) => b-a);
+                // rawData sudah di-sort descending dari PHP
+                return this.rawData.map(v => String(v.thn));
             },
-            
+
             getCurrentData() {
-                let yearData = this.rawData.find(d => parseInt(d.thn) === parseInt(this.selectedTahun));
-                if(!yearData) {
-                    yearData = { omset: 0, aset: 0, pades: 0 };
+                let yearData = this.rawData.find(d => String(d.thn) === String(this.selectedTahun));
+                const empty = { omset: 0, laba: 0, pades: 0, aset: 0 };
+                if (!yearData) {
+                    return { reguler: { ...empty }, ketapang: { ...empty } };
                 }
-                
-                let omset = parseFloat(yearData.omset || 0);
-                let pades = parseFloat(yearData.pades || 0);
-                let aset = parseFloat(yearData.aset || 0);
-                
-                // Similar proportion logic for displaying Kinerja (85% regular, 15% ketapang)
-                let laba = pades * (100/30);
-                
                 return {
-                    reguler: {
-                        omset: Math.round(omset * 0.85),
-                        laba: Math.round(laba * 0.85), 
-                        pades: Math.round(pades * 0.85),
-                        aset: Math.round(aset * 0.85)
+                    reguler:  { 
+                        omset: yearData.reguler?.omset  || 0, 
+                        laba:  yearData.reguler?.laba   || 0, 
+                        pades: yearData.reguler?.pades  || 0, 
+                        aset:  yearData.reguler?.aset   || 0 
                     },
-                    ketapang: {
-                        omset: Math.round(omset * 0.15),
-                        laba: Math.round(laba * 0.15),
-                        pades: Math.round(pades * 0.15),
-                        aset: Math.round(aset * 0.15)
+                    ketapang: { 
+                        omset: yearData.ketapang?.omset || 0, 
+                        laba:  yearData.ketapang?.laba  || 0, 
+                        pades: yearData.ketapang?.pades || 0, 
+                        aset:  yearData.ketapang?.aset  || 0 
                     }
-                }
+                };
             },
-            
+
             formatRupiah(value) {
-                if (value === 0 || !value) return '0';
+                if (!value || value === 0) return '0';
                 const num = parseFloat(value);
                 if (num >= 1000000000) return (num / 1000000000).toLocaleString('id-ID', {minimumFractionDigits: 1, maximumFractionDigits: 1}) + ' M';
                 if (num >= 1000000) return (num / 1000000).toLocaleString('id-ID', {minimumFractionDigits: 1, maximumFractionDigits: 1}) + ' Jt';

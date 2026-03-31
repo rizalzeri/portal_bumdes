@@ -157,25 +157,35 @@ class PublicController extends Controller
         $pendapatanData = [];
         $labaData = [];
 
+        // Bangun kinerjaTahunan dari kinerjaCapaians (bukan laporanKeuangans)
+        // Struktur: { thn, reguler: {omset,laba,pades,aset}, ketapang: {omset,laba,pades,aset} }
         $kinerjaTahunanRaw = [];
-
-        foreach($bumdes->laporanKeuangans as $lap) {
-            $monthName = config('app.months')[$lap->bulan] ?? mb_substr(date('F', mktime(0, 0, 0, max(1, $lap->bulan), 1)), 0, 3);
-            $year = $lap->tahun ?? $lap->year ?? date('Y');
-            $labels[] = $monthName . ' ' . substr($year, -2);
-            $pendapatanData[] = $lap->pendapatan;
-            $labaData[] = $lap->laba_rugi ?? $lap->laba_bersih ?? 0;
-
-            if(!isset($kinerjaTahunanRaw[$year])) {
-                $kinerjaTahunanRaw[$year] = ['thn' => (string) $year, 'omset' => 0, 'aset' => 0, 'pades' => 0];
+        foreach ($bumdes->kinerjaCapaians as $kinerja) {
+            $year = (string) ($kinerja->year ?? date('Y'));
+            if (!isset($kinerjaTahunanRaw[$year])) {
+                $kinerjaTahunanRaw[$year] = [
+                    'thn'      => $year,
+                    'reguler'  => ['omset' => 0, 'laba' => 0, 'pades' => 0, 'aset' => 0],
+                    'ketapang' => ['omset' => 0, 'laba' => 0, 'pades' => 0, 'aset' => 0],
+                ];
             }
-            $kinerjaTahunanRaw[$year]['omset'] += (float) $lap->pendapatan;
-            $kinerjaTahunanRaw[$year]['aset'] += (float) $lap->total_aset;
-            $kinerjaTahunanRaw[$year]['pades'] += (float) ($lap->laba_rugi ?? $lap->laba_bersih ?? 0);
+            $kategori = strtolower($kinerja->description ?? '');
+            $item     = strtolower($kinerja->title ?? '');
+            $value    = (float) ($kinerja->value ?? 0);
+
+            $group = str_contains($kategori, 'ketahanan') || str_contains($kategori, 'pangan')
+                ? 'ketapang' : 'reguler';
+
+            if (str_contains($item, 'omset'))      $kinerjaTahunanRaw[$year][$group]['omset'] += $value;
+            elseif (str_contains($item, 'laba'))   $kinerjaTahunanRaw[$year][$group]['laba']  += $value;
+            elseif (str_contains($item, 'pades') || str_contains($item, 'pad'))
+                                                    $kinerjaTahunanRaw[$year][$group]['pades'] += $value;
+            elseif (str_contains($item, 'aset') || str_contains($item, 'modal'))
+                                                    $kinerjaTahunanRaw[$year][$group]['aset']  += $value;
         }
 
         $kinerjaTahunan = array_values($kinerjaTahunanRaw);
-        usort($kinerjaTahunan, fn($a, $b) => $b['thn'] <=> $a['thn']); // sort by year desc
+        usort($kinerjaTahunan, fn($a, $b) => (int)$b['thn'] <=> (int)$a['thn']); // sort by year desc
 
         return view('public.bumdes.show', compact('bumdes', 'labels', 'pendapatanData', 'labaData', 'kinerjaTahunan'));
     }
