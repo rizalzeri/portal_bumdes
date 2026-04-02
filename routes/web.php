@@ -50,6 +50,8 @@ Route::get('/katalog-produk', [PublicController::class, 'katalog'])->name('publi
 Route::get('/mitra', [PublicController::class, 'mitra'])->name('public.mitra');
 Route::get('/galeri', [PublicController::class, 'galeri'])->name('public.galeri');
 Route::get('/pengumuman', [PublicController::class, 'pengumuman'])->name('public.pengumuman');
+Route::get('/pengumuman/kabupaten', [PublicController::class, 'pengumumanKabupaten'])->name('public.pengumuman.kabupaten');
+Route::get('/pengumuman/bumdes', [PublicController::class, 'pengumumanBumdes'])->name('public.pengumuman.bumdes');
 Route::get('/tentang-kami', [PublicController::class, 'about'])->name('public.about');
 Route::get('/layanan-produk', [PublicController::class, 'services'])->name('public.services');
 Route::get('/faq', [PublicController::class, 'faq'])->name('public.faq');

@@ -399,9 +399,9 @@
             </div>
 
             <!-- 10. Papan Pengumuman -->
-            @if ($bumdes->pengumuman->count() > 0)
-                <div class="bg-white rounded-xl shadow-sm border p-6" id="papan-pengumuman">
-                    <h2 class="text-2xl font-bold text-primary mb-6"><i class="fa-solid fa-bullhorn mr-2 text-accent"></i> Papan Pengumuman BUMDesa</h2>
+            <div class="bg-white rounded-xl shadow-sm border p-6" id="papan-pengumuman">
+                <h2 class="text-2xl font-bold text-primary mb-6"><i class="fa-solid fa-bullhorn mr-2 text-accent"></i> Papan Pengumuman BUMDesa</h2>
+                @if ($bumdes->pengumuman->count() > 0)
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         @foreach($bumdes->pengumuman->sortByDesc('created_at')->take(3) as $umum)
                             <div class="border rounded-lg p-5 bg-gray-50 hover:shadow-md transition">
@@ -422,13 +422,18 @@
                             </div>
                         @endforeach
                     </div>
-                </div>
-            @endif
+                @else
+                    <div class="text-center py-8 text-gray-400 border border-dashed rounded-lg">
+                        <i class="fa-solid fa-bullhorn text-3xl mb-2"></i>
+                        <p>Belum ada pengumuman dari BUMDesa ini.</p>
+                    </div>
+                @endif
+            </div>
 
             <!-- 11. Artikel & Opini -->
-            @if ($isPremium && $bumdes->artikels->count() > 0)
-                <div class="bg-white rounded-xl shadow-sm border p-6" id="artikel-opini">
-                    <h2 class="text-2xl font-bold text-primary mb-6"><i class="fa-solid fa-pen-nib mr-2 text-accent"></i> Artikel dan Opini BUMDesa</h2>
+            <div class="bg-white rounded-xl shadow-sm border p-6" id="artikel-opini">
+                <h2 class="text-2xl font-bold text-primary mb-6"><i class="fa-solid fa-pen-nib mr-2 text-accent"></i> Artikel dan Opini BUMDesa</h2>
+                @if ($bumdes->artikels->count() > 0)
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         @foreach($bumdes->artikels->sortByDesc('created_at')->take(4) as $art)
                             <div class="border rounded-lg p-4 bg-gray-50 hover:shadow-md transition flex flex-col sm:flex-row gap-4">
@@ -448,8 +453,13 @@
                             </div>
                         @endforeach
                     </div>
-                </div>
-            @endif
+                @else
+                    <div class="text-center py-8 text-gray-400 border border-dashed rounded-lg">
+                        <i class="fa-solid fa-pen-nib text-3xl mb-2"></i>
+                        <p>Belum ada artikel dan opini dari BUMDesa ini.</p>
+                    </div>
+                @endif
+            </div>
 
         </div>
     </div>

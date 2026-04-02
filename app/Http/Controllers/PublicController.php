@@ -393,18 +393,53 @@ class PublicController extends Controller
 
     public function pengumuman(Request $request)
     {
-        $items = \App\Models\Pengumuman::where(fn($q) => $q->whereNull('bumdes_id')->orWhereHas('bumdes', fn($bq) => $bq->where('is_active', true)))
+        $items = \App\Models\Pengumuman::where('type', 'portal')
             ->with(['bumdes.kabupaten', 'kabupaten'])
             ->latest()
             ->paginate(12);
 
         return view('public.content_page', [
-            'type' => 'pengumuman',
+            'type'      => 'pengumuman',
             'routeName' => 'public.pengumuman',
-            'title' => 'Pengumuman Portal',
-            'desc' => 'Informasi penting, agenda kegiatan, dan berita resmi terkini.',
-            'items' => $items,
-            'anchor' => '#pengumuman',
+            'title'     => 'Pengumuman Platform Portal',
+            'desc'      => 'Informasi penting, agenda resmi, dan pengumuman dari Tim Portal Pusat BUMDesa.',
+            'items'     => $items,
+            'anchor'    => '#pengumuman',
+        ]);
+    }
+
+    public function pengumumanKabupaten(Request $request)
+    {
+        $items = \App\Models\Pengumuman::where('type', 'kabupaten')
+            ->with(['bumdes.kabupaten', 'kabupaten'])
+            ->latest()
+            ->paginate(12);
+
+        return view('public.content_page', [
+            'type'      => 'pengumuman',
+            'routeName' => 'public.pengumuman.kabupaten',
+            'title'     => 'Pengumuman Dinas PMD Kabupaten',
+            'desc'      => 'Informasi dan edaran resmi dari Pemerintah Kabupaten untuk BUMDesa.',
+            'items'     => $items,
+            'anchor'    => '#pengumuman',
+        ]);
+    }
+
+    public function pengumumanBumdes(Request $request)
+    {
+        $items = \App\Models\Pengumuman::where('type', 'bumdes')
+            ->whereHas('bumdes', fn($bq) => $bq->where('is_active', true))
+            ->with(['bumdes.kabupaten', 'kabupaten'])
+            ->latest()
+            ->paginate(12);
+
+        return view('public.content_page', [
+            'type'      => 'pengumuman',
+            'routeName' => 'public.pengumuman.bumdes',
+            'title'     => 'Pengumuman dari BUMDesa',
+            'desc'      => 'Informasi, layanan, dan pengumuman operasional langsung dari unit BUMDesa.',
+            'items'     => $items,
+            'anchor'    => '#pengumuman',
         ]);
     }
 

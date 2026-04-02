@@ -425,7 +425,7 @@
 
             <!-- Menu 8b: Pengumuman Kabupaten -->
             <div class="w-full bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden mb-6">
-                <a href="{{ route('public.pengumuman') }}"
+                <a href="{{ route('public.pengumuman.kabupaten') }}"
                     class="group flex flex-row items-center gap-0 hover:bg-gray-50 transition-colors">
                     <div class="w-1.5 self-stretch bg-amber-500 shrink-0 rounded-l-2xl"></div>
                     <div class="flex flex-row items-center gap-5 p-5 flex-grow">
@@ -454,7 +454,7 @@
                     <div class="px-7 pb-5">
                         <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
                             @foreach ($previewPengumumanKabupaten as $item)
-                                <a href="javascript:void(0)"
+                                <a href="{{ route('public.pengumuman.kabupaten') }}"
                                     class="group/item flex flex-col gap-1.5 p-3 rounded-xl border border-gray-100 hover:border-amber-400 hover:bg-amber-50 transition-all">
                                     <div class="flex items-center gap-2 mb-1">
                                         <div
@@ -478,7 +478,7 @@
 
             <!-- Menu 8c: Pengumuman BUMDesa -->
             <div class="w-full bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden mb-6">
-                <a href="{{ route('public.pengumuman') }}"
+                <a href="{{ route('public.pengumuman.bumdes') }}"
                     class="group flex flex-row items-center gap-0 hover:bg-gray-50 transition-colors">
                     <div class="w-1.5 self-stretch bg-emerald-500 shrink-0 rounded-l-2xl"></div>
                     <div class="flex flex-row items-center gap-5 p-5 flex-grow">
@@ -559,7 +559,7 @@
                     <div class="px-7 pb-5">
                         <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
                             @foreach ($previewPengumumanPortal as $item)
-                                <a href="javascript:void(0)"
+                                <a href="{{ route('public.pengumuman') }}"
                                     class="group/item flex flex-col gap-1.5 p-3 rounded-xl border border-gray-100 hover:border-blue-400 hover:bg-blue-50 transition-all">
                                     <div class="flex items-center gap-2 mb-1">
                                         <div
