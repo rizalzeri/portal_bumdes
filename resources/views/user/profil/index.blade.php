@@ -35,8 +35,8 @@
                 <h3 class="font-bold text-gray-900 border-b pb-2 mb-4">Identitas Resmi</h3>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                        <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Nama BUMDesa (Readonly)</label>
-                        <input type="text" value="{{ $bumdes->name }}" disabled class="bg-gray-100 block w-full rounded-md border-gray-300 shadow-sm sm:text-sm border p-2 text-gray-500">
+                        <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Nama BUMDesa</label>
+                        <input type="text" name="name" value="{{ old('name', $bumdes->name) }}" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm border p-2">
                     </div>
                     <div>
                         <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Klasifikasi Sistem</label>

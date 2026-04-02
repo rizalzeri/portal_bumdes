@@ -1,5 +1,5 @@
 @extends('layouts.public')
-@section('title', 'BUMDesa ' . $bumdes->name . ' Desa ' . ($bumdes->desa ?? ''))
+@section('title', $bumdes->name . ' Desa ' . ($bumdes->desa ?? ''))
 
 @section('content')
     <!-- Header Section -->
@@ -23,7 +23,7 @@
                             class="fa-solid {{ $bumdes->status === 'active' ? 'fa-circle-check' : 'fa-circle-xmark' }} mr-2"></i>
                         Status BUMDesa: {{ $bumdes->status === 'active' ? 'Aktif' : 'Tidak Aktif' }}
                     </span>
-                    <h1 class="text-3xl md:text-5xl font-extrabold mb-4">BUMDesa {{ $bumdes->name }} Desa {{ $bumdes->desa ?? '' }}</h1>
+                    <h1 class="text-3xl md:text-5xl font-extrabold mb-4">{{ $bumdes->name }} Desa {{ $bumdes->desa ?? '' }}</h1>
                     <div
                         class="flex flex-col sm:flex-row flex-wrap gap-4 justify-center md:justify-start text-blue-100 text-sm md:text-base">
                         <div class="flex items-center"><i class="fa-solid fa-map-location-dot w-5 text-accent"></i>
@@ -399,7 +399,7 @@
             </div>
 
             <!-- 10. Papan Pengumuman -->
-            @if ($isPremium && $bumdes->pengumuman->count() > 0)
+            @if ($bumdes->pengumuman->count() > 0)
                 <div class="bg-white rounded-xl shadow-sm border p-6" id="papan-pengumuman">
                     <h2 class="text-2xl font-bold text-primary mb-6"><i class="fa-solid fa-bullhorn mr-2 text-accent"></i> Papan Pengumuman BUMDesa</h2>
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

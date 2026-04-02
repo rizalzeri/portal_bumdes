@@ -58,7 +58,7 @@ class PublicRegistrationController extends Controller
             // Create BUMDes
             $bumdes = Bumdes::create([
                 'kabupaten_id' => $request->kabupaten_id,
-                'name' => 'BUMDes ' . $request->desa,
+                'name' => $request->desa,
                 'slug' => $request->username,
                 'desa' => $request->desa,
                 'is_active' => $statusBumdes,
@@ -66,7 +66,7 @@ class PublicRegistrationController extends Controller
 
             // Create User
             $user = User::create([
-                'name' => 'Admin BUMDes ' . $request->desa,
+                'name' => 'Admin ' . $request->desa,
                 'username' => $request->username,
                 'email' => $request->email,
                 'password' => Hash::make($request->password),

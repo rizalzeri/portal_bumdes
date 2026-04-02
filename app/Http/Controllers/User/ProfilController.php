@@ -20,6 +20,7 @@ class ProfilController extends Controller
         $bumdes = Bumdesa::where('user_id', auth()->id())->orWhere('id', auth()->user()->bumdes_id)->firstOrFail();
 
         $request->validate([
+            'name' => 'nullable|string|max:255',
             'phone' => 'nullable|string|max:20',
             'about' => 'nullable|string',
             'visi_misi' => 'nullable|string',

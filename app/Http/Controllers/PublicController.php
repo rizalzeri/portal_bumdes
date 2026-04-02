@@ -204,10 +204,15 @@ class PublicController extends Controller
     {
         $kabupaten = \App\Models\Kabupaten::with('province')->findOrFail($id);
         
-        // Cek status premium admin kabupaten
-        $admin= \App\Models\User::where('kabupaten_id', $id)->where('role', 'admin_kabupaten')->first();
-        if (!$admin || $admin->subscription_status !== 'active' || $admin->subscription_expiry < now()) {
-            abort(403, 'Infografis Kabupaten ini tidak tersedia karena paket langganan tidak aktif (Bukan Kabupaten Premium).');
+        // Cek status premium admin kabupaten via tabel langganans (konsisten dengan sidebar)
+        $isPremiumKab = \App\Models\Langganan::where('kabupaten_id', $id)
+            ->whereNull('bumdes_id')
+            ->where('status', 'active')
+            ->where('end_date', '>', now())
+            ->exists();
+
+        if (!$isPremiumKab) {
+            abort(403, 'Infografis Perkembangan BUMDesa tidak tersedia (Status Admin Kabupaten Offline).');
         }
 
         $bumdesIds = \App\Models\Bumdesa::where('kabupaten_id', $id)->pluck('id');
