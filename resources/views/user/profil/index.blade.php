@@ -50,7 +50,15 @@
                         <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Kecamatan</label>
                         <input type="text" value="{{ $bumdes->kecamatan }}" disabled class="bg-gray-100 block w-full rounded-md border-gray-300 shadow-sm sm:text-sm border p-2 text-gray-500">
                     </div>
-                    <div class="md:col-span-2">
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Jenis Kelembagaan</label>
+                        <select name="jenis_kelembagaan" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm border p-2 text-gray-700">
+                            <option value="BUMDesa" {{ (old('jenis_kelembagaan', $bumdes->jenis_kelembagaan) === 'BUMDesa' || empty($bumdes->jenis_kelembagaan)) ? 'selected' : '' }}>BUMDesa</option>
+                            <option value="BUMDesa Bersama" {{ (old('jenis_kelembagaan', $bumdes->jenis_kelembagaan) === 'BUMDesa Bersama') ? 'selected' : '' }}>BUMDesa Bersama</option>
+                            <option value="BUMDESMA LKD" {{ (old('jenis_kelembagaan', $bumdes->jenis_kelembagaan) === 'BUMDESMA LKD') ? 'selected' : '' }}>BUMDESMA LKD</option>
+                        </select>
+                    </div>
+                    <div>
                         <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Status Organisasi dan Kegiatan</label>
                         <select name="status" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm border p-2 text-gray-700">
                             <option value="active" {{ (old('status', $bumdes->status) === 'active') ? 'selected' : '' }}>Aktif</option>

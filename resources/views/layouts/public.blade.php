@@ -52,7 +52,7 @@
 <body class="bg-gray-50 text-gray-800 antialiased flex flex-col min-h-screen">
 
     <!-- Public Navbar -->
-    <nav class="bg-primary text-white shadow-lg sticky top-0 z-50">
+    <nav x-data="{ mobileMenuOpen: false }" class="bg-primary text-white shadow-lg sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
                 <div class="flex items-center">
@@ -86,6 +86,25 @@
                         @endauth
                     </div>
                 </div>
+
+                <!-- Mobile menu button -->
+                <div class="-mr-2 flex md:hidden">
+                    <button type="button" @click="mobileMenuOpen = !mobileMenuOpen"
+                        class="inline-flex items-center justify-center p-2 rounded-md text-white hover:text-accent focus:outline-none"
+                        aria-controls="mobile-menu" aria-expanded="false">
+                        <span class="sr-only">Buka main menu</span>
+                        <i class="fa-solid fa-bars text-xl" x-show="!mobileMenuOpen"></i>
+                        <i class="fa-solid fa-xmark text-xl" x-show="mobileMenuOpen" x-cloak></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div class="md:hidden" id="mobile-menu" x-show="mobileMenuOpen" x-transition style="display: none;">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-primary border-t border-blue-800">
+                <a href="{{ route('home') }}" class="hover:text-accent block px-3 py-2 rounded-md text-base font-medium">Beranda</a>
+                <a href="{{ route('public.bumdes.list') }}" class="hover:text-accent block px-3 py-2 rounded-md text-base font-medium">BUMDesa</a>
             </div>
         </div>
     </nav>

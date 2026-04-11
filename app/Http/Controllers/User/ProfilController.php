@@ -41,6 +41,7 @@ class ProfilController extends Controller
             'audit_internal_terakhir' => 'nullable|date',
             'pemeringkatan' => 'nullable|string',
             'status' => 'nullable|string',
+            'jenis_kelembagaan' => 'nullable|string',
         ]);
 
         $data = $request->except(['_token', '_method', 'logo']);

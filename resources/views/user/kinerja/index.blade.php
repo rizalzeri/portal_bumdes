@@ -51,6 +51,7 @@
                             <option value="">-- Pilih Kategori --</option>
                             <option value="Reguler">Reguler</option>
                             <option value="Ketahanan Pangan">Ketahanan Pangan</option>
+                            <option value="Dana Bergulir Masyarakat (DBM)">Dana Bergulir Masyarakat (DBM)</option>
                         </select>
                     </div>
                     <div>
@@ -133,6 +134,8 @@
                 options = ['Omset', 'Laba', 'PADes', 'Aset'];
             } else if (kategori === 'Ketahanan Pangan') {
                 options = ['Omset', 'Laba', 'PADes', 'Modal Saat Ini'];
+            } else if (kategori === 'Dana Bergulir Masyarakat (DBM)') {
+                options = ['Omset', 'Laba', 'PADes', 'Aset', 'Dana Sosial/RTM'];
             }
             
             options.forEach(opt => {

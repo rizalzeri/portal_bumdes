@@ -23,16 +23,45 @@
                 <div class="flex flex-col items-center gap-2 w-full sm:w-auto">
                     <a href="{{ route('public.bumdes.list') }}"
                         class="px-8 py-4 border border-transparent text-lg font-bold rounded-full text-primary bg-accent hover:bg-yellow-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent shadow-lg transform transition hover:-translate-y-1 text-center w-full">
-                        Kunjungi BUMDesa
+                        Kunjungi Website BUMDesa
                     </a>
-                    <span class="text-xs font-semibold text-accent/90 italic tracking-wide">(Gratis dan Praktis)</span>
+                    <span class="text-xs font-semibold text-accent/90 italic tracking-wide">(Pencarian Cepat)</span>
                 </div>
                 <div class="flex flex-col items-center gap-2 w-full sm:w-auto">
                     <a href="{{ route('public.register') }}"
                         class="px-8 py-4 border-2 border-accent text-lg font-bold rounded-full text-accent bg-transparent hover:bg-accent hover:text-primary focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent shadow-lg transform transition hover:-translate-y-1 text-center w-full">
-                        Buat Website BUMDES
+                        Buat Website
                     </a>
-                    <span class="text-xs font-semibold text-accent/80 italic tracking-wide">(Mudah dan Cepat)</span>
+                    <span class="text-xs font-semibold text-accent/80 italic tracking-wide">(Gratis dan praktis)</span>
+                </div>
+                
+                <!-- Atur Website (Login) Button (Hanya tampil di HP) -->
+                <div class="flex md:hidden flex-col items-center gap-2 w-full mt-4">
+                    @auth
+                        @if (Auth::user()->role === 'superadmin')
+                            <a href="{{ route('superadmin.dashboard') }}"
+                                class="px-8 py-4 border border-white/20 text-lg font-bold rounded-full text-white bg-white/10 hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white/50 shadow-lg transform transition hover:-translate-y-1 text-center w-full">
+                                Dashboard Admin
+                            </a>
+                        @elseif(Auth::user()->role === 'admin_kabupaten')
+                            <a href="{{ route('adminkab.dashboard') }}"
+                                class="px-8 py-4 border border-white/20 text-lg font-bold rounded-full text-white bg-white/10 hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white/50 shadow-lg transform transition hover:-translate-y-1 text-center w-full">
+                                Dashboard Admin
+                            </a>
+                        @else
+                            <a href="{{ route('user.dashboard', ['slug' => Auth::user()->username]) }}"
+                                class="px-8 py-4 border border-white/20 text-lg font-bold rounded-full text-white bg-white/10 hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white/50 shadow-lg transform transition hover:-translate-y-1 text-center w-full">
+                                Dashboard BUMDesa
+                            </a>
+                        @endif
+                        <span class="text-xs font-semibold text-blue-200 italic tracking-wide">(Masuk ke Dasbor)</span>
+                    @else
+                        <a href="{{ route('login') }}"
+                            class="px-8 py-4 border border-white/20 text-lg font-bold rounded-full text-white bg-white/10 hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white/50 shadow-lg transform transition hover:-translate-y-1 text-center w-full">
+                            Atur Website
+                        </a>
+                        <span class="text-xs font-semibold text-blue-200 italic tracking-wide">(Mudah dan cepat)</span>
+                    @endauth
                 </div>
             </div>
         </div>
@@ -84,7 +113,7 @@
                                             <i class="fa-solid fa-store text-gray-400"></i>
                                         @endif
                                     </div>
-                                    <span class="text-xs font-semibold text-gray-700 group-hover/item:text-primary transition-colors line-clamp-2 leading-tight">BUMDesa {{ $item->name }} Desa {{ $item->desa ?? '' }}</span>
+                                    <span class="text-xs font-semibold text-gray-700 group-hover/item:text-primary transition-colors line-clamp-2 leading-tight">{{ $item->name }} {{ $item->desa ?? '' }}</span>
                                     <span class="text-xs text-gray-400">{{ $item->kabupaten->name ?? '-' }}</span>
                                 </a>
                             @endforeach
@@ -250,8 +279,7 @@
                             <i class="fa-solid fa-shop text-2xl text-teal-500"></i>
                         </div>
                         <div class="flex-grow">
-                            <h3 class="text-lg font-bold text-gray-900 group-hover:text-teal-600 transition-colors">Katalog
-                                Produk</h3>
+                            <h3 class="text-lg font-bold text-gray-900 group-hover:text-teal-600 transition-colors">Produk BUMDesa/Desa</h3>
                             <p class="text-gray-500 text-sm mt-0.5">Pasar digital produk unggulan karya BUMDesa dari
                                 seluruh Indonesia.</p>
                         </div>

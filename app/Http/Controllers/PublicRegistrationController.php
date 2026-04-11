@@ -35,6 +35,7 @@ class PublicRegistrationController extends Controller
         $request->validate([
             'province_id' => 'required|exists:provinces,id',
             'kabupaten_id' => 'required|exists:kabupatens,id',
+            'name' => 'required|string|max:255',
             'desa' => 'required|string|max:255',
             'email' => 'required|email|max:255|unique:users,email',
             'username' => 'required|string|max:255|unique:users,username|regex:/^[a-zA-Z0-9\-]+$/',
@@ -58,7 +59,7 @@ class PublicRegistrationController extends Controller
             // Create BUMDes
             $bumdes = Bumdes::create([
                 'kabupaten_id' => $request->kabupaten_id,
-                'name' => $request->desa,
+                'name' => $request->name,
                 'slug' => $request->username,
                 'desa' => $request->desa,
                 'is_active' => $statusBumdes,
@@ -66,7 +67,7 @@ class PublicRegistrationController extends Controller
 
             // Create User
             $user = User::create([
-                'name' => 'Admin ' . $request->desa,
+                'name' => 'Admin ' . $request->name,
                 'username' => $request->username,
                 'email' => $request->email,
                 'password' => Hash::make($request->password),

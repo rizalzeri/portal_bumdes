@@ -167,6 +167,7 @@ class PublicController extends Controller
                     'thn'      => $year,
                     'reguler'  => ['omset' => 0, 'laba' => 0, 'pades' => 0, 'aset' => 0],
                     'ketapang' => ['omset' => 0, 'laba' => 0, 'pades' => 0, 'aset' => 0],
+                    'dbm'      => ['omset' => 0, 'laba' => 0, 'pades' => 0, 'aset' => 0, 'danasosial' => 0],
                 ];
             }
             $kategori = strtolower($kinerja->description ?? '');
@@ -174,12 +175,14 @@ class PublicController extends Controller
             $value    = (float) ($kinerja->value ?? 0);
 
             $group = str_contains($kategori, 'ketahanan') || str_contains($kategori, 'pangan')
-                ? 'ketapang' : 'reguler';
+                ? 'ketapang' : (str_contains($kategori, 'dana bergulir') || str_contains($kategori, 'dbm') ? 'dbm' : 'reguler');
 
             if (str_contains($item, 'omset'))      $kinerjaTahunanRaw[$year][$group]['omset'] += $value;
             elseif (str_contains($item, 'laba'))   $kinerjaTahunanRaw[$year][$group]['laba']  += $value;
             elseif (str_contains($item, 'pades') || str_contains($item, 'pad'))
                                                     $kinerjaTahunanRaw[$year][$group]['pades'] += $value;
+            elseif (str_contains($item, 'dana') || str_contains($item, 'sosial') || str_contains($item, 'rtm'))
+                                                    $kinerjaTahunanRaw[$year][$group]['danasosial'] += $value;
             elseif (str_contains($item, 'aset') || str_contains($item, 'modal'))
                                                     $kinerjaTahunanRaw[$year][$group]['aset']  += $value;
         }

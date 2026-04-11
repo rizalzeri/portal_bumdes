@@ -75,7 +75,7 @@
                 <a href="{{ route('superadmin.katalog.index') }}"
                     class="flex items-center px-3 py-2 text-gray-200 transition-colors rounded-lg hover:bg-primary-800 hover:text-white">
                     <i class="fa-solid fa-shop w-5 h-5"></i>
-                    <span class="mx-2 text-sm font-medium">Produk Desa</span>
+                    <span class="mx-2 text-sm font-medium">Produk BUMDesa/Desa</span>
                 </a>
                 <a href="{{ route('superadmin.mitra.index') }}"
                     class="flex items-center px-3 py-2 text-gray-200 transition-colors rounded-lg hover:bg-primary-800 hover:text-white">
@@ -169,7 +169,7 @@
     <a href="{{ route('user.produk.index', ['slug' => Auth::user()->username]) }}"
         class="flex items-center px-3 py-2 text-gray-200 transition-colors rounded-lg hover:bg-primary-800 hover:text-white">
         <i class="fa-solid fa-box w-5 h-5"></i>
-        <span class="mx-2 text-sm font-medium">Produk Desa</span>
+        <span class="mx-2 text-sm font-medium">Produk BUMDesa/Desa</span>
     </a>
     @endpremium
     @premium('ketapang')

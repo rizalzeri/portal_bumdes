@@ -113,24 +113,36 @@
                                 </div>
                             </div>
 
-                            <!-- Desa & Email -->
+                            <!-- Nama BUMDesa & Desa -->
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <div>
-                                    <label for="desa" class="block text-sm font-medium text-gray-700">Nama Desa <span
+                                    <label for="name" class="block text-sm font-medium text-gray-700">Nama BUMDesa/BUMDESMA <span
+                                            class="text-red-500">*</span></label>
+                                    <input type="text" id="name" name="name" value="{{ old('name') }}"
+                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm p-2 border"
+                                        required>
+                                    @error('name')
+                                        <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                                <div>
+                                    <label for="desa" class="block text-sm font-medium text-gray-700">Nama Desa/Kecamatan <span
                                             class="text-red-500">*</span></label>
                                     <input type="text" id="desa" name="desa" value="{{ old('desa') }}"
-                                        placeholder="Cth. Makmur Jaya"
                                         class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm p-2 border"
                                         required>
                                     @error('desa')
                                         <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
                                     @enderror
                                 </div>
+                            </div>
+
+                            <!-- Email -->
+                            <div class="grid grid-cols-1 sm:grid-cols-1 gap-4">
                                 <div>
                                     <label for="email" class="block text-sm font-medium text-gray-700">Alamat Email <span
                                             class="text-red-500">*</span></label>
                                     <input type="email" id="email" name="email" value="{{ old('email') }}"
-                                        placeholder="admin@desa.id"
                                         class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm p-2 border"
                                         required>
                                     @error('email')
@@ -156,7 +168,7 @@
                                             <input type="text" id="username" name="username"
                                                 value="{{ old('username') }}"
                                                 class="flex-1 min-w-0 block w-full rounded-none rounded-r-md sm:text-sm border-gray-300 p-2 border focus:border-primary focus:ring-primary"
-                                                placeholder="contoh-desa" required>
+                                                required>
                                         </div>
                                         <p class="text-xs text-gray-500 mt-1">Ini akan menjadi alamat website anda dan
                                             username login. Hanya huruf, angka, dan strip (-).</p>

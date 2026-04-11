@@ -156,7 +156,7 @@
                                 </div>
                             </div>
                             <div class="p-6 pt-10 flex-grow flex flex-col">
-                                <h3 class="font-bold text-lg text-gray-900 tracking-tight">BUMDesa {{ $bd->name }} Desa {{ $bd->desa ?? '' }}</h3>
+                                <h3 class="font-bold text-lg text-gray-900 tracking-tight">{{ $bd->name }}</h3>
                                 <p class="text-[10px] font-bold uppercase tracking-wider mb-3 {{ $bd->status === 'active' ? 'text-emerald-600' : 'text-red-600' }}">
                                     <i class="fa-solid {{ $bd->status === 'active' ? 'fa-circle-check' : 'fa-circle-xmark' }}"></i> 
                                     Status BUMDesa: {{ $bd->status === 'active' ? 'Aktif' : 'Tidak Aktif' }}

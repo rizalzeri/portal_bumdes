@@ -41,7 +41,7 @@ digunakan untuk pelaporan.</p>
                     <div class="w-14 h-14 bg-purple-50 text-purple-600 rounded-2xl flex items-center justify-center text-2xl mb-6 group-hover:scale-110 group-hover:bg-purple-600 group-hover:text-white transition-all text-left">
                         <i class="fa-solid fa-file-invoice"></i>
                     </div>
-                    <h3 class="text-xl font-bold text-gray-900 mb-3 text-left">Aplikasi Dokumen & SPJ (<a href="https://bumdespro.my.id" target="_blank" class="text-purple-600 hover:underline">bumdespro.my.id</a>)</h3>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3 text-left">Aplikasi Dokumen & SPJ (<a href="https://bumdespro2.my.id" target="_blank" class="text-purple-600 hover:underline">bumdespro.my.id</a>)</h3>
                     <p class="text-gray-500 mb-4 text-left">Mendukung pengelolaan administrasi secara digital, aplikasi ini memudahkan dalam penyusunan 
 dokumen dan SPJ (Surat Pertanggungjawaban) secara cepat, rapi, dan sesuai kebutuhan 
 pelaporan. </p>

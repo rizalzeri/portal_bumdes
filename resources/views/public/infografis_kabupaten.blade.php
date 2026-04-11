@@ -94,7 +94,7 @@
             <h2 class="text-xl font-extrabold text-gray-900 mb-6">Kinerja BUMDesa</h2>
             
             <div class="bg-white rounded-xl border border-gray-200 px-5 py-3 shadow-sm mb-8 flex items-center gap-4 text-gray-900 max-w-sm">
-                <label class="font-bold text-sm text-gray-600">Periode :</label>
+                <label class="font-bold text-sm text-gray-600">Periode</label>
                 <select x-model="selectedTahun" class="border border-gray-300 rounded-lg px-4 py-1.5 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-teal-500 w-full bg-gray-50">
                     <template x-for="tahun in getReverseTahunList()" :key="tahun">
                         <option :value="tahun" x-text="tahun"></option>
@@ -103,7 +103,7 @@
             </div>
 
             <!-- Hasil Pemeringkatan -->
-            <h3 class="text-md font-bold text-gray-900 mb-4">1. Hasil Pemeringkatan</h3>
+            <h3 class="text-md font-bold text-gray-900 mb-4">Pemeringkatan</h3>
             <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
                 <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
                     <span class="text-xs font-semibold text-gray-400 mb-1 block">Maju</span>
@@ -123,49 +123,85 @@
                 </div>
             </div>
             
-            <!-- Kegiatan Reguler -->
-            <h3 class="text-md font-bold text-gray-900 mb-4">2. Kegiatan Reguler</h3>
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-2">
-                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
-                    <span class="text-xs font-semibold text-gray-400 mb-1 block tracking-wide">Omset</span>
-                    <span class="text-xl font-black text-teal-700" x-text="'Rp ' + formatRupiah(getCurrentData().reguler.omset)"></span>
+            <!-- Omset -->
+            <div x-show="hasSection('omset')" class="mb-2">
+                <h3 class="text-md font-bold text-gray-900 mb-4">Omset</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-2">
+                    <div x-show="hasValue(getCurrentData().reguler.omset)" class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
+                        <span class="text-xs font-semibold text-gray-400 mb-1 block tracking-wide uppercase">Reguler</span>
+                        <span class="text-xl font-black text-teal-700" x-text="'Rp ' + formatRupiah(getCurrentData().reguler.omset)"></span>
+                    </div>
+                    <div x-show="hasValue(getCurrentData().ketapang.omset)" class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
+                        <span class="text-xs font-semibold text-gray-400 mb-1 block tracking-wide uppercase">Ketahanan Pangan</span>
+                        <span class="text-xl font-black text-teal-700" x-text="'Rp ' + formatRupiah(getCurrentData().ketapang.omset)"></span>
+                    </div>
+                    <div x-show="hasValue(getCurrentData().dbm.omset)" class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
+                        <span class="text-xs font-semibold text-gray-400 mb-1 block tracking-wide uppercase">Dana Bergulir Masyarakat</span>
+                        <span class="text-xl font-black text-teal-700" x-text="'Rp ' + formatRupiah(getCurrentData().dbm.omset)"></span>
+                    </div>
                 </div>
-                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
-                    <span class="text-xs font-semibold text-gray-400 mb-1 block tracking-wide">Laba</span>
-                    <span class="text-xl font-black text-teal-700" x-text="'Rp ' + formatRupiah(getCurrentData().reguler.laba)"></span>
-                </div>
-                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
-                    <span class="text-xs font-semibold text-gray-400 mb-1 block tracking-wide">PADes</span>
-                    <span class="text-xl font-black text-teal-700" x-text="'Rp ' + formatRupiah(getCurrentData().reguler.pades)"></span>
-                </div>
-                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
-                    <span class="text-xs font-semibold text-gray-400 mb-1 block tracking-wide">Aset</span>
-                    <span class="text-xl font-black text-teal-700" x-text="'Rp ' + formatRupiah(getCurrentData().reguler.aset)"></span>
-                </div>
+                <p class="text-xs text-gray-400 mb-8 italic ml-1">Akumulasi dari laporan dokumen BUMDesa</p>
             </div>
-            <p class="text-xs text-gray-400 mb-8 italic ml-1">Akumulasi dari laporan dokumen BUMDesa</p>
 
-            <!-- Kegiatan Ketahanan Pangan -->
-            <h3 class="text-md font-bold text-gray-900 mb-4">3. Kegiatan Ketahanan Pangan</h3>
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-2">
-                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
-                    <span class="text-xs font-semibold text-gray-400 mb-1 block tracking-wide">Omset</span>
-                    <span class="text-xl font-black text-teal-700" x-text="'Rp ' + formatRupiah(getCurrentData().ketapang.omset)"></span>
+            <!-- Laba -->
+            <div x-show="hasSection('laba')" class="mb-2">
+                <h3 class="text-md font-bold text-gray-900 mb-4">Laba</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-2">
+                    <div x-show="hasValue(getCurrentData().reguler.laba)" class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
+                        <span class="text-xs font-semibold text-gray-400 mb-1 block tracking-wide uppercase">Reguler</span>
+                        <span class="text-xl font-black text-teal-700" x-text="'Rp ' + formatRupiah(getCurrentData().reguler.laba)"></span>
+                    </div>
+                    <div x-show="hasValue(getCurrentData().ketapang.laba)" class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
+                        <span class="text-xs font-semibold text-gray-400 mb-1 block tracking-wide uppercase">Ketahanan Pangan</span>
+                        <span class="text-xl font-black text-teal-700" x-text="'Rp ' + formatRupiah(getCurrentData().ketapang.laba)"></span>
+                    </div>
+                    <div x-show="hasValue(getCurrentData().dbm.laba)" class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
+                        <span class="text-xs font-semibold text-gray-400 mb-1 block tracking-wide uppercase">Dana Bergulir Masyarakat</span>
+                        <span class="text-xl font-black text-teal-700" x-text="'Rp ' + formatRupiah(getCurrentData().dbm.laba)"></span>
+                    </div>
                 </div>
-                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
-                    <span class="text-xs font-semibold text-gray-400 mb-1 block tracking-wide">Laba</span>
-                    <span class="text-xl font-black text-teal-700" x-text="'Rp ' + formatRupiah(getCurrentData().ketapang.laba)"></span>
-                </div>
-                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
-                    <span class="text-xs font-semibold text-gray-400 mb-1 block tracking-wide">PADes</span>
-                    <span class="text-xl font-black text-teal-700" x-text="'Rp ' + formatRupiah(getCurrentData().ketapang.pades)"></span>
-                </div>
-                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
-                    <span class="text-xs font-semibold text-gray-400 mb-1 block tracking-wide">Aset</span>
-                    <span class="text-xl font-black text-teal-700" x-text="'Rp ' + formatRupiah(getCurrentData().ketapang.aset)"></span>
-                </div>
+                <p class="text-xs text-gray-400 mb-8 italic ml-1">Akumulasi dari laporan dokumen BUMDesa</p>
             </div>
-            <p class="text-xs text-gray-400 mb-12 italic ml-1">Akumulasi dari laporan dokumen BUMDesa</p>
+
+            <!-- Aset -->
+            <div x-show="hasSection('aset')" class="mb-2">
+                <h3 class="text-md font-bold text-gray-900 mb-4">Aset</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-2">
+                    <div x-show="hasValue(getCurrentData().reguler.aset)" class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
+                        <span class="text-xs font-semibold text-gray-400 mb-1 block tracking-wide uppercase">Reguler</span>
+                        <span class="text-xl font-black text-teal-700" x-text="'Rp ' + formatRupiah(getCurrentData().reguler.aset)"></span>
+                    </div>
+                    <div x-show="hasValue(getCurrentData().ketapang.aset)" class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
+                        <span class="text-xs font-semibold text-gray-400 mb-1 block tracking-wide uppercase">Ketahanan Pangan</span>
+                        <span class="text-xl font-black text-teal-700" x-text="'Rp ' + formatRupiah(getCurrentData().ketapang.aset)"></span>
+                    </div>
+                    <div x-show="hasValue(getCurrentData().dbm.aset)" class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
+                        <span class="text-xs font-semibold text-gray-400 mb-1 block tracking-wide uppercase">Dana Bergulir Masyarakat</span>
+                        <span class="text-xl font-black text-teal-700" x-text="'Rp ' + formatRupiah(getCurrentData().dbm.aset)"></span>
+                    </div>
+                </div>
+                <p class="text-xs text-gray-400 mb-8 italic ml-1">Akumulasi dari laporan dokumen BUMDesa</p>
+            </div>
+
+            <!-- Dana Sosial -->
+            <div x-show="hasSection('danasosial')" class="mb-2">
+                <h3 class="text-md font-bold text-gray-900 mb-4">Dana Sosial</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-2">
+                    <div x-show="hasValue(getCurrentData().reguler.danasosial)" class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
+                        <span class="text-xs font-semibold text-gray-400 mb-1 block tracking-wide uppercase">Reguler</span>
+                        <span class="text-xl font-black text-teal-700" x-text="'Rp ' + formatRupiah(getCurrentData().reguler.danasosial)"></span>
+                    </div>
+                    <div x-show="hasValue(getCurrentData().ketapang.danasosial)" class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
+                        <span class="text-xs font-semibold text-gray-400 mb-1 block tracking-wide uppercase">Ketahanan Pangan</span>
+                        <span class="text-xl font-black text-teal-700" x-text="'Rp ' + formatRupiah(getCurrentData().ketapang.danasosial)"></span>
+                    </div>
+                    <div x-show="hasValue(getCurrentData().dbm.danasosial)" class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
+                        <span class="text-xs font-semibold text-gray-400 mb-1 block tracking-wide uppercase">Dana Bergulir Masyarakat</span>
+                        <span class="text-xl font-black text-teal-700" x-text="'Rp ' + formatRupiah(getCurrentData().dbm.danasosial)"></span>
+                    </div>
+                </div>
+                <p class="text-xs text-gray-400 mb-12 italic ml-1">Akumulasi dari laporan dokumen BUMDesa</p>
+            </div>
         </section>
 
         <!-- 3. Monitoring BUMDesa -->
@@ -278,18 +314,39 @@
                 
                 return {
                     reguler: {
-                        omset: Math.round(omset * 0.85),
-                        laba: Math.round(laba * 0.85), 
-                        pades: Math.round(pades * 0.85),
-                        aset: Math.round(aset * 0.85)
+                        omset: Math.round(omset * 0.80),
+                        laba: Math.round(laba * 0.80), 
+                        pades: Math.round(pades * 0.80),
+                        aset: Math.round(aset * 0.80),
+                        danasosial: 0
                     },
                     ketapang: {
-                        omset: Math.round(omset * 0.15),
-                        laba: Math.round(laba * 0.15),
-                        pades: Math.round(pades * 0.15),
-                        aset: Math.round(aset * 0.15)
+                        omset: Math.round(omset * 0.10),
+                        laba: Math.round(laba * 0.10),
+                        pades: Math.round(pades * 0.10),
+                        aset: Math.round(aset * 0.10),
+                        danasosial: 0
+                    },
+                    dbm: {
+                        omset: Math.round(omset * 0.10),
+                        laba: Math.round(laba * 0.10),
+                        pades: Math.round(pades * 0.10),
+                        aset: Math.round(aset * 0.10),
+                        danasosial: Math.round(laba * 0.05) // Dummy data
                     }
                 }
+            },
+            
+            hasValue(value) {
+                if (value === null || value === undefined || value === '') return false;
+                const num = parseFloat(value);
+                if (isNaN(num) || num === 0) return false;
+                return true;
+            },
+
+            hasSection(metric) {
+                const d = this.getCurrentData();
+                return this.hasValue(d.reguler[metric]) || this.hasValue(d.ketapang[metric]) || this.hasValue(d.dbm[metric]);
             },
             
             formatRupiah(value) {
