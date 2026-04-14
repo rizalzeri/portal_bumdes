@@ -158,7 +158,6 @@
             @endphp
 
             <!-- 4. Produk Desa -->
-            @if($isPremium)
             <div class="bg-white rounded-xl shadow-sm border p-6" id="produk-desa">
                 <h2 class="text-2xl font-bold text-primary border-b pb-2 mb-6"><i
                         class="fa-solid fa-box-open mr-2 text-accent"></i> Produk BUMDesa / Desa</h2>
@@ -197,7 +196,6 @@
                     </div>
                 @endif
             </div>
-            @endif
 
             <!-- 5. Produk Ketahanan Pangan -->
             <div class="bg-white rounded-xl shadow-sm border p-6">
