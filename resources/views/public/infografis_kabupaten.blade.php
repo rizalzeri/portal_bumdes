@@ -282,61 +282,54 @@
     document.addEventListener('alpine:init', () => {
         Alpine.data('infografisData', () => ({
             rawData: @json($perkembangan),
-            selectedTahun: new Date().getFullYear(),
-            
+            selectedTahun: null,
+
+            init() {
+                if (this.rawData && this.rawData.length > 0) {
+                    this.selectedTahun = this.rawData[0].thn;
+                } else {
+                    this.selectedTahun = String(new Date().getFullYear());
+                }
+            },
+
             getReverseTahunList() {
-                const currentYear = new Date().getFullYear();
                 if (!this.rawData || this.rawData.length === 0) {
-                    return [currentYear];
+                    return [String(new Date().getFullYear())];
                 }
-                const years = this.rawData.map(v => parseInt(v.thn));
-                if (!years.includes(currentYear)) {
-                    years.push(currentYear);
-                }
-                return [...new Set(years)].sort((a,b) => b-a);
+                return this.rawData.map(v => String(v.thn));
             },
-            
+
             getCurrentData() {
-                let yearData = this.rawData.find(d => parseInt(d.thn) === parseInt(this.selectedTahun));
-                if(!yearData) {
-                    yearData = { omset: 0, aset: 0, pades: 0 };
+                let yearData = this.rawData.find(d => String(d.thn) === String(this.selectedTahun));
+                const empty = { omset: null, laba: null, pades: null, aset: null, danasosial: null };
+                if (!yearData) {
+                    return { reguler: { ...empty }, ketapang: { ...empty }, dbm: { ...empty } };
                 }
-                
-                // Assuming PADes data is 'pades', Laba is estimated or derived from PADes for dummy UI
-                // For Reguler (85%) and Ketapang (15%) splits as per typical BUMDes ratio or business login
-                
-                let omset = parseFloat(yearData.omset || 0);
-                let pades = parseFloat(yearData.pades || 0);
-                let aset = parseFloat(yearData.aset || 0);
-                
-                // Estimate overall Laba since pades is just the PADes setoran
-                let laba = pades * (100/30); // E.g., PADes is ~30% of Laba
-                
                 return {
-                    reguler: {
-                        omset: Math.round(omset * 0.80),
-                        laba: Math.round(laba * 0.80), 
-                        pades: Math.round(pades * 0.80),
-                        aset: Math.round(aset * 0.80),
-                        danasosial: 0
+                    reguler:  { 
+                        omset: yearData.reguler?.omset, 
+                        laba:  yearData.reguler?.laba, 
+                        pades: yearData.reguler?.pades, 
+                        aset:  yearData.reguler?.aset,
+                        danasosial: yearData.reguler?.danasosial
                     },
-                    ketapang: {
-                        omset: Math.round(omset * 0.10),
-                        laba: Math.round(laba * 0.10),
-                        pades: Math.round(pades * 0.10),
-                        aset: Math.round(aset * 0.10),
-                        danasosial: 0
+                    ketapang: { 
+                        omset: yearData.ketapang?.omset, 
+                        laba:  yearData.ketapang?.laba, 
+                        pades: yearData.ketapang?.pades, 
+                        aset:  yearData.ketapang?.aset,
+                        danasosial: yearData.ketapang?.danasosial
                     },
-                    dbm: {
-                        omset: Math.round(omset * 0.10),
-                        laba: Math.round(laba * 0.10),
-                        pades: Math.round(pades * 0.10),
-                        aset: Math.round(aset * 0.10),
-                        danasosial: Math.round(laba * 0.05) // Dummy data
+                    dbm: { 
+                        omset: yearData.dbm?.omset, 
+                        laba:  yearData.dbm?.laba, 
+                        pades: yearData.dbm?.pades, 
+                        aset:  yearData.dbm?.aset,
+                        danasosial: yearData.dbm?.danasosial
                     }
-                }
+                };
             },
-            
+
             hasValue(value) {
                 if (value === null || value === undefined || value === '') return false;
                 const num = parseFloat(value);
@@ -348,17 +341,12 @@
                 const d = this.getCurrentData();
                 return this.hasValue(d.reguler[metric]) || this.hasValue(d.ketapang[metric]) || this.hasValue(d.dbm[metric]);
             },
-            
+
             formatRupiah(value) {
-                if (value === 0 || !value) return '0';
+                if (value === null || value === undefined || value === 0) return '-';
                 const num = parseFloat(value);
-                
-                if (num >= 1000000000) {
-                    return (num / 1000000000).toLocaleString('id-ID', {minimumFractionDigits: 1, maximumFractionDigits: 1}) + ' M';
-                }
-                if (num >= 1000000) {
-                    return (num / 1000000).toLocaleString('id-ID', {minimumFractionDigits: 1, maximumFractionDigits: 1}) + ' Jt';
-                }
+                if (num >= 1000000000) return (num / 1000000000).toLocaleString('id-ID', {minimumFractionDigits: 1, maximumFractionDigits: 1}) + ' M';
+                if (num >= 1000000) return (num / 1000000).toLocaleString('id-ID', {minimumFractionDigits: 1, maximumFractionDigits: 1}) + ' Jt';
                 return num.toLocaleString('id-ID');
             }
         }))

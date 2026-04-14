@@ -249,11 +249,34 @@ class PublicController extends Controller
             else $rawKlasifikasi['Perintis']++;
         }
 
-        $perkembangan = \App\Models\LaporanKeuangan::whereIn('bumdes_id', $bumdesIds)
-            ->selectRaw('COALESCE(tahun, year) as thn, SUM(pendapatan) as omset, SUM(total_aset) as aset, SUM(laba_rugi) as pades')
-            ->groupBy('thn')
-            ->orderBy('thn', 'desc')
-            ->get();
+        $kinerjaTahunanRaw = [];
+        $kinerjas = \App\Models\KinerjaCapaian::whereIn('bumdes_id', $bumdesIds)->get();
+        foreach ($kinerjas as $kinerja) {
+            $year = (string) ($kinerja->year ?? date('Y'));
+            if (!isset($kinerjaTahunanRaw[$year])) {
+                $kinerjaTahunanRaw[$year] = [
+                    'thn'      => $year,
+                    'reguler'  => ['omset' => 0, 'laba' => 0, 'pades' => 0, 'aset' => 0, 'danasosial' => 0],
+                    'ketapang' => ['omset' => 0, 'laba' => 0, 'pades' => 0, 'aset' => 0, 'danasosial' => 0],
+                    'dbm'      => ['omset' => 0, 'laba' => 0, 'pades' => 0, 'aset' => 0, 'danasosial' => 0],
+                ];
+            }
+            $kategori = strtolower($kinerja->description ?? '');
+            $item     = strtolower($kinerja->title ?? '');
+            $value    = (float) ($kinerja->value ?? 0);
+
+            $group = str_contains($kategori, 'ketahanan') || str_contains($kategori, 'pangan')
+                ? 'ketapang' : (str_contains($kategori, 'dana bergulir') || str_contains($kategori, 'dbm') ? 'dbm' : 'reguler');
+
+            if (str_contains($item, 'omset'))      $kinerjaTahunanRaw[$year][$group]['omset'] += $value;
+            elseif (str_contains($item, 'laba'))   $kinerjaTahunanRaw[$year][$group]['laba']  += $value;
+            elseif (str_contains($item, 'pades') || str_contains($item, 'pad')) $kinerjaTahunanRaw[$year][$group]['pades'] += $value;
+            elseif (str_contains($item, 'dana') || str_contains($item, 'sosial') || str_contains($item, 'rtm')) $kinerjaTahunanRaw[$year][$group]['danasosial'] += $value;
+            elseif (str_contains($item, 'aset') || str_contains($item, 'modal')) $kinerjaTahunanRaw[$year][$group]['aset']  += $value;
+        }
+
+        $perkembangan = array_values($kinerjaTahunanRaw);
+        usort($perkembangan, fn($a, $b) => (int)$b['thn'] <=> (int)$a['thn']); // sort by year desc
 
         $monitoring = \App\Models\Bumdesa::where('kabupaten_id', $id)
             ->selectRaw('kecamatan, count(*) as total')
