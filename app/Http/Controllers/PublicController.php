@@ -240,14 +240,8 @@ class PublicController extends Controller
             ->get();
 
         $rawKlasifikasi = ['Maju' => 0, 'Berkembang' => 0, 'Pemula' => 0, 'Perintis' => 0];
-        $klasifikasiList = \App\Models\Bumdesa::where('kabupaten_id', $id)->pluck('klasifikasi');
-        foreach ($klasifikasiList as $k) {
-            $kl  = strtolower($k ?? '');
-            if (str_contains($kl, 'maju')) $rawKlasifikasi['Maju']++;
-            elseif (str_contains($kl, 'berkembang')) $rawKlasifikasi['Berkembang']++;
-            elseif (str_contains($kl, 'pemula') || str_contains($kl, 'dasar')) $rawKlasifikasi['Pemula']++;
-            else $rawKlasifikasi['Perintis']++;
-        }
+        $bumdesList = \App\Models\Bumdesa::where('kabupaten_id', $id)->get(['klasifikasi', 'pemeringkatan', 'pemeringkatan_tahun']);
+        // We will process this inside the next loops after kinerjaTahunanRaw is initialized.
 
         $kinerjaTahunanRaw = [];
         $kinerjas = \App\Models\KinerjaCapaian::whereIn('bumdes_id', $bumdesIds)->get();
@@ -259,6 +253,7 @@ class PublicController extends Controller
                     'reguler'  => ['omset' => 0, 'laba' => 0, 'pades' => 0, 'aset' => 0, 'danasosial' => 0],
                     'ketapang' => ['omset' => 0, 'laba' => 0, 'pades' => 0, 'aset' => 0, 'danasosial' => 0],
                     'dbm'      => ['omset' => 0, 'laba' => 0, 'pades' => 0, 'aset' => 0, 'danasosial' => 0],
+                    'klasifikasi' => ['Maju' => 0, 'Berkembang' => 0, 'Pemula' => 0, 'Perintis' => 0],
                 ];
             }
             $kategori = strtolower($kinerja->description ?? '');
@@ -273,6 +268,43 @@ class PublicController extends Controller
             elseif (str_contains($item, 'pades') || str_contains($item, 'pad')) $kinerjaTahunanRaw[$year][$group]['pades'] += $value;
             elseif (str_contains($item, 'dana') || str_contains($item, 'sosial') || str_contains($item, 'rtm')) $kinerjaTahunanRaw[$year][$group]['danasosial'] += $value;
             elseif (str_contains($item, 'aset') || str_contains($item, 'modal')) $kinerjaTahunanRaw[$year][$group]['aset']  += $value;
+        }
+
+        foreach ($bumdesList as $b) {
+            $year = (string) ($b->pemeringkatan_tahun ?? date('Y'));
+            
+            if (!isset($kinerjaTahunanRaw[$year])) {
+                $kinerjaTahunanRaw[$year] = [
+                    'thn'      => $year,
+                    'reguler'  => ['omset' => 0, 'laba' => 0, 'pades' => 0, 'aset' => 0, 'danasosial' => 0],
+                    'ketapang' => ['omset' => 0, 'laba' => 0, 'pades' => 0, 'aset' => 0, 'danasosial' => 0],
+                    'dbm'      => ['omset' => 0, 'laba' => 0, 'pades' => 0, 'aset' => 0, 'danasosial' => 0],
+                    'klasifikasi' => ['Maju' => 0, 'Berkembang' => 0, 'Pemula' => 0, 'Perintis' => 0],
+                ];
+            } else if (!isset($kinerjaTahunanRaw[$year]['klasifikasi'])) {
+                $kinerjaTahunanRaw[$year]['klasifikasi'] = ['Maju' => 0, 'Berkembang' => 0, 'Pemula' => 0, 'Perintis' => 0];
+            }
+            
+            $kl = strtolower($b->pemeringkatan ?? $b->klasifikasi ?? '');
+            if (str_contains($kl, 'maju')) {
+                $kinerjaTahunanRaw[$year]['klasifikasi']['Maju']++;
+                $rawKlasifikasi['Maju']++;
+            } elseif (str_contains($kl, 'berkembang')) {
+                $kinerjaTahunanRaw[$year]['klasifikasi']['Berkembang']++;
+                $rawKlasifikasi['Berkembang']++;
+            } elseif (str_contains($kl, 'pemula') || str_contains($kl, 'dasar')) {
+                $kinerjaTahunanRaw[$year]['klasifikasi']['Pemula']++;
+                $rawKlasifikasi['Pemula']++;
+            } else {
+                $kinerjaTahunanRaw[$year]['klasifikasi']['Perintis']++;
+                $rawKlasifikasi['Perintis']++;
+            }
+        }
+        
+        foreach ($kinerjaTahunanRaw as $y => $val) {
+            if (!isset($val['klasifikasi'])) {
+                $kinerjaTahunanRaw[$y]['klasifikasi'] = ['Maju' => 0, 'Berkembang' => 0, 'Pemula' => 0, 'Perintis' => 0];
+            }
         }
 
         $perkembangan = array_values($kinerjaTahunanRaw);
