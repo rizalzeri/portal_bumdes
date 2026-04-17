@@ -236,7 +236,7 @@
             class="flex items-center justify-center px-4 py-2 {{ $activeSub ? 'bg-gradient-to-r from-emerald-500 to-teal-600' : 'bg-gradient-to-r from-amber-500 to-orange-600' }} text-white font-bold rounded-lg hover:opacity-90 w-full transition shadow-md whitespace-nowrap overflow-hidden">
             <i class="fa-solid fa-crown mr-2 shrink-0"></i> 
             <span class="text-xs truncate">
-                {{ $activeSub ? ($activeSub->days_remaining . ' Hari Tersisa') : 'Langganan Premium' }}
+                {{ $activeSub ? ($activeSub->days_remaining . ' Hari Tersisa') : 'Upgrade Premium' }}
             </span>
         </a>
     </div>

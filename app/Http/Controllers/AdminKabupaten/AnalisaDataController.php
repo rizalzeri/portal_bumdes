@@ -55,18 +55,35 @@ class AnalisaDataController extends Controller
 
         $tahun = $request->get('tahun', date('Y'));
         
-        // 7. Laporan Keuangan Sorting (Reguler / Ketapang mapping to the same base for now if not distinct in DB)
-        $sort_keuangan = $request->get('sort_keuangan', 'semua');
-        if ($sort_keuangan !== 'semua') {
-            $query->whereHas('laporanKeuangan', fn($q) => $q->where('tahun', $tahun));
+        // 7. Laporan Keuangan/Kinerja Sorting
+        $kategori_keuangan = $request->get('kategori_keuangan', 'semua');
+        $jenis_keuangan = $request->get('jenis_keuangan', 'semua');
+
+        if ($kategori_keuangan !== 'semua' || $jenis_keuangan !== 'semua') {
+            $kinerjaFilter = function ($q) use ($tahun, $jenis_keuangan, $kategori_keuangan) {
+                $q->where('year', $tahun);
+                
+                if ($jenis_keuangan !== 'semua') {
+                    if ($jenis_keuangan == 'omset') $q->where('title', 'like', '%Omset%');
+                    elseif ($jenis_keuangan == 'laba') $q->where('title', 'like', '%Laba%');
+                    elseif ($jenis_keuangan == 'pades') $q->where('title', 'like', '%PAD%');
+                    elseif ($jenis_keuangan == 'aset') $q->where('title', 'like', '%Aset%');
+                    elseif ($jenis_keuangan == 'dansos') $q->where(function($q2) {
+                        $q2->where('title', 'like', '%Dana%')->orWhere('title', 'like', '%Sosial%')->orWhere('title', 'like', '%RTM%');
+                    });
+                }
+
+                if ($kategori_keuangan !== 'semua') {
+                    if ($kategori_keuangan == 'reguler') $q->where('description', 'like', '%Reguler%');
+                    elseif ($kategori_keuangan == 'ketahanan_pangan') $q->where('description', 'like', '%Ketahanan%');
+                    elseif ($kategori_keuangan == 'dbm') $q->where(function($q3) {
+                        $q3->where('description', 'like', '%Bergulir%')->orWhere('description', 'like', '%DBM%');
+                    });
+                }
+            };
             
-            if ($sort_keuangan == 'omset') {
-                $query->withSum(['laporanKeuangan' => fn($q) => $q->where('tahun', $tahun)], 'pendapatan')->orderByDesc('laporan_keuangan_sum_pendapatan');
-            } elseif ($sort_keuangan == 'laba') {
-                $query->withSum(['laporanKeuangan' => fn($q) => $q->where('tahun', $tahun)], 'laba_rugi')->orderByDesc('laporan_keuangan_sum_laba_rugi');
-            } elseif ($sort_keuangan == 'aset') {
-                $query->withSum(['laporanKeuangan' => fn($q) => $q->where('tahun', $tahun)], 'total_aset')->orderByDesc('laporan_keuangan_sum_total_aset');
-            }
+            $query->whereHas('kinerjaCapaians', $kinerjaFilter);
+            $query->withSum(['kinerjaCapaians as sort_value' => $kinerjaFilter], 'value')->orderByDesc('sort_value');
         }
 
         $bumdes = $query->paginate(20)->withQueryString();
@@ -79,6 +96,6 @@ class AnalisaDataController extends Controller
             array_unshift($tahunList, date('Y'));
         }
 
-        return view('adminkab.analisa_data.index', compact('bumdes', 'kategoriList', 'komoditasList', 'mitraList', 'tahunList', 'tahun', 'sort_keuangan'));
+        return view('adminkab.analisa_data.index', compact('bumdes', 'kategoriList', 'komoditasList', 'mitraList', 'tahunList', 'tahun', 'kategori_keuangan', 'jenis_keuangan'));
     }
 }

@@ -67,7 +67,7 @@
 
             <div class="md:col-span-2 lg:col-span-3 border-t my-2 pt-4">
                 <h4 class="font-bold text-sm text-gray-800 mb-4 uppercase tracking-wider">Filter / Sortir Bertingkat</h4>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
                     <div>
                         <label class="block text-xs font-bold text-gray-600 uppercase mb-2">Data Tahun Laporan</label>
                         <select name="tahun" class="w-full border-gray-300 rounded-md text-sm p-2 bg-gray-50">
@@ -87,12 +87,23 @@
                         </select>
                     </div>
                     <div>
-                        <label class="block text-xs font-bold text-gray-600 uppercase mb-2">Laporan Keuangan</label>
-                        <select name="sort_keuangan" class="w-full border-gray-300 rounded-md text-sm p-2 bg-gray-50">
-                            <option value="semua" {{ request('sort_keuangan') == 'semua' ? 'selected' : '' }}>Tidak Disortir</option>
-                            <option value="omset" {{ request('sort_keuangan') == 'omset' ? 'selected' : '' }}>Tertinggi by Omset</option>
-                            <option value="laba" {{ request('sort_keuangan') == 'laba' ? 'selected' : '' }}>Tertinggi by Laba</option>
-                            <option value="aset" {{ request('sort_keuangan') == 'aset' ? 'selected' : '' }}>Tertinggi by Aset</option>
+                        <label class="block text-xs font-bold text-gray-600 uppercase mb-2">Kategori Laporan</label>
+                        <select name="kategori_keuangan" class="w-full border-gray-300 rounded-md text-sm p-2 bg-gray-50">
+                            <option value="semua" {{ request('kategori_keuangan') == 'semua' ? 'selected' : '' }}>Semua Kategori</option>
+                            <option value="reguler" {{ request('kategori_keuangan') == 'reguler' ? 'selected' : '' }}>Reguler</option>
+                            <option value="ketahanan_pangan" {{ request('kategori_keuangan') == 'ketahanan_pangan' ? 'selected' : '' }}>Ketahanan Pangan</option>
+                            <option value="dbm" {{ request('kategori_keuangan') == 'dbm' ? 'selected' : '' }}>DBM / Dana Bergulir</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-600 uppercase mb-2">Jenis Laporan (Sort)</label>
+                        <select name="jenis_keuangan" class="w-full border-gray-300 rounded-md text-sm p-2 bg-gray-50">
+                            <option value="semua" {{ request('jenis_keuangan') == 'semua' ? 'selected' : '' }}>Semua Jenis (Sub-total)</option>
+                            <option value="omset" {{ request('jenis_keuangan') == 'omset' ? 'selected' : '' }}>Tertinggi by Omset</option>
+                            <option value="laba" {{ request('jenis_keuangan') == 'laba' ? 'selected' : '' }}>Tertinggi by Laba</option>
+                            <option value="pades" {{ request('jenis_keuangan') == 'pades' ? 'selected' : '' }}>Tertinggi by PADes</option>
+                            <option value="aset" {{ request('jenis_keuangan') == 'aset' ? 'selected' : '' }}>Tertinggi by Aset</option>
+                            <option value="dansos" {{ request('jenis_keuangan') == 'dansos' ? 'selected' : '' }}>Tertinggi by Dana Sosial</option>
                         </select>
                     </div>
                 </div>
@@ -119,8 +130,8 @@
                     <th class="px-6 py-3 border-r">Nama BUMDesa</th>
                     <th class="px-6 py-3 border-r">Desa & Kecamatan</th>
                     <th class="px-6 py-3 border-r">Status</th>
-                    @if($sort_keuangan != 'semua')
-                        <th class="px-6 py-3 border-r">Total Laporan ({{ strtoupper($sort_keuangan) }})</th>
+                    @if($kategori_keuangan != 'semua' || $jenis_keuangan != 'semua')
+                        <th class="px-6 py-3 border-r">NILAI CAPAIAN (TERFILTER)</th>
                     @endif
                     <th class="px-6 py-3 text-center">Profil</th>
                 </tr>
@@ -146,9 +157,9 @@
                             <span class="ml-2 bg-blue-100 text-blue-800 text-[10px] px-2 py-0.5 rounded">{{ $b->klasifikasi }}</span>
                         @endif
                     </td>
-                    @if($sort_keuangan != 'semua')
+                    @if($kategori_keuangan != 'semua' || $jenis_keuangan != 'semua')
                         <td class="px-6 py-4 border-r font-mono text-green-600 font-bold">
-                            Rp {{ number_format($b->{'laporan_keuangan_sum_' . ($sort_keuangan == 'omset' ? 'pendapatan' : ($sort_keuangan == 'laba' ? 'laba_rugi' : 'total_aset'))} ?? 0, 0, ',', '.') }}
+                            Rp {{ number_format($b->sort_value ?? 0, 0, ',', '.') }}
                         </td>
                     @endif
                     <td class="px-6 py-4 text-center">

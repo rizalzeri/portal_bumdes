@@ -93,13 +93,35 @@
         <section>
             <h2 class="text-xl font-extrabold text-gray-900 mb-6">Kinerja BUMDesa</h2>
             
-            <div class="bg-white rounded-xl border border-gray-200 px-5 py-3 shadow-sm mb-8 flex items-center gap-4 text-gray-900 max-w-sm">
-                <label class="font-bold text-sm text-gray-600">Periode</label>
-                <select x-model="selectedTahun" class="border border-gray-300 rounded-lg px-4 py-1.5 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-teal-500 w-full bg-gray-50">
-                    <template x-for="tahun in getReverseTahunList()" :key="tahun">
-                        <option :value="tahun" x-text="tahun"></option>
-                    </template>
-                </select>
+            <div class="bg-white rounded-xl border border-gray-200 px-4 py-3 shadow-sm mb-8 flex flex-col md:flex-row items-start md:items-center gap-4 text-gray-900 w-full lg:w-max">
+                <div class="flex items-center gap-2 w-full md:w-auto">
+                    <label class="font-bold text-sm text-gray-600 whitespace-nowrap">Periode</label>
+                    <select x-model="selectedTahun" class="border border-gray-300 rounded-lg px-4 py-1.5 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-teal-500 w-full md:w-28 bg-gray-50">
+                        <template x-for="tahun in getReverseTahunList()" :key="tahun">
+                            <option :value="tahun" x-text="tahun"></option>
+                        </template>
+                    </select>
+                </div>
+                <div class="flex items-center gap-2 w-full md:w-auto">
+                    <label class="font-bold text-sm text-gray-600 whitespace-nowrap">Kategori</label>
+                    <select x-model="selectedKategori" class="border border-gray-300 rounded-lg px-4 py-1.5 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-teal-500 w-full md:w-44 bg-gray-50">
+                        <option value="semua">Semua Kategori</option>
+                        <option value="reguler">Reguler</option>
+                        <option value="ketapang">Ketahanan Pangan</option>
+                        <option value="dbm">Dana Bergulir (DBM)</option>
+                    </select>
+                </div>
+                <div class="flex items-center gap-2 w-full md:w-auto">
+                    <label class="font-bold text-sm text-gray-600 whitespace-nowrap">Jenis</label>
+                    <select x-model="selectedJenis" class="border border-gray-300 rounded-lg px-4 py-1.5 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-teal-500 w-full md:w-40 bg-gray-50">
+                        <option value="semua">Semua Jenis</option>
+                        <option value="omset">Omset</option>
+                        <option value="laba">Laba</option>
+                        <option value="pades">PADes</option>
+                        <option value="aset">Aset</option>
+                        <option value="danasosial">Dana Sosial</option>
+                    </select>
+                </div>
             </div>
 
             <!-- Hasil Pemeringkatan -->
@@ -124,72 +146,84 @@
             </div>
             
             <!-- Reguler -->
-            <div x-show="hasGroup('reguler')" class="mb-2">
+            <div x-show="hasGroup('reguler') && (selectedKategori === 'semua' || selectedKategori === 'reguler')" class="mb-6">
                 <h3 class="text-md font-bold text-gray-900 mb-4">Reguler</h3>
-                <div class="grid grid-cols-1 sm:grid-cols-4 gap-4 mb-2">
-                    <div x-show="hasValue(getCurrentData().reguler.omset)" class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-2">
+                    <div x-show="hasValue(getCurrentData().reguler.omset) && (selectedJenis === 'semua' || selectedJenis === 'omset')" class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
                         <span class="text-xs font-semibold text-gray-400 mb-1 block tracking-wide uppercase">Omset</span>
-                        <span class="text-xl font-black text-teal-700" x-text="'Rp ' + formatRupiah(getCurrentData().reguler.omset)"></span>
+                        <span class="text-xl font-black text-teal-700" x-text="formatRupiah(getCurrentData().reguler.omset)"></span>
                     </div>
-                    <div x-show="hasValue(getCurrentData().reguler.laba)" class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
+                    <div x-show="hasValue(getCurrentData().reguler.laba) && (selectedJenis === 'semua' || selectedJenis === 'laba')" class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
                         <span class="text-xs font-semibold text-gray-400 mb-1 block tracking-wide uppercase">Laba</span>
-                        <span class="text-xl font-black text-teal-700" x-text="'Rp ' + formatRupiah(getCurrentData().reguler.laba)"></span>
+                        <span class="text-xl font-black text-teal-700" x-text="formatRupiah(getCurrentData().reguler.laba)"></span>
                     </div>
-                    <div x-show="hasValue(getCurrentData().reguler.aset)" class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
+                    <div x-show="hasValue(getCurrentData().reguler.pades) && (selectedJenis === 'semua' || selectedJenis === 'pades')" class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
+                        <span class="text-xs font-semibold text-gray-400 mb-1 block tracking-wide uppercase">PADes</span>
+                        <span class="text-xl font-black text-teal-700" x-text="formatRupiah(getCurrentData().reguler.pades)"></span>
+                    </div>
+                    <div x-show="hasValue(getCurrentData().reguler.aset) && (selectedJenis === 'semua' || selectedJenis === 'aset')" class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
                         <span class="text-xs font-semibold text-gray-400 mb-1 block tracking-wide uppercase">Aset</span>
-                        <span class="text-xl font-black text-teal-700" x-text="'Rp ' + formatRupiah(getCurrentData().reguler.aset)"></span>
+                        <span class="text-xl font-black text-teal-700" x-text="formatRupiah(getCurrentData().reguler.aset)"></span>
                     </div>
-                    <div x-show="hasValue(getCurrentData().reguler.danasosial)" class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
+                    <div x-show="hasValue(getCurrentData().reguler.danasosial) && (selectedJenis === 'semua' || selectedJenis === 'danasosial')" class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
                         <span class="text-xs font-semibold text-gray-400 mb-1 block tracking-wide uppercase">Dana Sosial</span>
-                        <span class="text-xl font-black text-teal-700" x-text="'Rp ' + formatRupiah(getCurrentData().reguler.danasosial)"></span>
+                        <span class="text-xl font-black text-teal-700" x-text="formatRupiah(getCurrentData().reguler.danasosial)"></span>
                     </div>
                 </div>
-                <p class="text-xs text-gray-400 mb-8 italic ml-1">Akumulasi dari laporan dokumen BUMDesa</p>
+                <p class="text-xs text-gray-400 mb-2 italic ml-1">Akumulasi dari laporan dokumen BUMDesa</p>
             </div>
 
             <!-- Ketahanan Pangan -->
-            <div x-show="hasGroup('ketapang')" class="mb-2">
+            <div x-show="hasGroup('ketapang') && (selectedKategori === 'semua' || selectedKategori === 'ketapang')" class="mb-6">
                 <h3 class="text-md font-bold text-gray-900 mb-4">Ketahanan Pangan</h3>
-                <div class="grid grid-cols-1 sm:grid-cols-4 gap-4 mb-2">
-                    <div x-show="hasValue(getCurrentData().ketapang.omset)" class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-2">
+                    <div x-show="hasValue(getCurrentData().ketapang.omset) && (selectedJenis === 'semua' || selectedJenis === 'omset')" class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
                         <span class="text-xs font-semibold text-gray-400 mb-1 block tracking-wide uppercase">Omset</span>
-                        <span class="text-xl font-black text-teal-700" x-text="'Rp ' + formatRupiah(getCurrentData().ketapang.omset)"></span>
+                        <span class="text-xl font-black text-teal-700" x-text="formatRupiah(getCurrentData().ketapang.omset)"></span>
                     </div>
-                    <div x-show="hasValue(getCurrentData().ketapang.laba)" class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
+                    <div x-show="hasValue(getCurrentData().ketapang.laba) && (selectedJenis === 'semua' || selectedJenis === 'laba')" class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
                         <span class="text-xs font-semibold text-gray-400 mb-1 block tracking-wide uppercase">Laba</span>
-                        <span class="text-xl font-black text-teal-700" x-text="'Rp ' + formatRupiah(getCurrentData().ketapang.laba)"></span>
+                        <span class="text-xl font-black text-teal-700" x-text="formatRupiah(getCurrentData().ketapang.laba)"></span>
                     </div>
-                    <div x-show="hasValue(getCurrentData().ketapang.aset)" class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
+                    <div x-show="hasValue(getCurrentData().ketapang.pades) && (selectedJenis === 'semua' || selectedJenis === 'pades')" class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
+                        <span class="text-xs font-semibold text-gray-400 mb-1 block tracking-wide uppercase">PADes</span>
+                        <span class="text-xl font-black text-teal-700" x-text="formatRupiah(getCurrentData().ketapang.pades)"></span>
+                    </div>
+                    <div x-show="hasValue(getCurrentData().ketapang.aset) && (selectedJenis === 'semua' || selectedJenis === 'aset')" class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
                         <span class="text-xs font-semibold text-gray-400 mb-1 block tracking-wide uppercase">Aset</span>
-                        <span class="text-xl font-black text-teal-700" x-text="'Rp ' + formatRupiah(getCurrentData().ketapang.aset)"></span>
+                        <span class="text-xl font-black text-teal-700" x-text="formatRupiah(getCurrentData().ketapang.aset)"></span>
                     </div>
-                    <div x-show="hasValue(getCurrentData().ketapang.danasosial)" class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
+                    <div x-show="hasValue(getCurrentData().ketapang.danasosial) && (selectedJenis === 'semua' || selectedJenis === 'danasosial')" class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
                         <span class="text-xs font-semibold text-gray-400 mb-1 block tracking-wide uppercase">Dana Sosial</span>
-                        <span class="text-xl font-black text-teal-700" x-text="'Rp ' + formatRupiah(getCurrentData().ketapang.danasosial)"></span>
+                        <span class="text-xl font-black text-teal-700" x-text="formatRupiah(getCurrentData().ketapang.danasosial)"></span>
                     </div>
                 </div>
-                <p class="text-xs text-gray-400 mb-8 italic ml-1">Akumulasi dari laporan dokumen BUMDesa</p>
+                <p class="text-xs text-gray-400 mb-2 italic ml-1">Akumulasi dari laporan dokumen BUMDesa</p>
             </div>
 
             <!-- Kegiatan Dana Bergulir Masyarakat (DBM) -->
-            <div x-show="hasGroup('dbm')" class="mb-2">
+            <div x-show="hasGroup('dbm') && (selectedKategori === 'semua' || selectedKategori === 'dbm')" class="mb-6">
                 <h3 class="text-md font-bold text-gray-900 mb-4">Kegiatan Dana Bergulir Masyarakat (DBM)</h3>
-                <div class="grid grid-cols-1 sm:grid-cols-4 gap-4 mb-2">
-                    <div x-show="hasValue(getCurrentData().dbm.omset)" class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-2">
+                    <div x-show="hasValue(getCurrentData().dbm.omset) && (selectedJenis === 'semua' || selectedJenis === 'omset')" class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
                         <span class="text-xs font-semibold text-gray-400 mb-1 block tracking-wide uppercase">Omset</span>
-                        <span class="text-xl font-black text-teal-700" x-text="'Rp ' + formatRupiah(getCurrentData().dbm.omset)"></span>
+                        <span class="text-xl font-black text-teal-700" x-text="formatRupiah(getCurrentData().dbm.omset)"></span>
                     </div>
-                    <div x-show="hasValue(getCurrentData().dbm.laba)" class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
+                    <div x-show="hasValue(getCurrentData().dbm.laba) && (selectedJenis === 'semua' || selectedJenis === 'laba')" class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
                         <span class="text-xs font-semibold text-gray-400 mb-1 block tracking-wide uppercase">Laba</span>
-                        <span class="text-xl font-black text-teal-700" x-text="'Rp ' + formatRupiah(getCurrentData().dbm.laba)"></span>
+                        <span class="text-xl font-black text-teal-700" x-text="formatRupiah(getCurrentData().dbm.laba)"></span>
                     </div>
-                    <div x-show="hasValue(getCurrentData().dbm.aset)" class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
+                    <div x-show="hasValue(getCurrentData().dbm.pades) && (selectedJenis === 'semua' || selectedJenis === 'pades')" class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
+                        <span class="text-xs font-semibold text-gray-400 mb-1 block tracking-wide uppercase">PADes</span>
+                        <span class="text-xl font-black text-teal-700" x-text="formatRupiah(getCurrentData().dbm.pades)"></span>
+                    </div>
+                    <div x-show="hasValue(getCurrentData().dbm.aset) && (selectedJenis === 'semua' || selectedJenis === 'aset')" class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
                         <span class="text-xs font-semibold text-gray-400 mb-1 block tracking-wide uppercase">Aset</span>
-                        <span class="text-xl font-black text-teal-700" x-text="'Rp ' + formatRupiah(getCurrentData().dbm.aset)"></span>
+                        <span class="text-xl font-black text-teal-700" x-text="formatRupiah(getCurrentData().dbm.aset)"></span>
                     </div>
-                    <div x-show="hasValue(getCurrentData().dbm.danasosial)" class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
+                    <div x-show="hasValue(getCurrentData().dbm.danasosial) && (selectedJenis === 'semua' || selectedJenis === 'danasosial')" class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
                         <span class="text-xs font-semibold text-gray-400 mb-1 block tracking-wide uppercase">Dana Sosial</span>
-                        <span class="text-xl font-black text-teal-700" x-text="'Rp ' + formatRupiah(getCurrentData().dbm.danasosial)"></span>
+                        <span class="text-xl font-black text-teal-700" x-text="formatRupiah(getCurrentData().dbm.danasosial)"></span>
                     </div>
                 </div>
                 <p class="text-xs text-gray-400 mb-12 italic ml-1">Akumulasi dari laporan dokumen BUMDesa</p>
@@ -275,6 +309,8 @@
         Alpine.data('infografisData', () => ({
             rawData: @json($perkembangan),
             selectedTahun: null,
+            selectedKategori: 'semua',
+            selectedJenis: 'semua',
 
             init() {
                 if (this.rawData && this.rawData.length > 0) {
@@ -337,11 +373,12 @@
             },
 
             formatRupiah(value) {
-                if (value === null || value === undefined || value === 0) return '-';
+                if (value === null || value === undefined) return '-';
                 const num = parseFloat(value);
-                if (num >= 1000000000) return (num / 1000000000).toLocaleString('id-ID', {minimumFractionDigits: 1, maximumFractionDigits: 1}) + ' M';
-                if (num >= 1000000) return (num / 1000000).toLocaleString('id-ID', {minimumFractionDigits: 1, maximumFractionDigits: 1}) + ' Jt';
-                return num.toLocaleString('id-ID');
+                if (isNaN(num) || num === 0) return '-';
+                if (num >= 1000000000) return 'Rp ' + (num / 1000000000).toLocaleString('id-ID', {minimumFractionDigits: 1, maximumFractionDigits: 1}) + ' M';
+                if (num >= 1000000) return 'Rp ' + (num / 1000000).toLocaleString('id-ID', {minimumFractionDigits: 1, maximumFractionDigits: 1}) + ' Jt';
+                return 'Rp ' + num.toLocaleString('id-ID');
             }
         }))
     });

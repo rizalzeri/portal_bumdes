@@ -29,7 +29,7 @@ class KinerjaController extends Controller
             ->firstOrFail();
 
         $request->validate([
-            'kategori' => 'required|in:Reguler,Ketahanan Pangan',
+            'kategori' => 'required|in:Reguler,Ketahanan Pangan,Dana Bergulir Masyarakat (DBM)',
             'item'     => 'required|string',
             'year'     => 'required|integer|min:2000|max:2100',
             'nominal'  => 'required|numeric',

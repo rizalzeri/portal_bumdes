@@ -237,13 +237,35 @@
                 
                 
 
-                    <div class="bg-gray-50 rounded-xl border border-gray-200 px-5 py-3 shadow-sm mb-8 flex items-center gap-4 text-gray-900 w-full sm:w-1/3">
-                        <label class="font-bold text-sm text-gray-600 whitespace-nowrap">Periode :</label>
-                        <select x-model="selectedTahun" class="border border-gray-300 rounded-lg px-4 py-1.5 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-primary w-full bg-white">
-                            <template x-for="tahun in getReverseTahunList()" :key="tahun">
-                                <option :value="tahun" x-text="tahun"></option>
-                            </template>
-                        </select>
+                    <div class="bg-gray-50 rounded-xl border border-gray-200 px-4 py-3 shadow-sm mb-8 flex flex-col md:flex-row items-start md:items-center gap-4 text-gray-900 w-full lg:w-max">
+                        <div class="flex items-center gap-2 w-full md:w-auto">
+                            <label class="font-bold text-sm text-gray-600 whitespace-nowrap">Periode :</label>
+                            <select x-model="selectedTahun" class="border border-gray-300 rounded-lg px-4 py-1.5 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-primary w-full md:w-28 bg-white">
+                                <template x-for="tahun in getReverseTahunList()" :key="tahun">
+                                    <option :value="tahun" x-text="tahun"></option>
+                                </template>
+                            </select>
+                        </div>
+                        <div class="flex items-center gap-2 w-full md:w-auto">
+                            <label class="font-bold text-sm text-gray-600 whitespace-nowrap">Kategori :</label>
+                            <select x-model="selectedKategori" class="border border-gray-300 rounded-lg px-4 py-1.5 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-primary w-full md:w-44 bg-white">
+                                <option value="semua">Semua Kategori</option>
+                                <option value="reguler">Reguler</option>
+                                <option value="ketapang">Ketahanan Pangan</option>
+                                <option value="dbm">Dana Bergulir (DBM)</option>
+                            </select>
+                        </div>
+                        <div class="flex items-center gap-2 w-full md:w-auto">
+                            <label class="font-bold text-sm text-gray-600 whitespace-nowrap">Jenis :</label>
+                            <select x-model="selectedJenis" class="border border-gray-300 rounded-lg px-4 py-1.5 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-primary w-full md:w-40 bg-white">
+                                <option value="semua">Semua Jenis</option>
+                                <option value="omset">Omset</option>
+                                <option value="laba">Laba</option>
+                                <option value="pades">PADes</option>
+                                <option value="aset">Aset</option>
+                                <option value="danasosial">Dana Sosial</option>
+                            </select>
+                        </div>
                     </div>
 
                     <!-- Hasil Pemeringkatan -->
@@ -258,80 +280,84 @@
                         @endif
                     </div>
 
-                    <!-- Omset -->
-                    <div x-show="hasSection('omset')" class="mb-2">
-                        <h4 class="text-md font-bold text-gray-900 mb-4">Omset</h4>
-                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-2">
-                            <div x-show="hasValue(getCurrentData().reguler.omset)" class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
-                                <span class="text-xs font-semibold text-gray-400 mb-1 block tracking-wide uppercase">Reguler</span>
+                    <!-- Reguler -->
+                    <div x-show="hasGroup('reguler') && (selectedKategori === 'semua' || selectedKategori === 'reguler')" class="mb-6">
+                        <h4 class="text-md font-bold text-gray-900 mb-4">Reguler</h4>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-2">
+                            <div x-show="hasValue(getCurrentData().reguler.omset) && (selectedJenis === 'semua' || selectedJenis === 'omset')" class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
+                                <span class="text-xs font-semibold text-gray-400 mb-1 block tracking-wide uppercase">Omset</span>
                                 <span class="text-xl font-black text-primary" x-text="formatRupiah(getCurrentData().reguler.omset)"></span>
                             </div>
-                            <div x-show="hasValue(getCurrentData().ketapang.omset)" class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
-                                <span class="text-xs font-semibold text-gray-400 mb-1 block tracking-wide uppercase">Ketahanan Pangan</span>
-                                <span class="text-xl font-black text-primary" x-text="formatRupiah(getCurrentData().ketapang.omset)"></span>
-                            </div>
-                            <div x-show="hasValue(getCurrentData().dbm.omset)" class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
-                                <span class="text-xs font-semibold text-gray-400 mb-1 block tracking-wide uppercase">Dana Bergulir Masyarakat</span>
-                                <span class="text-xl font-black text-primary" x-text="formatRupiah(getCurrentData().dbm.omset)"></span>
-                            </div>
-                        </div>
-                        <p class="text-xs text-gray-400 mb-8 italic ml-1">Akumulasi dari laporan dokumen BUMDesa</p>
-                    </div>
-
-                    <!-- Laba -->
-                    <div x-show="hasSection('laba')" class="mb-2">
-                        <h4 class="text-md font-bold text-gray-900 mb-4">Laba</h4>
-                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-2">
-                            <div x-show="hasValue(getCurrentData().reguler.laba)" class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
-                                <span class="text-xs font-semibold text-gray-400 mb-1 block tracking-wide uppercase">Reguler</span>
+                            <div x-show="hasValue(getCurrentData().reguler.laba) && (selectedJenis === 'semua' || selectedJenis === 'laba')" class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
+                                <span class="text-xs font-semibold text-gray-400 mb-1 block tracking-wide uppercase">Laba</span>
                                 <span class="text-xl font-black text-primary" x-text="formatRupiah(getCurrentData().reguler.laba)"></span>
                             </div>
-                            <div x-show="hasValue(getCurrentData().ketapang.laba)" class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
-                                <span class="text-xs font-semibold text-gray-400 mb-1 block tracking-wide uppercase">Ketahanan Pangan</span>
-                                <span class="text-xl font-black text-primary" x-text="formatRupiah(getCurrentData().ketapang.laba)"></span>
+                            <div x-show="hasValue(getCurrentData().reguler.pades) && (selectedJenis === 'semua' || selectedJenis === 'pades')" class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
+                                <span class="text-xs font-semibold text-gray-400 mb-1 block tracking-wide uppercase">PADes</span>
+                                <span class="text-xl font-black text-primary" x-text="formatRupiah(getCurrentData().reguler.pades)"></span>
                             </div>
-                            <div x-show="hasValue(getCurrentData().dbm.laba)" class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
-                                <span class="text-xs font-semibold text-gray-400 mb-1 block tracking-wide uppercase">Dana Bergulir Masyarakat</span>
-                                <span class="text-xl font-black text-primary" x-text="formatRupiah(getCurrentData().dbm.laba)"></span>
-                            </div>
-                        </div>
-                        <p class="text-xs text-gray-400 mb-8 italic ml-1">Akumulasi dari laporan dokumen BUMDesa</p>
-                    </div>
-
-                    <!-- Aset -->
-                    <div x-show="hasSection('aset')" class="mb-2">
-                        <h4 class="text-md font-bold text-gray-900 mb-4">Aset</h4>
-                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-2">
-                            <div x-show="hasValue(getCurrentData().reguler.aset)" class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
-                                <span class="text-xs font-semibold text-gray-400 mb-1 block tracking-wide uppercase">Reguler</span>
+                            <div x-show="hasValue(getCurrentData().reguler.aset) && (selectedJenis === 'semua' || selectedJenis === 'aset')" class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
+                                <span class="text-xs font-semibold text-gray-400 mb-1 block tracking-wide uppercase">Aset</span>
                                 <span class="text-xl font-black text-primary" x-text="formatRupiah(getCurrentData().reguler.aset)"></span>
                             </div>
-                            <div x-show="hasValue(getCurrentData().ketapang.aset)" class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
-                                <span class="text-xs font-semibold text-gray-400 mb-1 block tracking-wide uppercase">Ketahanan Pangan</span>
-                                <span class="text-xl font-black text-primary" x-text="formatRupiah(getCurrentData().ketapang.aset)"></span>
-                            </div>
-                            <div x-show="hasValue(getCurrentData().dbm.aset)" class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
-                                <span class="text-xs font-semibold text-gray-400 mb-1 block tracking-wide uppercase">Dana Bergulir Masyarakat</span>
-                                <span class="text-xl font-black text-primary" x-text="formatRupiah(getCurrentData().dbm.aset)"></span>
-                            </div>
-                        </div>
-                        <p class="text-xs text-gray-400 mb-8 italic ml-1">Akumulasi dari laporan dokumen BUMDesa</p>
-                    </div>
-
-                    <!-- Dana Sosial -->
-                    <div x-show="hasSection('danasosial')" class="mb-2">
-                        <h4 class="text-md font-bold text-gray-900 mb-4">Dana Sosial</h4>
-                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-2">
-                            <div x-show="hasValue(getCurrentData().reguler.danasosial)" class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
-                                <span class="text-xs font-semibold text-gray-400 mb-1 block tracking-wide uppercase">Reguler</span>
+                            <div x-show="hasValue(getCurrentData().reguler.danasosial) && (selectedJenis === 'semua' || selectedJenis === 'danasosial')" class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
+                                <span class="text-xs font-semibold text-gray-400 mb-1 block tracking-wide uppercase">Dana Sosial</span>
                                 <span class="text-xl font-black text-primary" x-text="formatRupiah(getCurrentData().reguler.danasosial)"></span>
                             </div>
-                            <div x-show="hasValue(getCurrentData().ketapang.danasosial)" class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
-                                <span class="text-xs font-semibold text-gray-400 mb-1 block tracking-wide uppercase">Ketahanan Pangan</span>
+                        </div>
+                        <p class="text-xs text-gray-400 mb-2 italic ml-1">Akumulasi dari laporan dokumen BUMDesa</p>
+                    </div>
+
+                    <!-- Ketahanan Pangan -->
+                    <div x-show="hasGroup('ketapang') && (selectedKategori === 'semua' || selectedKategori === 'ketapang')" class="mb-6">
+                        <h4 class="text-md font-bold text-gray-900 mb-4">Ketahanan Pangan</h4>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-2">
+                            <div x-show="hasValue(getCurrentData().ketapang.omset) && (selectedJenis === 'semua' || selectedJenis === 'omset')" class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
+                                <span class="text-xs font-semibold text-gray-400 mb-1 block tracking-wide uppercase">Omset</span>
+                                <span class="text-xl font-black text-primary" x-text="formatRupiah(getCurrentData().ketapang.omset)"></span>
+                            </div>
+                            <div x-show="hasValue(getCurrentData().ketapang.laba) && (selectedJenis === 'semua' || selectedJenis === 'laba')" class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
+                                <span class="text-xs font-semibold text-gray-400 mb-1 block tracking-wide uppercase">Laba</span>
+                                <span class="text-xl font-black text-primary" x-text="formatRupiah(getCurrentData().ketapang.laba)"></span>
+                            </div>
+                            <div x-show="hasValue(getCurrentData().ketapang.pades) && (selectedJenis === 'semua' || selectedJenis === 'pades')" class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
+                                <span class="text-xs font-semibold text-gray-400 mb-1 block tracking-wide uppercase">PADes</span>
+                                <span class="text-xl font-black text-primary" x-text="formatRupiah(getCurrentData().ketapang.pades)"></span>
+                            </div>
+                            <div x-show="hasValue(getCurrentData().ketapang.aset) && (selectedJenis === 'semua' || selectedJenis === 'aset')" class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
+                                <span class="text-xs font-semibold text-gray-400 mb-1 block tracking-wide uppercase">Aset</span>
+                                <span class="text-xl font-black text-primary" x-text="formatRupiah(getCurrentData().ketapang.aset)"></span>
+                            </div>
+                            <div x-show="hasValue(getCurrentData().ketapang.danasosial) && (selectedJenis === 'semua' || selectedJenis === 'danasosial')" class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
+                                <span class="text-xs font-semibold text-gray-400 mb-1 block tracking-wide uppercase">Dana Sosial</span>
                                 <span class="text-xl font-black text-primary" x-text="formatRupiah(getCurrentData().ketapang.danasosial)"></span>
                             </div>
-                            <div x-show="hasValue(getCurrentData().dbm.danasosial)" class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
-                                <span class="text-xs font-semibold text-gray-400 mb-1 block tracking-wide uppercase">Dana Bergulir Masyarakat</span>
+                        </div>
+                        <p class="text-xs text-gray-400 mb-2 italic ml-1">Akumulasi dari laporan dokumen BUMDesa</p>
+                    </div>
+
+                    <!-- Kegiatan Dana Bergulir Masyarakat (DBM) -->
+                    <div x-show="hasGroup('dbm') && (selectedKategori === 'semua' || selectedKategori === 'dbm')" class="mb-6">
+                        <h4 class="text-md font-bold text-gray-900 mb-4">Kegiatan Dana Bergulir Masyarakat (DBM)</h4>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-2">
+                            <div x-show="hasValue(getCurrentData().dbm.omset) && (selectedJenis === 'semua' || selectedJenis === 'omset')" class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
+                                <span class="text-xs font-semibold text-gray-400 mb-1 block tracking-wide uppercase">Omset</span>
+                                <span class="text-xl font-black text-primary" x-text="formatRupiah(getCurrentData().dbm.omset)"></span>
+                            </div>
+                            <div x-show="hasValue(getCurrentData().dbm.laba) && (selectedJenis === 'semua' || selectedJenis === 'laba')" class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
+                                <span class="text-xs font-semibold text-gray-400 mb-1 block tracking-wide uppercase">Laba</span>
+                                <span class="text-xl font-black text-primary" x-text="formatRupiah(getCurrentData().dbm.laba)"></span>
+                            </div>
+                            <div x-show="hasValue(getCurrentData().dbm.pades) && (selectedJenis === 'semua' || selectedJenis === 'pades')" class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
+                                <span class="text-xs font-semibold text-gray-400 mb-1 block tracking-wide uppercase">PADes</span>
+                                <span class="text-xl font-black text-primary" x-text="formatRupiah(getCurrentData().dbm.pades)"></span>
+                            </div>
+                            <div x-show="hasValue(getCurrentData().dbm.aset) && (selectedJenis === 'semua' || selectedJenis === 'aset')" class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
+                                <span class="text-xs font-semibold text-gray-400 mb-1 block tracking-wide uppercase">Aset</span>
+                                <span class="text-xl font-black text-primary" x-text="formatRupiah(getCurrentData().dbm.aset)"></span>
+                            </div>
+                            <div x-show="hasValue(getCurrentData().dbm.danasosial) && (selectedJenis === 'semua' || selectedJenis === 'danasosial')" class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
+                                <span class="text-xs font-semibold text-gray-400 mb-1 block tracking-wide uppercase">Dana Sosial</span>
                                 <span class="text-xl font-black text-primary" x-text="formatRupiah(getCurrentData().dbm.danasosial)"></span>
                             </div>
                         </div>
@@ -506,6 +532,8 @@
         Alpine.data('kinerjaBumdesData', () => ({
             rawData: @json($kinerjaTahunan ?? []),
             selectedTahun: null,
+            selectedKategori: 'semua',
+            selectedJenis: 'semua',
 
             init() {
                 // Inisialisasi ke tahun pertama dalam data (terbaru), bukan hardcode tahun ini
@@ -562,14 +590,210 @@
                 return true;
             },
 
-            hasSection(metric) {
+            hasGroup(group) {
                 const d = this.getCurrentData();
-                return this.hasValue(d.reguler[metric]) || this.hasValue(d.ketapang[metric]) || this.hasValue(d.dbm[metric]);
+            <!-- 8. Mitra -->
+            <div class="bg-white rounded-xl shadow-sm border p-6" id="mitra">
+                <h3 class="text-2xl font-bold text-primary border-b pb-2 mb-6"><i
+                        class="fa-solid fa-handshake mr-2 text-accent"></i> Mitra</h3>
+                @if ($bumdes->mitraKerjasamas->isEmpty())
+                    <p class="text-gray-500 italic text-center py-6">Data mitra kerjasama belum dilengkapi.</p>
+                @else
+                    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
+                        @foreach ($bumdes->mitraKerjasamas as $mitra)
+                            <div
+                                class="bg-white border rounded-xl p-6 flex flex-col items-center justify-center text-center group hover:shadow-md transition">
+                                <div
+                                    class="w-20 h-20 bg-gray-50 rounded-full mb-4 flex items-center justify-center border overflow-hidden group-hover:border-accent">
+                                    @if ($mitra->logo)
+                                        <img src="{{ asset('storage/' . $mitra->logo) }}"
+                                            class="w-full h-full object-contain p-2">
+                                    @else
+                                        <i class="fa-solid fa-building text-gray-300 text-3xl"></i>
+                                    @endif
+                                </div>
+                                <h4 class="font-bold text-sm text-gray-800 line-clamp-2">{{ $mitra->name }}</h4>
+                            </div>
+                        @endforeach
+                    </div>
+                @endif
+            </div>
+
+            <!-- 9. Galeri Kegiatan -->
+            <div class="bg-white rounded-xl shadow-sm border p-6" id="galeri-kegiatan" x-data="{ imgModal: false, imgModalSrc: '' }">
+                <!-- Modal -->
+                <template x-if="imgModal">
+                    <div @click="imgModal = false" class="fixed inset-0 z-[100] flex items-center justify-center bg-black bg-opacity-90 p-4 cursor-zoom-out duration-300 transition-opacity">
+                        <img :src="imgModalSrc" class="max-h-full max-w-full rounded-lg shadow-2xl">
+                    </div>
+                </template>
+
+                <h3 class="text-2xl font-bold text-primary border-b pb-2 mb-6"><i
+                        class="fa-solid fa-images mr-2 text-accent"></i> Galeri Kegiatan BUMDesa</h3>
+                @php
+                    $galeriList = $isPremium ? $bumdes->galeris : $bumdes->galeris->take(1);
+                @endphp
+                @if ($galeriList->isEmpty())
+                    <p class="text-gray-500 italic text-center py-6">Galeri kegiatan belum tersedia.</p>
+                @else
+                    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                        @foreach ($galeriList as $galeri)
+                            <div class="relative group rounded-xl overflow-hidden shadow-sm hover:shadow-md transition cursor-zoom-in"
+                                 @click="imgModalSrc = '{{ asset('storage/' . $galeri->image) }}'; imgModal = true;">
+                                <img src="{{ asset('storage/' . $galeri->image) }}"
+                                    class="w-full h-40 object-cover group-hover:scale-110 transition duration-300">
+                                <div
+                                    class="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition flex items-center justify-center p-4">
+                                    <p class="text-white text-sm font-bold text-center line-clamp-2">{{ $galeri->title }}
+                                    </p>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                @endif
+            </div>
+
+            <!-- 10. Papan Pengumuman -->
+            <div class="bg-white rounded-xl shadow-sm border p-6" id="papan-pengumuman">
+                <h2 class="text-2xl font-bold text-primary mb-6"><i class="fa-solid fa-bullhorn mr-2 text-accent"></i> Papan Pengumuman BUMDesa</h2>
+                @if ($bumdes->pengumuman->count() > 0)
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        @foreach($bumdes->pengumuman->sortByDesc('created_at')->take(3) as $umum)
+                            <div class="border rounded-lg p-5 bg-gray-50 hover:shadow-md transition">
+                                <h4 class="font-bold text-gray-900 text-lg mb-2">{{ $umum->title }}</h4>
+                                <div class="flex items-center gap-2 mb-3">
+                                    <span class="text-[10px] font-bold text-white bg-accent px-2 py-1 rounded-full uppercase tracking-wider">
+                                        @if ($umum->bumdes)
+                                            {{ $umum->bumdes->name }}
+                                        @elseif($umum->type === 'kabupaten' && $umum->kabupaten)
+                                            Portal {{ $umum->kabupaten->name }}
+                                        @else
+                                            Portal Pusat
+                                        @endif
+                                    </span>
+                                    <span class="text-xs text-gray-400"><i class="fa-regular fa-clock mr-1"></i> {{ $umum->created_at->translatedFormat('d F Y') }}</span>
+                                </div>
+                                <p class="text-sm text-gray-700 line-clamp-3">{{ Str::limit(strip_tags($umum->content), 150) }}</p>
+                            </div>
+                        @endforeach
+                    </div>
+                @else
+                    <div class="text-center py-8 text-gray-400 border border-dashed rounded-lg">
+                        <i class="fa-solid fa-bullhorn text-3xl mb-2"></i>
+                        <p>Belum ada pengumuman dari BUMDesa ini.</p>
+                    </div>
+                @endif
+            </div>
+
+            <!-- 11. Artikel & Opini -->
+            <div class="bg-white rounded-xl shadow-sm border p-6" id="artikel-opini">
+                <h2 class="text-2xl font-bold text-primary mb-6"><i class="fa-solid fa-pen-nib mr-2 text-accent"></i> Artikel dan Opini BUMDesa</h2>
+                @if ($bumdes->artikels->count() > 0)
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        @foreach($bumdes->artikels->sortByDesc('created_at')->take(4) as $art)
+                            <div class="border rounded-lg p-4 bg-gray-50 hover:shadow-md transition flex flex-col sm:flex-row gap-4">
+                                @if ($art->image)
+                                    <div class="w-full sm:w-32 h-32 flex-shrink-0 bg-gray-200 rounded-lg overflow-hidden">
+                                        <img src="{{ asset('storage/' . $art->image) }}" class="w-full h-full object-cover">
+                                    </div>
+                                @endif
+                                <div class="flex flex-col">
+                                    <h4 class="font-bold text-gray-900 text-lg leading-tight mb-2 line-clamp-2">{{ $art->title }}</h4>
+                                    <div class="flex items-center text-xs text-gray-500 mb-2 gap-3">
+                                        <span><i class="fa-regular fa-calendar mr-1"></i> {{ $art->created_at->translatedFormat('d F Y') }}</span>
+                                        <span><i class="fa-solid fa-user-pen mr-1"></i> {{ $art->author ?? 'Admin' }}</span>
+                                    </div>
+                                    <p class="text-sm text-gray-700 line-clamp-2 mt-auto">{{ Str::limit(strip_tags($art->content), 100) }}</p>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                @else
+                    <div class="text-center py-8 text-gray-400 border border-dashed rounded-lg">
+                        <i class="fa-solid fa-pen-nib text-3xl mb-2"></i>
+                        <p>Belum ada artikel dan opini dari BUMDesa ini.</p>
+                    </div>
+                @endif
+            </div>
+
+        </div>
+    </div>
+
+@endsection
+
+@push('scripts')
+<script>
+    document.addEventListener('alpine:init', () => {
+        Alpine.data('kinerjaBumdesData', () => ({
+            rawData: @json($kinerjaTahunan ?? []),
+            selectedTahun: null,
+            selectedKategori: 'semua',
+            selectedJenis: 'semua',
+
+            init() {
+                // Inisialisasi ke tahun pertama dalam data (terbaru), bukan hardcode tahun ini
+                if (this.rawData && this.rawData.length > 0) {
+                    this.selectedTahun = this.rawData[0].thn;
+                } else {
+                    this.selectedTahun = String(new Date().getFullYear());
+                }
+            },
+
+            getReverseTahunList() {
+                if (!this.rawData || this.rawData.length === 0) {
+                    return [String(new Date().getFullYear())];
+                }
+                // rawData sudah di-sort descending dari PHP
+                return this.rawData.map(v => String(v.thn));
+            },
+
+            getCurrentData() {
+                let yearData = this.rawData.find(d => String(d.thn) === String(this.selectedTahun));
+                const empty = { omset: null, laba: null, pades: null, aset: null, danasosial: null };
+                if (!yearData) {
+                    return { reguler: { ...empty }, ketapang: { ...empty }, dbm: { ...empty } };
+                }
+                return {
+                    reguler:  { 
+                        omset: yearData.reguler?.omset, 
+                        laba:  yearData.reguler?.laba, 
+                        pades: yearData.reguler?.pades, 
+                        aset:  yearData.reguler?.aset,
+                        danasosial: yearData.reguler?.danasosial
+                    },
+                    ketapang: { 
+                        omset: yearData.ketapang?.omset, 
+                        laba:  yearData.ketapang?.laba, 
+                        pades: yearData.ketapang?.pades, 
+                        aset:  yearData.ketapang?.aset,
+                        danasosial: yearData.ketapang?.danasosial
+                    },
+                    dbm: { 
+                        omset: yearData.dbm?.omset, 
+                        laba:  yearData.dbm?.laba, 
+                        pades: yearData.dbm?.pades, 
+                        aset:  yearData.dbm?.aset,
+                        danasosial: yearData.dbm?.danasosial
+                    }
+                };
+            },
+
+            hasValue(value) {
+                if (value === null || value === undefined || value === '') return false;
+                const num = parseFloat(value);
+                if (isNaN(num) || num === 0) return false;
+                return true;
+            },
+
+            hasGroup(group) {
+                const d = this.getCurrentData();
+                return this.hasValue(d[group].omset) || this.hasValue(d[group].laba) || this.hasValue(d[group].aset) || this.hasValue(d[group].danasosial) || this.hasValue(d[group].pades);
             },
 
             formatRupiah(value) {
-                if (value === null || value === undefined || value === 0) return '-';
+                if (value === null || value === undefined) return '-';
                 const num = parseFloat(value);
+                if (isNaN(num) || num === 0) return '-';
                 if (num >= 1000000000) return 'Rp ' + (num / 1000000000).toLocaleString('id-ID', {minimumFractionDigits: 1, maximumFractionDigits: 1}) + ' M';
                 if (num >= 1000000) return 'Rp ' + (num / 1000000).toLocaleString('id-ID', {minimumFractionDigits: 1, maximumFractionDigits: 1}) + ' Jt';
                 return 'Rp ' + num.toLocaleString('id-ID');
