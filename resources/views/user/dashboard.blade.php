@@ -105,34 +105,5 @@
         </div>
     </div>
 
-    <!-- Latest Financial Report Status -->
-    <div class="bg-white rounded-xl shadow-sm border">
-        <div class="border-b px-6 py-4 bg-gray-50">
-            <h3 class="font-bold text-gray-800"><i class="fa-solid fa-chart-column mr-2 text-green-600"></i> Laporan Keuangan Terakhir</h3>
-        </div>
-        <div class="p-0">
-            @if($latestReports->isEmpty())
-                <div class="p-8 text-center text-gray-400">
-                    <i class="fa-solid fa-file-invoice-dollar text-4xl mb-3 text-gray-300"></i>
-                    <p class="text-sm">Belum ada laporan keuangan yang diunggah.</p>
-                    <a href="{{ route('user.finansial.index') }}" class="text-xs text-primary font-bold mt-2 inline-block">Mulai Lapor Sekarang</a>
-                </div>
-            @else
-                <ul class="divide-y divide-gray-100">
-                    @foreach($latestReports as $rep)
-                    <li class="p-4 hover:bg-gray-50 transition flex justify-between items-center">
-                        <div>
-                            <div class="font-bold text-sm text-gray-900">
-                                {{ config('app.months')[$rep->bulan] ?? $rep->bulan }} {{ $rep->tahun }}
-                            </div>
-                            <div class="text-xs text-gray-500 mt-1">Laba: <span class="{{ $rep->laba_bersih >= 0 ? 'text-green-600' : 'text-red-600' }} font-bold">Rp {{ number_format($rep->laba_bersih, 0, ',', '.') }}</span></div>
-                        </div>
-                        <a href="{{ route('user.finansial.index') }}" class="text-gray-400 hover:text-primary"><i class="fa-solid fa-chevron-right"></i></a>
-                    </li>
-                    @endforeach
-                </ul>
-            @endif
-        </div>
-    </div>
 </div>
 @endsection

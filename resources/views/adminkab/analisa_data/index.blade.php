@@ -17,6 +17,16 @@
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
             <!-- 1 Tingkat -->
             <div>
+                <label class="block text-xs font-bold text-gray-600 uppercase mb-2">Kecamatan</label>
+                <select name="kecamatan" class="w-full border-gray-300 rounded-md text-sm p-2 bg-gray-50">
+                    <option value="semua" {{ request('kecamatan') == 'semua' ? 'selected' : '' }}>Semua Kecamatan</option>
+                    @foreach($kecamatanList as $kec)
+                        <option value="{{ $kec->name }}" {{ request('kecamatan') == $kec->name ? 'selected' : '' }}>{{ $kec->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+            
+            <div>
                 <label class="block text-xs font-bold text-gray-600 uppercase mb-2">Keaktifan BUMDesa</label>
                 <select name="status" class="w-full border-gray-300 rounded-md text-sm p-2 bg-gray-50">
                     <option value="semua" {{ request('status') == 'semua' ? 'selected' : '' }}>Semua</option>

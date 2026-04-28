@@ -13,6 +13,11 @@ class AnalisaDataController extends Controller
         $kabupatenId = auth()->user()->kabupaten_id;
         $query = Bumdesa::where('kabupaten_id', $kabupatenId)->with(['user']);
 
+        // 0. Kecamatan
+        if ($request->filled('kecamatan') && $request->kecamatan !== 'semua') {
+            $query->where('kecamatan', $request->kecamatan);
+        }
+
         // 1. Keaktifan BUMDesa
         if ($request->filled('status') && $request->status !== 'semua') {
             if ($request->status === 'aktif') {
@@ -88,6 +93,7 @@ class AnalisaDataController extends Controller
 
         $bumdes = $query->paginate(20)->withQueryString();
 
+        $kecamatanList = \App\Models\Kecamatan::where('kabupaten_id', $kabupatenId)->orderBy('name')->get();
         $kategoriList = \App\Models\UnitUsahaOption::orderBy('name')->get();
         $komoditasList = \App\Models\ProdukKetapangOption::orderBy('name')->get();
         $mitraList = class_exists('\App\Models\MitraOption') ? \App\Models\MitraOption::orderBy('name')->get() : [];
@@ -96,6 +102,6 @@ class AnalisaDataController extends Controller
             array_unshift($tahunList, date('Y'));
         }
 
-        return view('adminkab.analisa_data.index', compact('bumdes', 'kategoriList', 'komoditasList', 'mitraList', 'tahunList', 'tahun', 'kategori_keuangan', 'jenis_keuangan'));
+        return view('adminkab.analisa_data.index', compact('bumdes', 'kecamatanList', 'kategoriList', 'komoditasList', 'mitraList', 'tahunList', 'tahun', 'kategori_keuangan', 'jenis_keuangan'));
     }
 }
